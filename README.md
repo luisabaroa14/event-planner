@@ -11,3 +11,11 @@
 2. Install Bootstrap 5 and SASS
    ```sh
    npm install bootstrap @popperjs/core sass
+
+3. Install express and redis
+   ```sh
+   npm install express redis
+
+3. Install nodemon
+   ```sh
+   npm install --save-dev nodemon

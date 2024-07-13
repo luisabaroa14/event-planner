@@ -1,0 +1,44 @@
+{
+  "version": "2.0.0",
+  "tasks": [
+    {
+      "label": "Dump Redis Data",
+      "type": "shell",
+      "command": "node",
+      "args": ["backend/src/scripts/dumpRedisData.js", "backupData.json"],
+      "problemMatcher": [],
+      "group": {
+        "kind": "build",
+        "isDefault": true
+      }
+    },
+    {
+      "label": "Load Redis Data",
+      "type": "shell",
+      "command": "node",
+      "args": ["backend/src/scripts/loadRedisData.js", "${input:selectedFile}"],
+      "problemMatcher": [],
+      "group": {
+        "kind": "build",
+        "isDefault": true
+      }
+    }
+  ],
+  "inputs": [
+    {
+      "id": "fileName",
+      "type": "promptString",
+      "description": "Enter the filename (e.g., backup_2024_07_05.json)"
+    },
+    {
+      "id": "selectedFile",
+      "type": "pickString",
+      "description": "Select the file to load",
+      "options": [
+        "testData.json",
+        "otherData.json",
+      ],
+      "default": "testData.json"
+    }
+  ]
+}

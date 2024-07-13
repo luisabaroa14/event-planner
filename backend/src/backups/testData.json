@@ -1,0 +1,52 @@
+{
+  "events": [
+    {
+      "id": 1,
+      "name": "Conference 2024",
+      "date": "2024-08-10",
+      "location": "New York",
+      "attendees": [1, 2, 3]
+    },
+    {
+      "id": 2,
+      "name": "Tech Expo 2024",
+      "date": "2024-09-15",
+      "location": "San Francisco",
+      "attendees": [2, 3, 4]
+    },
+    {
+      "id": 3,
+      "name": "Music Festival 2024",
+      "date": "2024-10-20",
+      "location": "Los Angeles",
+      "attendees": [1, 4, 5]
+    }
+  ],
+  "users": [
+    {
+      "id": 1,
+      "name": "Alice Johnson",
+      "email": "alice.johnson@example.com"
+    },
+    {
+      "id": 2,
+      "name": "Bob Smith",
+      "email": "bob.smith@example.com"
+    },
+    {
+      "id": 3,
+      "name": "Charlie Brown",
+      "email": "charlie.brown@example.com"
+    },
+    {
+      "id": 4,
+      "name": "David Williams",
+      "email": "david.williams@example.com"
+    },
+    {
+      "id": 5,
+      "name": "Eve Davis",
+      "email": "eve.davis@example.com"
+    }
+  ]
+}

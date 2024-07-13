@@ -3,7 +3,7 @@ import * as redisClient from "./clients/redisClient.js";
 import eventRoutes from "./routes/eventRoutes.js";
 
 const app = express();
-const port = process.env.PORT || 3300;
+const port = process.env.SERVER_PORT || 3300;
 
 startRedis();
 

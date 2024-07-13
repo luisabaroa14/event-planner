@@ -1,8 +1,17 @@
 import express from "express";
+import * as redisClient from "./clients/redisClient.js";
 import eventRoutes from "./routes/eventRoutes.js";
 
 const app = express();
-const port = 3000;
+const port = process.env.PORT || 3300;
+
+startRedis();
+
+async function startRedis() {
+  await redisClient.init();
+  await redisClient.connect();
+  console.log(`Connected to redis on http://localhost:${process.env.REDIS_PORT}`);
+}
 
 app.use(express.json());
 

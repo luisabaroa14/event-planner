@@ -6,7 +6,12 @@ import router from "./router";
 import "bootstrap/dist/css/bootstrap.min.css";
 import "bootstrap";
 
+// Import FontAwesome
+import '@fortawesome/fontawesome-free/css/all.min.css';
+
+// Import custom SCSS
 import "../scss/custom.scss";
+import '../scss/responsive.scss';
 
 const app = createApp(App);
 

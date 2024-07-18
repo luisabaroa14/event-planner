@@ -1,0 +1,20 @@
+// Define breakpoints
+$breakpoint-md: 992px;
+
+// Utility class for showing elements on small screens only
+.small-screen {
+  display: none !important;
+
+  @media (max-width: $breakpoint-md) {
+    display: flex !important;
+  }
+}
+
+// Utility class for showing elements on large screens only
+.large-screen {
+  display: none !important;
+
+  @media (min-width: $breakpoint-md) {
+    display: flex !important;
+  }
+}

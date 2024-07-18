@@ -10,10 +10,12 @@
     "compile-sass": "sass ./scss/custom.scss ./css/custom.css"
   },
   "dependencies": {
+    "@fortawesome/fontawesome-free": "^6.6.0",
     "@popperjs/core": "^2.11.8",
     "bootstrap": "^5.3.3",
     "sass": "^1.77.6",
-    "vue": "^3.4.29"
+    "vue": "^3.4.29",
+    "vue-router": "^4.4.0"
   },
   "devDependencies": {
     "@vitejs/plugin-vue": "^5.0.5",

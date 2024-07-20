@@ -6,5 +6,7 @@
 @import '../node_modules/bootstrap/scss/variables';
 @import '../node_modules/bootstrap/scss/mixins';
 
+@import './abstracts/utilities';
+
 // Import the rest of Bootstrap
 @import '../node_modules/bootstrap/scss/bootstrap';

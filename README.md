@@ -1,4 +1,4 @@
-# Event Scheduler App
+# Event Planner App
 
 ## Project Setup
 
@@ -12,10 +12,11 @@
    ```sh
    npm install bootstrap @popperjs/core sass
 
-3. Install express and redis
-   ```sh
-   npm install express redis
-
 3. Install nodemon
    ```sh
    npm install --save-dev nodemon
+
+4. Build docker image
+   ```sh
+   docker-compose up --build
+

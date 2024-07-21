@@ -18,3 +18,10 @@ services:
     environment:
       REDIS_HOST: redis
       REDIS_PORT: 6379
+  client:
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
+    container_name: client
+    ports:
+      - "8080:80"

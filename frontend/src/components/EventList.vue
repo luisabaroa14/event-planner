@@ -10,9 +10,9 @@
       @mouseenter="stopAutoScroll"
       @mouseleave="startAutoScroll"
     >
-      <div v-for="event in events" :key="event.id">
+      <div v-for="event in events" :key="event.id" class="col-6 col-lg-2">
         <div class="card border-0">
-          <img :src="img" class="rounded-top" />
+          <img :src="img" class="rounded-top img-fluid" />
           <div class="card-body">
             <h5 class="card-title">{{ event.name }}</h5>
             <p>{{ event.location }}</p>
@@ -127,9 +127,6 @@ onMounted(() => {
 
 <style scoped>
 .card {
-  width: 280px;
-  background: white;
-  border-radius: 10px;
   box-shadow: 0px 0px 14px -2px #bebebe;
   transition: 0.6s ease-in-out;
 }

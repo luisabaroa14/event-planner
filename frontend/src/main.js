@@ -13,7 +13,13 @@ import '@fortawesome/fontawesome-free/css/all.min.css';
 import "../scss/custom.scss";
 import '../scss/responsive.scss';
 
+// Import VCalendar and its styles
+import VCalendar from 'v-calendar';
+import 'v-calendar/style.css';
+
 const app = createApp(App);
+
+app.use(VCalendar, {})
 
 app.use(router);
 app.mount("#app");

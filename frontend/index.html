@@ -5,7 +5,7 @@
     <link rel="icon" type="image/svg+xml" href="/vite.svg" />
     <link href="./css/custom.css" rel="stylesheet" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Event Scheduler</title>
+    <title>Event Planner</title>
     <style>
       body,
       html {
@@ -18,10 +18,27 @@
       #app {
         display: flex;
         flex-direction: column;
+        height: 100%;
+        width: 100%;
+        
+        /* flex: 1;
+        display: flex;
+        flex-direction: column;
+        margin: 0;
+        padding: 0; */
       }
     </style>
   </head>
-  <body class="bg-secondary d-flex flex-column">
+  <body
+    class="d-flex bg-secondary flex-column"
+    style="
+      background: linear-gradient(
+        to right,
+        #769bba,
+        var(--bs-secondary)
+      );
+    "
+  >
     <div id="app"></div>
     <script type="module" src="./src/main.js"></script>
   </body>

@@ -1,5 +1,11 @@
 <template>
-  <div class="large-screen d-flex justify-content-center mt-3">
+  <div
+    class="position-fixed d-flex justify-content-center align-items-center w-100 pt-3 pb-3 z-3"
+    style="
+      background: linear-gradient(to right, #769bba, var(--bs-secondary));
+      mask-image: linear-gradient(black 80%, transparent);
+    "
+  >
     <nav class="navbar shadow-sm rounded-pill border p-0">
       <div class="justify-content-center">
         <ul class="nav gap-2">
@@ -12,7 +18,7 @@
             >
               <i class="fas fa-house-chimney"></i>
               <!-- <i class="fas fa-home"></i> -->
-              Home
+              <p class="large-screen m-0">Home</p>
             </router-link>
           </li>
           <li class="nav-item">
@@ -24,7 +30,7 @@
             >
               <i class="fas fa-champagne-glasses"></i>
               <!-- <i class="fas fa-calendar-alt"></i> -->
-              Events
+              <p class="large-screen m-0">Events</p>
             </router-link>
           </li>
           <li class="nav-item">
@@ -35,7 +41,19 @@
               to="/products"
             >
               <i class="fas fa-bowl-rice"></i>
-              Products
+              <p class="large-screen m-0">Products</p>
+            </router-link>
+          </li>
+          <li class="nav-item">
+            <router-link
+              class="nav-link"
+              active-class="active"
+              aria-current="page"
+              to="/chefs"
+            >
+              <ChefIcon />
+              <!-- <i class="fas fa-bowl-rice"></i> -->
+              <p class="large-screen m-0">Chefs</p>
             </router-link>
           </li>
         </ul>
@@ -44,7 +62,9 @@
   </div>
 </template>
 
-<script setup></script>
+<script setup>
+import ChefIcon from "@/assets/icons/ChefIcon.vue";
+</script>
 
 <style scoped>
 .nav-link {

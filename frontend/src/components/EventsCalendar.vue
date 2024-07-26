@@ -1,4 +1,5 @@
 <script setup>
+// https://vcalendar.io/calendar/dates.html
 import { ref, computed } from "vue";
 
 // Define props for event dates
@@ -44,7 +45,7 @@ const calendarEvents = computed(() => {
 
 <template>
   <VDatePicker
-    class="w-100"
+    class="w-100 h-100"
     v-model="selectedDate"
     :attributes="calendarEvents"
     :select-attribute="selectAttribute"

@@ -1,65 +1,125 @@
+<script setup>
+import { ref, computed, defineProps } from "vue";
+
+const props = defineProps({
+  dishes: Array,
+  categories: Array,
+  activeCategoryId: Number,
+});
+
+const updateRating = (dish, rating) => {
+  // Actualiza el rating del evento
+  dish.rating = rating;
+};
+</script>
+
 <template>
-    <div class="w-100 mt-3">
-      <div class="tab-content" style="overflow-x: hidden;">
-        <div v-if="props.events.length === 0" class="text-center">
-          <p>Loading events...</p>
-        </div>
-        <div class="card-container" v-else>
-          <div v-for="event in props.events" :key="event.id" class="card">
-            <img :src="event.img" class="rounded-top" />
-            <div class="card-body">
-              <h5 class="card-title">{{ event.name }}</h5>
-              <p>{{ event.location }}</p>
-              <p class="text-muted">{{ event.date }}</p>
+  <div class="w-100 mt-3">
+    <div class="tab-content" style="overflow-x: hidden">
+      <div v-if="props.dishes.length === 0" class="text-center">
+        <p>Loading dishes...</p>
+      </div>
+      <div class="card-container" v-else>
+        <div
+          v-for="dish in props.dishes"
+          :key="dish.id"
+          class="card position-relative"
+        >
+          <img :src="dish.img" class="rounded-top" />
+          <button
+            class="position-absolute btn btn-sm btn-black border border-dark btn-black-hover rounded-circle"
+            style="top: 10px; right: 10px"
+          >
+            <i class="fa fa-heart"></i>
+          </button>
+          <div class="card-body">
+            <h5 class="card-title">{{ dish.name }}</h5>
+            <div class="rating">
+              <button
+                v-for="i in 5"
+                :key="i"
+                @click="updateRating(dish, i)"
+                :class="{ active: i <= dish.rating }"
+              >
+                <i class="fa fa-star"></i>
+              </button>
+            </div>
+            <p class="text-muted">{{ dish.description }}</p>
+            <div class="container">
+              <div class="row">
+                <p class="col fs-5" style="font-weight: bold">
+                  {{ dish.cost }}
+                </p>
+                <button
+                  type="button"
+                  class="col btn btn-black bg-white border border-dark btn-black-hover rounded-pill"
+                >
+                  Add to Cart
+                </button>
+              </div>
             </div>
           </div>
         </div>
       </div>
     </div>
-  </template>
-  
-  <script setup>
-  import { ref, computed, defineProps } from "vue";
-  
-  const props = defineProps({
-    events: Array,
-    categories: Array,
-    activeCategoryId: Number
-  });
-  </script>
-  
-  <style scoped>
+  </div>
+</template>
+
+<style scoped>
+.card-container {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  gap: 10px;
+}
+
+.card {
+  background: white;
+  border-radius: 10px;
+  box-shadow: 0px 0px 14px -2px #bebebe;
+  transition: 0.6s ease-in-out;
+}
+
+.card img {
+  width: 100%;
+  height: 150px;
+  object-fit: cover;
+  border-radius: 10px 10px 0 0;
+}
+
+.rating {
+  display: flex;
+  gap: 5px;
+}
+
+.rating button {
+  background-color: transparent;
+  border: none;
+  padding: 0;
+  cursor: pointer;
+}
+
+.rating button.active {
+  color: #ffd700;
+}
+
+.rating button i {
+  font-size: 18px;
+}
+
+.btn-black:hover {
+  background-color: #27486e !important;
+  color: white;
+}
+
+@media (max-width: 1200px) {
   .card-container {
-    display: flex;
-    flex-wrap: wrap;
-    justify-content: center;
+    grid-template-columns: repeat(3, 1fr);
   }
-  
-  .card {
-    width: calc(25% - 20px);
-    margin: 10px 20px 10px 0;
-    background: white;
-    border-radius: 10px;
-    box-shadow: 0px 0px 14px -2px #bebebe;
-    transition: 0.6s ease-in-out;
+}
+
+@media (max-width: 992px) {
+  .card-container {
+    grid-template-columns: repeat(2, 1fr);
   }
-  
-  .card img {
-    width: 100%;
-    height: 150px;
-    object-fit: cover;
-    border-radius: 10px 10px 0 0;
-  }
-  
-  @media (max-width: 768px) {
-    .card {
-      width: calc(50% - 20px);
-    }
-  }
-  
-  @media (max-width: 480px) {
-    .card {
-      width: 100%;
-    }
-  }
-  </style>
+}
+</style>

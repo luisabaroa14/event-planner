@@ -23,7 +23,7 @@ const calendarEvents = computed(() => {
   return (
     props.events
       // Filter events if collaborator ID is provided
-      .filter(
+      ?.filter(
         (e) =>
           !props.collaboratorId || e.collaboratorId === props.collaboratorId
       )

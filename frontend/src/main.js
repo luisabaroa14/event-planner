@@ -4,7 +4,10 @@ import router from "./router";
 
 // Import Bootstrap and BootstrapVue CSS files
 import "bootstrap/dist/css/bootstrap.min.css";
+import 'bootstrap/dist/js/bootstrap.min.js'
 import "bootstrap";
+import 'bootstrap/dist/css/bootstrap.css';
+import 'bootstrap/dist/js/bootstrap.js';
 
 // Import FontAwesome
 import '@fortawesome/fontawesome-free/css/all.min.css';

@@ -4,6 +4,8 @@ import EventList from "../components/EventList.vue";
 import img from "@/assets/images/plate.png";
 import { getEvents } from "../utils/data";
 
+
+
 const loadEvents = async () => {
   try {
     const response = await fetch("http://localhost:3300/api/events");

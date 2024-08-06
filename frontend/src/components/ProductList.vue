@@ -1,5 +1,5 @@
 <script setup>
-import { ref, computed, defineProps } from "vue";
+import { defineProps } from "vue";
 
 const props = defineProps({
   dishes: Array,

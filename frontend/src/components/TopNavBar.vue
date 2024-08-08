@@ -1,10 +1,7 @@
 <template>
   <div
-    class="position-fixed d-flex justify-content-between align-items-center w-100 pt-3 pb-3 z-3 px-3"
-    style="
-      background: linear-gradient(to right, #769bba, var(--bs-secondary));
-      mask-image: linear-gradient(black 80%, transparent);
-    "
+    class="position-fixed d-flex justify-content-between align-items-center w-100 pt-3 pb-3 z-3 px-3 bl-btm"
+    style="background: linear-gradient(to right, #769bba, var(--bs-secondary))"
   >
     <div class="d-flex">
       <img :src="img" alt="logo" style="width: 100px" />

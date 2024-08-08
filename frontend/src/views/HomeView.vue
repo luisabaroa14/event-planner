@@ -90,7 +90,7 @@ const infoPills = [
           class="d-flex w-20 position-relative hover-bounce"
         >
           <div
-            class="rounded-pill position-absolute top-0 start-0 w-100 h-100"
+            class="rounded-pill position-absolute w-100 h-100"
             :style="{
               backgroundImage: 'url(' + getEvents()[0].img + ')',
               backgroundSize: 'cover',

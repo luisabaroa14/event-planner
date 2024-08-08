@@ -23,7 +23,7 @@ const updateRating = (dish, rating) => {
         <div
           v-for="dish in props.dishes"
           :key="dish.id"
-          class="card position-relative"
+          class="card border-0"
         >
           <img :src="dish.img" class="rounded-top" />
           <button

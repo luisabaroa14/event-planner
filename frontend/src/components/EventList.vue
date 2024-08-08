@@ -23,8 +23,13 @@ const props = defineProps({ title: String, events: Array });
           />
           <div class="card-body">
             <h5 class="card-title">{{ event.name }}</h5>
-            <p>{{ event.location }}</p>
-            <p class="text-muted">{{ event.date }}</p>
+            <p class="text-muted">{{event.date }}</p>
+            <div class="d-flex flex-row">
+              <p class="col fs-5" style="font-weight: bold">850$</p>
+              <button type="button" class="btn btn-primary rounded-pill">
+                View Event
+              </button>
+            </div>
           </div>
         </div>
       </div>

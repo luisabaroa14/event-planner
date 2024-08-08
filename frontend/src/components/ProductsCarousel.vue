@@ -36,7 +36,7 @@ const groupedDishes = computed(() => {
     >
       <Slide v-for="(dish) in dishGroup" :key="dish.id" class="pt-3">
         <div class="card-container">
-            <div class="card position-relative">
+            <div class="card border-0 position-relative">
               <img :src="dish.img" class="rounded-top d-block w-100" />
             </div>
           </div>

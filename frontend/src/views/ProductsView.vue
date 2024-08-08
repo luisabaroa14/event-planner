@@ -1,8 +1,8 @@
 <script setup>
 import ProductList from "../components/ProductList.vue";
-import ProductsCarousel from "../components/ProductsCarousel.vue";
+import ProductsCarousel from "@/components/ProductsCarousel.vue";
 import { ref, computed } from "vue";
-import { getDishes } from "../utils/data";
+import { getDishes } from "@/utils/data.js";
 
 const dishes = getDishes();
 
@@ -93,14 +93,19 @@ const updateRating = (dishId, newRating) => {
         </div>
       </div>
       <div>
-        <p>Welcome to the products page</p>
-        <ProductsCarousel />
         <ProductList
           :dishes="searchDishes"
           :categories="categories"
           :active-category-id="activeCategoryId"
           @update-rating="updateRating"
         />
+        <div class="my-5">
+          <ProductsCarousel
+            :images="dishes.map((d) => d.img)"
+            :numberOfRows="1"
+            :withSpace="false"
+          />
+        </div>
       </div>
     </div>
   </div>

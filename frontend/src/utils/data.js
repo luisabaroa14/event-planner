@@ -101,7 +101,7 @@ export function getDishes() {
       description: "Food description",
       cost: "59.77$",
       categoryId: 1,
-      img: "https://fotografias.larazon.es/clipping/cmsimages01/2023/11/16/080445F5-DC20-409E-A8B9-498C90C12C90/dieta-mexicana-reduce-inflamacion-colesterol-malo-debido-sus-componentes_98.jpg?crop=1280,720,x0,y0&width=1900&height=1069&optimize=low&format=webply",
+      img: "https://cdn.britannica.com/36/123536-050-95CB0C6E/Variety-fruits-vegetables.jpg",
       rating: 0,
     },
     {
@@ -110,7 +110,7 @@ export function getDishes() {
       description: "Food description",
       cost: "59.77$",
       categoryId: 1,
-      img: "https://fotografias.larazon.es/clipping/cmsimages01/2023/11/16/080445F5-DC20-409E-A8B9-498C90C12C90/dieta-mexicana-reduce-inflamacion-colesterol-malo-debido-sus-componentes_98.jpg?crop=1280,720,x0,y0&width=1900&height=1069&optimize=low&format=webply",
+      img: "https://images.immediate.co.uk/production/volatile/sites/30/2022/08/Corndogs-7832ef6.jpg?quality=90&resize=556,505",
       rating: 0,
     },
     {
@@ -119,7 +119,7 @@ export function getDishes() {
       description: "Food description",
       cost: "59.77$",
       categoryId: 2,
-      img: "https://fotografias.larazon.es/clipping/cmsimages01/2023/11/16/080445F5-DC20-409E-A8B9-498C90C12C90/dieta-mexicana-reduce-inflamacion-colesterol-malo-debido-sus-componentes_98.jpg?crop=1280,720,x0,y0&width=1900&height=1069&optimize=low&format=webply",
+      img: "https://images.ctfassets.net/awb1we50v0om/2Spf80TME2zIhLqsi3Zxv9/919421a45f3260ee426c99c35235f1c8/Plates03__3__copy3.jpg?w=1920&fm=webp&q=70",
       rating: 0,
     },
     {
@@ -128,7 +128,7 @@ export function getDishes() {
       description: "Food description",
       cost: "59.77$",
       categoryId: 2,
-      img: "https://fotografias.larazon.es/clipping/cmsimages01/2023/11/16/080445F5-DC20-409E-A8B9-498C90C12C90/dieta-mexicana-reduce-inflamacion-colesterol-malo-debido-sus-componentes_98.jpg?crop=1280,720,x0,y0&width=1900&height=1069&optimize=low&format=webply",
+      img: "https://media.post.rvohealth.io/wp-content/uploads/2022/09/frozen-dinner-meal-meatloaf-mashed-potatoes-vegetables-732x549-thumbnail-732x549.jpg",
       rating: 0,
     },
     {
@@ -146,7 +146,7 @@ export function getDishes() {
       description: "Food description",
       cost: "59.77$",
       categoryId: 3,
-      img: "https://okdiario.com/img/2021/03/10/recetas-chinas-655x368.jpg",
+      img: "https://cdn.sanity.io/images/cctd4ker/production/9296da795070ca0b6d9147d9507ab54d9e2dba84-1440x960.jpg?w=3840&q=75&fit=clip&auto=format",
       rating: 0,
     },
     {
@@ -164,7 +164,7 @@ export function getDishes() {
       description: "Food description",
       cost: "59.77$",
       categoryId: 2,
-      img: "https://okdiario.com/img/2021/03/10/recetas-chinas-655x368.jpg",
+      img: "https://images.immediate.co.uk/production/volatile/sites/30/2013/05/spaghetti-carbonara-382837d.jpg?resize=768,574",
       rating: 0,
     },
     {
@@ -173,7 +173,7 @@ export function getDishes() {
       description: "Food description",
       cost: "59.77$",
       categoryId: 3,
-      img: "https://okdiario.com/img/2021/03/10/recetas-chinas-655x368.jpg",
+      img: "https://www.jollibeefoods.com/cdn/shop/files/29351737_2152446668377854_356570745477300982_o_2152446668377854.jpg?v=1634843436&width=1080",
       rating: 0,
     },
     {
@@ -182,7 +182,7 @@ export function getDishes() {
       description: "Food description",
       cost: "59.77$",
       categoryId: 1,
-      img: "https://okdiario.com/img/2021/03/10/recetas-chinas-655x368.jpg",
+      img: "https://hips.hearstapps.com/hmg-prod/images/delish-221219-burger-king-chicken-fries-0133-eb-1672788323.jpg?crop=0.683xw:1.00xh;0.248xw,0&resize=640:*",
       rating: 0,
     },
     {
@@ -303,7 +303,7 @@ export function getChefs() {
       id: 4,
       name: "Homer",
       description: "This is the chefs description",
-      img: "https://www.shutterstock.com/image-photo/win-success-good-news-happy-260nw-2045370566.jpg",
+      img: "https://www.escoffier.edu/wp-content/uploads/2022/03/Chef-in-uniform-posing-for-a-photo-in-a-kitchen-1400.jpg",
    },
     {
       id: 5,

@@ -3,8 +3,6 @@ import { ref } from "vue";
 import { Carousel, Slide } from "vue3-carousel";
 import { getChefs } from "../utils/data";
 
-import "vue3-carousel/dist/carousel.css";
-
 const currentSlide = ref(0);
 const chefs = ref(getChefs());
 

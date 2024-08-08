@@ -5,6 +5,10 @@ import img from "@/assets/images/chef2.png";
 import ImageGrid from "@/components/ImageGrid.vue";
 import SocialIcons from "@/components/SocialIcons.vue";
 import CardComponent from "@/components/CardComponent.vue";
+import ProductsCarousel from "@/components/ProductsCarousel.vue";
+import { getChefs } from "../utils/data";
+
+const chefs = getChefs();
 
 const infoPills = [
   { title: "Events", value: 33 },
@@ -70,6 +74,14 @@ const infoPills = [
           </p>
         </div>
       </CardComponent>
+
+      <div class="mt-5">
+        <ProductsCarousel
+          :images="chefs.map((chef) => chef.img)"
+          :numberOfRows="1"
+          :withSpace="true"
+        />
+      </div>
 
       <div class="d-flex flex-row justify-content-between w-100 my-5">
         <div

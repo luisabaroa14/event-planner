@@ -1,10 +1,11 @@
 <script setup>
 import EventsCalendar from "../components/EventsCalendar.vue";
 import EventList from "../components/EventList.vue";
+import ProductsCarousel from "@/components/ProductsCarousel.vue";
 import img from "@/assets/images/plate.png";
-import { getEvents } from "../utils/data";
+import { getEvents } from "@/utils/data";
 
-
+const events = getEvents();
 
 const loadEvents = async () => {
   try {
@@ -22,6 +23,6 @@ const loadEvents = async () => {
       <img :src="img" class="large-screen rounded" />
       <EventsCalendar :events="events" :collaborator-id="null" />
     </div>
-    <EventList title="Upcomming Events" :events="getEvents()" />
+    <EventList title="Upcomming Events" :events="events" />
   </div>
 </template>

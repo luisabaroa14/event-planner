@@ -18,6 +18,9 @@ import '../scss/anims.scss';
 import VCalendar from 'v-calendar';
 import 'v-calendar/style.css';
 
+// Import Carousel and its styles
+import "vue3-carousel/dist/carousel.css";
+
 const app = createApp(App);
 
 app.use(VCalendar, {})

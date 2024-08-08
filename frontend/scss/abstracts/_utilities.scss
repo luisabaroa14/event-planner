@@ -41,3 +41,94 @@ $utilities: map-merge(
     ),
   )
 );
+
+// Define a custom map for margin and padding classes
+$custom-margins-paddings: (
+  0: 0,
+  1: 0.25rem,
+  2: 0.5rem,
+  3: 1rem,
+  4: 1.5rem,
+  5: 3rem,
+  6: 4rem,
+  7: 5rem,
+  8: 6rem,
+  9: 7rem,
+  10: 8rem,
+);
+
+$utilities: map-merge(
+  $utilities,
+  (
+    "m": (
+      property: margin,
+      class: m,
+      values: $custom-margins-paddings,
+    ),
+    "mt": (
+      property: margin-top,
+      class: mt,
+      values: $custom-margins-paddings,
+    ),
+    "mr": (
+      property: margin-right,
+      class: mr,
+      values: $custom-margins-paddings,
+    ),
+    "mb": (
+      property: margin-bottom,
+      class: mb,
+      values: $custom-margins-paddings,
+    ),
+    "ml": (
+      property: margin-left,
+      class: ml,
+      values: $custom-margins-paddings,
+    ),
+    "mx": (
+      property: (margin-left, margin-right),
+      class: mx,
+      values: $custom-margins-paddings,
+    ),
+    "my": (
+      property: (margin-top, margin-bottom),
+      class: my,
+      values: $custom-margins-paddings,
+    ),
+    "p": (
+      property: padding,
+      class: p,
+      values: $custom-margins-paddings,
+    ),
+    "pt": (
+      property: padding-top,
+      class: pt,
+      values: $custom-margins-paddings,
+    ),
+    "pr": (
+      property: padding-right,
+      class: pr,
+      values: $custom-margins-paddings,
+    ),
+    "pb": (
+      property: padding-bottom,
+      class: pb,
+      values: $custom-margins-paddings,
+    ),
+    "pl": (
+      property: padding-left,
+      class: pl,
+      values: $custom-margins-paddings,
+    ),
+    "px": (
+      property: (padding-left, padding-right),
+      class: px,
+      values: $custom-margins-paddings,
+    ),
+    "py": (
+      property: (padding-top, padding-bottom),
+      class: py,
+      values: $custom-margins-paddings,
+    )
+  )
+);

@@ -20,3 +20,7 @@
    ```sh
    docker-compose up --build
 
+4. Copy dist folder to root for gh-pages
+   ```sh
+   cp -r frontend/dist/* .
+

@@ -36,7 +36,7 @@ const groupedImages = computed(() => {
     <Carousel
       :breakpoints="breakpoints"
       snap-align="start"
-      :autoplay="500"
+      :autoplay="2000"
       :transition="3000"
       :wrap-around="true"
       :dir="index % 2 === 0 ? 'ltr' : 'rtl'"

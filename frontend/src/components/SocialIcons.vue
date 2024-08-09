@@ -1,9 +1,39 @@
+<script setup>
+import { computed } from "vue";
+const icons = [
+  { name: "instagram", url: "https://www.instagram.com" },
+  { name: "spotify", url: "https://www.spotify.com" },
+  { name: "facebook", url: "https://www.facebook.com" },
+  { name: "whatsapp", url: "https://www.whatsapp.com" },
+];
+
+const filteredIcons = computed(() =>
+  icons.filter((icon) => props.iconNames.includes(icon.name))
+);
+
+const props = defineProps({
+  iconNames: {
+    type: Array,
+    default: () => ["instagram", "spotify", "facebook", "whatsapp"],
+  },
+  color: {
+    type: String,
+    default: "whitesmoke",
+  },
+});
+</script>
+
 <template>
-  <div class="d-flex flex-row container p-3">
-    <i class="social-link1 fa-brands fa-instagram"></i>
-    <i class="social-link2 fa-brands fa-spotify"></i>
-    <i class="social-link3 fa-brands fa-facebook"></i>
-    <i class="social-link4 fa-brands fa-whatsapp"></i>
+  <div class="d-flex flex-row justify-content-center container p-3">
+    <a
+      v-for="icon in filteredIcons"
+      :key="icon.name"
+      :href="icon.url"
+      class="fa-brands"
+      :style="{ color: props.color }"
+      :class="`${icon.name} fa-${icon.name}`"
+    >
+    </a>
   </div>
 </template>
 
@@ -12,23 +42,36 @@
   height: 100px;
 }
 
-.container .social-link1,
-.container .social-link2,
-.container .social-link3,
-.container .social-link4 {
+.container .instagram,
+.container .spotify,
+.container .facebook,
+.container .whatsapp {
   position: relative;
   display: flex;
   align-items: center;
   justify-content: center;
   width: 25%;
-  color: whitesmoke;
   font-size: 28px;
   text-decoration: none;
   transition: 0.25s;
   border-radius: 50px;
 }
 
-.container .social-link1:hover {
+/* Media query for screens smaller than 992px */
+@media (max-width: 991.98px) {
+  .container {
+    height: 60px; /* Adjust height for smaller screens */
+  }
+
+  .container .instagram,
+  .container .spotify,
+  .container .facebook,
+  .container .whatsapp {
+    font-size: 18px; /* Adjust font size for smaller screens */
+  }
+}
+
+.container .instagram:hover {
   background: #f09433;
   background: -moz-linear-gradient(
     45deg,
@@ -58,17 +101,17 @@
   animation: bounce 0.4s linear;
 }
 
-.container .social-link2:hover {
+.container .spotify:hover {
   background-color: #1db954;
   animation: bounce 0.4s linear;
 }
 
-.container .social-link3:hover {
+.container .facebook:hover {
   background-color: #316ff6;
   animation: bounce 0.4s linear;
 }
 
-.container .social-link4:hover {
+.container .whatsapp:hover {
   background-color: #12a50b;
   animation: bounce 0.4s linear;
 }

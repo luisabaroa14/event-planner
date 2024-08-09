@@ -12,8 +12,9 @@ export function getEvents(currentDate = new Date()) {
       id: 2,
       name: "Event 2",
       img: "https://images.immediate.co.uk/production/volatile/sites/30/2022/08/Corndogs-7832ef6.jpg?quality=90&resize=556,505",
-      date: new Date(currentDate.setDate(currentDate.getDate() + 1))
-        .toDateString(),
+      date: new Date(
+        currentDate.setDate(currentDate.getDate() + 1)
+      ).toDateString(),
       location: "Location 2",
       collaboratorId: 1,
     },
@@ -21,8 +22,9 @@ export function getEvents(currentDate = new Date()) {
       id: 3,
       name: "Event 3",
       img: "https://media.post.rvohealth.io/wp-content/uploads/2022/09/frozen-dinner-meal-meatloaf-mashed-potatoes-vegetables-732x549-thumbnail-732x549.jpg",
-      date: new Date(currentDate.setDate(currentDate.getDate() + 1))
-        .toDateString(),
+      date: new Date(
+        currentDate.setDate(currentDate.getDate() + 1)
+      ).toDateString(),
       location: "Location 3",
       collaboratorId: 1,
     },
@@ -30,8 +32,7 @@ export function getEvents(currentDate = new Date()) {
       id: 4,
       name: "Event 4",
       img: "https://cdn.sanity.io/images/cctd4ker/production/9296da795070ca0b6d9147d9507ab54d9e2dba84-1440x960.jpg?w=3840&q=75&fit=clip&auto=format",
-      date: new Date(currentDate.setDate(currentDate.getDate()))
-        .toDateString(),
+      date: new Date(currentDate.setDate(currentDate.getDate())).toDateString(),
       location: "Location 4",
       collaboratorId: 2,
     },
@@ -39,8 +40,9 @@ export function getEvents(currentDate = new Date()) {
       id: 5,
       name: "Event 5",
       img: "https://images.immediate.co.uk/production/volatile/sites/30/2013/05/spaghetti-carbonara-382837d.jpg?resize=768,574",
-      date: new Date(currentDate.setDate(currentDate.getDate() + 1))
-        .toDateString(),
+      date: new Date(
+        currentDate.setDate(currentDate.getDate() + 1)
+      ).toDateString(),
       location: "Location 5",
       collaboratorId: 2,
     },
@@ -48,8 +50,9 @@ export function getEvents(currentDate = new Date()) {
       id: 6,
       name: "Event 6",
       img: "https://ichef.bbci.co.uk/images/ic/832xn/p0h0ylf7.jpg",
-      date: new Date(currentDate.setDate(currentDate.getDate() + 1))
-        .toDateString(),
+      date: new Date(
+        currentDate.setDate(currentDate.getDate() + 1)
+      ).toDateString(),
       location: "Location 6",
       collaboratorId: 2,
     },
@@ -57,8 +60,7 @@ export function getEvents(currentDate = new Date()) {
       id: 7,
       name: "Event 7",
       img: "https://hips.hearstapps.com/hmg-prod/images/delish-221219-burger-king-chicken-fries-0133-eb-1672788323.jpg?crop=0.683xw:1.00xh;0.248xw,0&resize=640:*",
-      date: new Date(currentDate.setDate(currentDate.getDate()))
-        .toDateString(),
+      date: new Date(currentDate.setDate(currentDate.getDate())).toDateString(),
       location: "Location 7",
       collaboratorId: 2,
     },
@@ -66,8 +68,9 @@ export function getEvents(currentDate = new Date()) {
       id: 8,
       name: "Event 8",
       img: "https://www.jollibeefoods.com/cdn/shop/files/29351737_2152446668377854_356570745477300982_o_2152446668377854.jpg?v=1634843436&width=1080",
-      date: new Date(currentDate.setDate(currentDate.getDate() + 1))
-        .toDateString(),
+      date: new Date(
+        currentDate.setDate(currentDate.getDate() + 1)
+      ).toDateString(),
       location: "Location 8",
       collaboratorId: 3,
     },
@@ -75,8 +78,9 @@ export function getEvents(currentDate = new Date()) {
       id: 9,
       name: "Event 9",
       img: "https://images.immediate.co.uk/production/volatile/sites/30/2013/05/spaghetti-carbonara-382837d.jpg?resize=768,574",
-      date: new Date(currentDate.setDate(currentDate.getDate() + 1))
-        .toDateString(),
+      date: new Date(
+        currentDate.setDate(currentDate.getDate() + 1)
+      ).toDateString(),
       location: "Location 9",
       collaboratorId: 3,
     },
@@ -84,8 +88,9 @@ export function getEvents(currentDate = new Date()) {
       id: 10,
       name: "Event 10",
       img: "https://images.immediate.co.uk/production/volatile/sites/30/2022/08/Corndogs-7832ef6.jpg?quality=90&resize=556,505",
-      date: new Date(currentDate.setDate(currentDate.getDate() + 1))
-        .toDateString(),
+      date: new Date(
+        currentDate.setDate(currentDate.getDate() + 1)
+      ).toDateString(),
       location: "Location 10",
       collaboratorId: 3,
     },
@@ -284,33 +289,43 @@ export function getChefs() {
     {
       id: 1,
       name: "John",
-      description: "This is the chefs description",
+      description:
+        "John is a master of modern fusion cuisine, blending classic techniques with contemporary flavors. His signature dishes showcase innovative combinations and exquisite presentation.",
       img: "https://static.cordonbleu.edu/Files/MediaFile/79298.jpg",
+      cuisineTypes: ["Fusion", "Contemporary"],
     },
     {
       id: 2,
       name: "Larry",
-      description: "This is the chefs description",
+      description:
+        "Larry specializes in rustic Italian cuisine, focusing on traditional recipes passed down through generations. His dishes are known for their authenticity and rich, comforting flavors.",
       img: "https://static.cordonbleu.edu/Files/MediaFile/79299.jpg",
+      cuisineTypes: ["Italian", "Rustic"],
     },
     {
       id: 3,
       name: "Moe",
-      description: "This is the chefs description",
+      description:
+        "Moe is renowned for his expertise in seafood, crafting dishes that highlight the freshness and natural flavors of the ocean. His culinary creations are both delicate and bold.",
       img: "https://static.cordonbleu.edu/Files/MediaFile/70795.jpg",
+      cuisineTypes: ["Seafood", "Mediterranean"],
     },
     {
       id: 4,
       name: "Homer",
-      description: "This is the chefs description",
+      description:
+        "Homer excels in traditional French cuisine, with a focus on classic techniques and rich, buttery flavors. His dishes are elegant and embody the essence of French culinary artistry.",
       img: "https://www.escoffier.edu/wp-content/uploads/2022/03/Chef-in-uniform-posing-for-a-photo-in-a-kitchen-1400.jpg",
-   },
+      cuisineTypes: ["French", "Classical"],
+    },
     {
       id: 5,
       name: "Lenny",
-      description: "This is the chefs description",
+      description:
+        "Lenny brings a flair for modern American cuisine, infusing familiar dishes with creative twists and bold flavors. His approach combines comfort with innovation, making each meal a unique experience.",
       img: "https://static.cordonbleu.edu/Files/MediaFile/80212.jpg",
-  },
+      cuisineTypes: ["American", "Modern"],
+    },
   ];
   return chefs;
 }

@@ -1,12 +1,14 @@
 <script setup>
 import EventList from "../components/EventList.vue";
-import { getEvents } from "../utils/data";
 import img from "@/assets/images/chef2.png";
 import ImageGrid from "@/components/ImageGrid.vue";
 import SocialIcons from "@/components/SocialIcons.vue";
 import CardComponent from "@/components/CardComponent.vue";
 import ProductsCarousel from "@/components/ProductsCarousel.vue";
 import { getChefs } from "../utils/data";
+import { useEventStore } from "@/stores/useEventStore";
+
+const eventStore = useEventStore();
 
 const chefs = getChefs();
 
@@ -41,7 +43,7 @@ const infoPills = [
           class="d-flex align-items-center justify-content-center w-50-lg-w-100-sm h-100 mb-2"
         >
           <ImageGrid
-            :images="getEvents().map((event) => event.img)"
+            :images="eventStore.events?.map((event) => event.img)"
             style="filter: drop-shadow(16px 16px 16px black)"
           />
         </div>
@@ -60,7 +62,7 @@ const infoPills = [
         </div>
       </CardComponent>
 
-      <EventList title="Events" :events="getEvents()" />
+      <EventList title="Events" :events="eventStore.events" />
 
       <CardComponent class="my-6 mx-3">
         <div class="my-2 p-2">
@@ -92,7 +94,7 @@ const infoPills = [
           <div
             class="rounded-pill position-absolute top-0 start-0 w-100 h-100"
             :style="{
-              backgroundImage: 'url(' + getEvents()[0].img + ')',
+              backgroundImage: 'url(' + eventStore.events?.[0]?.img + ')',
               backgroundSize: 'cover',
               backgroundPosition: 'center',
               filter: 'brightness(25%) grayscale(100%)',

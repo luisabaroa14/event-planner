@@ -3,6 +3,7 @@ import HomeView from '@/views/HomeView.vue'
 import ProductsView from '@/views/ProductsView.vue'
 import EventsView from '@/views/EventsView.vue'
 import ChefsView from '@/views/ChefsView.vue'
+import AdminView from '@/views/AdminView.vue'
 import NotFoundView from '@/views/NotFoundView.vue'
 
 const router = createRouter({
@@ -31,6 +32,12 @@ const router = createRouter({
       name: 'chefs',
       component: ChefsView,
       meta: { adminOnly: false }
+    },
+    {
+      path: '/admin',
+      name: 'admin',
+      component: AdminView,
+      meta: { adminOnly: true }
     },
     {
       path: '/not-found',

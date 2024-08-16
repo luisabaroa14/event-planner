@@ -57,6 +57,17 @@
                 <p class="large-screen m-0">Chefs</p>
               </router-link>
             </li>
+            <li class="nav-item">
+              <router-link
+                class="nav-link"
+                active-class="active"
+                aria-current="page"
+                to="/admin"
+              >
+                <i class="fas fa-lock"></i>
+                <p class="large-screen m-0">Admin</p>
+              </router-link>
+            </li>
           </ul>
         </div>
       </nav>

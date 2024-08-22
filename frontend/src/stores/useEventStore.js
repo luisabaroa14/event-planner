@@ -1,5 +1,5 @@
 import { defineStore } from "pinia";
-import eventService from "@/services/eventsService";
+import eventService from "@/services/events";
 import { ref } from "vue";
 
 export const useEventStore = defineStore("eventStore", () => {
@@ -11,7 +11,7 @@ export const useEventStore = defineStore("eventStore", () => {
 
   // Actions
   async function fetchEvents() {
-    const response = await eventService.getEvents();
+    const response = await eventService.fetchEvents();
     if (response.success) {
       events.value = response.data;
     } else {

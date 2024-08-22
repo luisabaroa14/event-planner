@@ -1,6 +1,7 @@
 <script setup>
 import { ref } from "vue";
 import { useEventStore } from "@/stores/useEventStore";
+import { formatDateForInput, parseDateAtMidnight } from "@/utils/functions";
 
 const eventStore = useEventStore();
 
@@ -8,19 +9,18 @@ const name = ref("");
 const location = ref("");
 const date = ref("");
 
-const updateEvent = ref(null);
+const eventToUpdate = ref(null);
 
 const clearForm = () => {
   name.value = "";
   location.value = "";
   date.value = "";
 
-  updateEvent.value = null;
+  eventToUpdate.value = null;
 };
 
 const handleCreateEvent = async () => {
   await eventStore.createEvent({
-    id: 1,
     name: name.value,
     location: location.value,
     date: date.value,
@@ -30,32 +30,38 @@ const handleCreateEvent = async () => {
 };
 
 const handleUpdateEvent = async () => {
-  await eventStore.updateEvent(updateEvent.value);
+  await eventStore.updateEvent(eventToUpdate.value);
 
   clearForm();
+};
+
+const updateEvent = (event) => {
+  eventToUpdate.value = JSON.parse(JSON.stringify(event));
+  eventToUpdate.value.date = new Date(event.date);
 };
 </script>
 
 <template>
   <div>
-    <div v-if="updateEvent">
+    <div v-if="eventToUpdate">
       <h3>Update Event</h3>
       <form @submit.prevent="handleUpdateEvent">
         <label>Name:</label>
-        <input class="w-100 mb-1" v-model="updateEvent.name" required />
+        <input class="w-100 mb-1" v-model="eventToUpdate.name" required />
         <br />
         <label>Location:</label>
-        <input class="w-100 mb-1" v-model="updateEvent.location" required />
+        <input class="w-100 mb-1" v-model="eventToUpdate.location" required />
         <br />
         <label>Date:</label>
         <input
           class="w-100 mb-2"
           type="date"
-          v-model="updateEvent.date"
+          @input="eventToUpdate.date = parseDateAtMidnight($event.target.value)"
+          :value="formatDateForInput(eventToUpdate.date)"
           required
         />
         <br />
-        <button class="btn btn-primary w-100" @click="updateEvent = null">
+        <button class="btn btn-primary w-100" @click="eventToUpdate = null">
           Cancel
         </button>
         <button class="btn btn-primary w-100 mt-3" type="submit">
@@ -83,6 +89,7 @@ const handleUpdateEvent = async () => {
     <table class="w-100">
       <thead>
         <tr>
+          <th>ID</th>
           <th>Name</th>
           <th>Location</th>
           <th>Date</th>
@@ -91,14 +98,12 @@ const handleUpdateEvent = async () => {
       </thead>
       <tbody>
         <tr v-for="event in eventStore.events" :key="event.id">
+          <td>{{ event.id }}</td>
           <td>{{ event.name }}</td>
           <td>{{ event.location }}</td>
-          <td>{{ new Date(event.date).toDateString() }}</td>
+          <td>{{ event.date.toDateString() }}</td>
           <td>
-            <button
-              class="btn btn-secondary"
-              @click="updateEvent = JSON.parse(JSON.stringify(event))"
-            >
+            <button class="btn btn-secondary" @click="updateEvent(event)">
               Update
             </button>
             <button

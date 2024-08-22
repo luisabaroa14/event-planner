@@ -1,0 +1,1 @@
+export const useFirestore = import.meta.env.VITE_DATABASE === 'firestore';

@@ -17,7 +17,7 @@ const selectedOption = ref("events");
       </h2>
 
       <!-- Picker at the top -->
-      <select v-model="selectedOption" class="mb-4 p-2">
+      <select v-model="selectedOption" class="form-control w-10 mb-4 p-2">
         <option value="events">Events</option>
         <option value="products">Products</option>
         <option value="chefs">Chefs</option>

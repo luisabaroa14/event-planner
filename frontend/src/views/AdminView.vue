@@ -2,7 +2,7 @@
 import { ref } from "vue";
 import { capitalizeFirstLetter } from "@/utils/functions";
 import AdminEvents from "@/components/admin/AdminEvents.vue";
-// import AdminProduct from '@/components/AdminProduct.vue';
+import AdminProducts from '@/components/admin/AdminProducts.vue';
 // import AdminChef from '@/components/AdminChef.vue';
 
 // Selected option state
@@ -25,5 +25,6 @@ const selectedOption = ref("events");
     </div>
 
     <AdminEvents v-if="selectedOption === 'events'" class="mt-2" />
+    <AdminProducts v-if="selectedOption === 'products'" class="mt-2" />
   </div>
 </template>

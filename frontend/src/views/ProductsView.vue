@@ -2,9 +2,9 @@
 import ProductList from "../components/ProductList.vue";
 import ProductsCarousel from "@/components/ProductsCarousel.vue";
 import { ref, computed } from "vue";
-import { getDishes } from "@/utils/data.js";
+import { useProductStore } from "@/stores/useProductStore";
 
-const dishes = getDishes();
+const productStore = useProductStore();
 
 const categories = ref([
   { id: 1, name: "Breakfast" },
@@ -16,28 +16,33 @@ const activeCategoryId = ref(0);
 
 const activeName = ref("");
 
-const filteredDishes = computed(() => {
-  if (activeCategoryId.value === 0) {
-    return dishes;
-  } else {
-    return dishes.filter((dish) => dish.categoryId === activeCategoryId.value);
-  }
+const filteredProducts = computed(() => {
+  // if (activeCategoryId.value === 0) {
+  //   return productStore.products;
+  // }
+  //  else {
+  //   return productStore.products.filter((product) => product.categoryId === activeCategoryId.value);
+  // }
 });
 
-const searchDishes = computed(() => {
+const searchProducts = computed(() => {
   if (activeName.value === "") {
-    return filteredDishes.value;
+    return productStore.products;
   } else {
-    return filteredDishes.value.filter((dish) => {
-      return dish.name.toLowerCase().includes(activeName.value.toLowerCase());
+    return productStore.products.filter((product) => {
+      return product.name
+        .toLowerCase()
+        .includes(activeName.value.toLowerCase());
     });
   }
 });
 
-const updateRating = (dishId, newRating) => {
-  const dishIndex = dishes.findIndex((dish) => dish.id === dishId);
-  if (dishIndex !== -1) {
-    dishes[dishIndex].rating = newRating;
+const updateRating = (productId, newRating) => {
+  const productIndex = productStore.products.findIndex(
+    (product) => product.id === productId
+  );
+  if (productIndex !== -1) {
+    productStore.products[productIndex].rating = newRating;
   }
 };
 </script>
@@ -92,16 +97,17 @@ const updateRating = (dishId, newRating) => {
           </div>
         </div>
       </div>
-      <div>
+      <div v-if="productStore.products">
         <ProductList
-          :dishes="searchDishes"
+          :products="searchProducts"
           :categories="categories"
           :active-category-id="activeCategoryId"
           @update-rating="updateRating"
         />
         <div class="my-5">
           <ProductsCarousel
-            :images="dishes.map((d) => d.img)"
+            v-if="productStore.products"
+            :images="productStore.products.map((p) => p.image)"
             :numberOfRows="1"
             :withSpace="false"
           />

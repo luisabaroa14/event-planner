@@ -2,30 +2,30 @@
 import { defineProps } from "vue";
 
 const props = defineProps({
-  dishes: Array,
+  products: Array,
   categories: Array,
   activeCategoryId: Number,
 });
 
-const updateRating = (dish, rating) => {
+const updateRating = (product, rating) => {
   // Actualiza el rating del evento
-  dish.rating = rating;
+  product.rating = rating;
 };
 </script>
 
 <template>
   <div class="w-100 mt-3">
     <div class="tab-content" style="overflow-x: hidden">
-      <div v-if="props.dishes.length === 0" class="text-center">
-        <p>Loading dishes...</p>
+      <div v-if="props.products?.length === 0" class="text-center">
+        <p>Loading productes...</p>
       </div>
       <div class="card-container" v-else>
         <div
-          v-for="dish in props.dishes"
-          :key="dish.id"
+          v-for="product in props.products"
+          :key="product.id"
           class="card border-0"
         >
-          <img :src="dish.img" class="rounded-top" />
+          <img :src="product.image" class="rounded-top" />
           <button
             class="position-absolute btn btn-sm btn-black border border-dark btn-black-hover rounded-circle"
             style="top: 10px; right: 10px"
@@ -33,22 +33,22 @@ const updateRating = (dish, rating) => {
             <i class="fa fa-heart"></i>
           </button>
           <div class="card-body">
-            <h5 class="card-title">{{ dish.name }}</h5>
+            <h5 class="card-title">{{ product.name }}</h5>
             <div class="rating">
               <button
                 v-for="i in 5"
                 :key="i"
-                @click="updateRating(dish, i)"
-                :class="{ active: i <= dish.rating }"
+                @click="updateRating(product, i)"
+                :class="{ active: i <= product.rating }"
               >
                 <i class="fa fa-star"></i>
               </button>
             </div>
-            <p class="text-muted">{{ dish.description }}</p>
+            <p class="text-muted">{{ product.description }}</p>
             <div class="container">
               <div class="row">
                 <p class="col fs-5" style="font-weight: bold">
-                  {{ dish.cost }}
+                  {{ product.price }}$
                 </p>
                 <button
                   type="button"

@@ -88,6 +88,15 @@ const handleFileUpload = async (event) => {
             type="number"
             v-model="productToUpdate.price"
             required
+            step="any"
+            @input="
+              (event) => {
+                productToUpdate.value.price = event.target.value.replace(
+                  '-',
+                  ''
+                );
+              }
+            "
           />
           <div class="input-group-append">
             <span
@@ -144,7 +153,18 @@ const handleFileUpload = async (event) => {
         <br />
         <label>Price:</label>
         <div class="input-group">
-          <input type="number" class="form-control" v-model="price" required />
+          <input
+            type="number"
+            class="form-control"
+            v-model="price"
+            required
+            step="any"
+            @input="
+              (event) => {
+                price.value = event.target.value.replace('-', '');
+              }
+            "
+          />
           <div class="input-group-append">
             <span
               class="input-group-text bg-primary border-primary rounded-0 rounded-end text-white ms-1"

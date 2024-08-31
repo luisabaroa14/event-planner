@@ -1,10 +1,11 @@
 <script setup>
 import { ref } from "vue";
 import { Carousel, Slide } from "vue3-carousel";
-import { getChefs } from "../utils/data";
+import { useCollaboratorStore } from "@/stores/useCollaboratorStore";
+
+const collaboratorStore = useCollaboratorStore();
 
 const currentSlide = ref(0);
-const chefs = ref(getChefs());
 
 const slideTo = (val) => {
   currentSlide.value = val;
@@ -18,17 +19,20 @@ const slideTo = (val) => {
     :wrap-around="true"
     v-model="currentSlide"
   >
-    <Slide v-for="(chef, index) in chefs" :key="index">
+    <Slide
+      v-for="(collaborator, index) in collaboratorStore.collaborators"
+      :key="index"
+    >
       <div class="carousel__card">
         <div class="row h-100">
           <div class="col-md-6 p-0 d-flex justify-content-center">
-            <img :src="chef.img" class="h-50 w-100 carousel__image" />
+            <img :src="collaborator.image" class="h-50 w-100 carousel__image" />
           </div>
           <div class="col-md-6 p-0">
             <div class="card h-100">
               <div class="card-body">
-                <h5 class="display-1">{{ chef.name }}</h5>
-                <p class="display-2">{{ chef.description }}</p>
+                <h5 class="display-1">{{ collaborator.name }}</h5>
+                <p class="display-2">{{ collaborator.description }}</p>
               </div>
             </div>
           </div>
@@ -44,9 +48,12 @@ const slideTo = (val) => {
     v-model="currentSlide"
     ref="carousel"
   >
-    <Slide v-for="(chef, index) in chefs" :key="index">
+    <Slide
+      v-for="(collaborator, index) in collaboratorStore.collaborators"
+      :key="index"
+    >
       <div class="carousel__item" @click="slideTo(index)">
-        <h5 class="display-1">{{ chef.name }}</h5>
+        <h5 class="display-1">{{ collaborator.name }}</h5>
       </div>
     </Slide>
   </Carousel>

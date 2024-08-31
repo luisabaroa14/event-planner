@@ -5,12 +5,11 @@ import ImageGrid from "@/components/ImageGrid.vue";
 import SocialIcons from "@/components/SocialIcons.vue";
 import CardComponent from "@/components/CardComponent.vue";
 import ProductsCarousel from "@/components/ProductsCarousel.vue";
-import { getChefs } from "../utils/data";
 import { useEventStore } from "@/stores/useEventStore";
+import { useCollaboratorStore } from "@/stores/useCollaboratorStore";
 
 const eventStore = useEventStore();
-
-const chefs = getChefs();
+const collaboratorStore = useCollaboratorStore();
 
 const infoPills = [
   { title: "Events", value: 33 },
@@ -43,7 +42,7 @@ const infoPills = [
           class="d-flex align-items-center justify-content-center w-50-lg-w-100-sm h-100 mb-2"
         >
           <ImageGrid
-            :images="eventStore.events?.map((event) => event.img)"
+            :images="eventStore.events?.map((event) => event.image)"
             style="filter: drop-shadow(16px 16px 16px black)"
           />
         </div>
@@ -77,9 +76,9 @@ const infoPills = [
         </div>
       </CardComponent>
 
-      <div class="mt-5">
+      <div v-if="collaboratorStore.collaborators" class="mt-5">
         <ProductsCarousel
-          :images="chefs.map((chef) => chef.img)"
+          :images="collaboratorStore.collaborators.map((chef) => chef.image)"
           :numberOfRows="1"
           :withSpace="true"
         />
@@ -94,7 +93,7 @@ const infoPills = [
           <div
             class="rounded-pill position-absolute top-0 start-0 w-100 h-100"
             :style="{
-              backgroundImage: 'url(' + eventStore.events?.[0]?.img + ')',
+              backgroundImage: 'url(' + eventStore.events?.[0]?.image + ')',
               backgroundSize: 'cover',
               backgroundPosition: 'center',
               filter: 'brightness(25%) grayscale(100%)',

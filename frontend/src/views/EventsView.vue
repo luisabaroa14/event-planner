@@ -1,11 +1,10 @@
 <script setup>
 import EventsCalendar from "../components/EventsCalendar.vue";
 import EventList from "../components/EventList.vue";
-import ProductsCarousel from "@/components/ProductsCarousel.vue";
 import img from "@/assets/images/plate.png";
-import { getEvents } from "@/utils/data";
+import { useEventStore } from "@/stores/useEventStore";
 
-const events = getEvents();
+const eventStore = useEventStore();
 
 const loadEvents = async () => {
   try {
@@ -21,8 +20,8 @@ const loadEvents = async () => {
   <div class="d-flex flex-column mt-5 mx-3 p-3">
     <div class="d-flex flex-row my-3" style="height: 250px">
       <img :src="img" class="large-screen rounded" />
-      <EventsCalendar :events="events" :collaborator-id="null" />
+      <EventsCalendar :events="eventStore.events" :collaborator-id="null" />
     </div>
-    <EventList title="Upcomming Events" :events="events" />
+    <EventList title="Upcomming Events" :events="eventStore.events" />
   </div>
 </template>

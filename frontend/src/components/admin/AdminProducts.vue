@@ -1,22 +1,32 @@
 <script setup>
 import { ref } from "vue";
 import { useProductStore } from "@/stores/useProductStore";
+import { useCollaboratorStore } from "@/stores/useCollaboratorStore";
+import { capitalizeKebab, toKebabCase } from "@/utils/functions";
 
+const collaboratorStore = useCollaboratorStore();
 const productStore = useProductStore();
 
 const name = ref("");
 const description = ref("");
 const price = ref(0);
+const collaboratorId = ref("");
+const tags = ref([]);
 const image = ref(null);
 const uploadFile = ref(false);
 
 const productToUpdate = ref(null);
+
+const newTag = ref("");
 
 const clearForm = () => {
   name.value = "";
   image.value = "";
   description.value = "";
   price.value = 0;
+  collaboratorId.value = "";
+  tags.value = [];
+  newTag.value = "";
 
   uploadFile.value = false;
   productToUpdate.value = null;
@@ -29,6 +39,8 @@ const handleCreateProduct = async () => {
       image: image.value,
       description: description.value,
       price: price.value,
+      collaboratorId: collaboratorId.value,
+      tags: tags.value,
     },
     uploadFile.value
   );
@@ -59,6 +71,19 @@ const handleFileUpload = async (event) => {
   // Set the image value to the file
   image.value = file;
   uploadFile.value = true;
+};
+
+const addTag = async (update = false) => {
+  if (!newTag.value) return;
+
+  const tag = toKebabCase(newTag.value);
+  const tagList = update ? productToUpdate.value.tags : tags.value;
+
+  // Check if the tag is already in the list
+  if (tagList.includes(tag)) return;
+
+  tagList.push(tag);
+  newTag.value = "";
 };
 </script>
 
@@ -91,10 +116,7 @@ const handleFileUpload = async (event) => {
             step="any"
             @input="
               (event) => {
-                productToUpdate.value.price = event.target.value.replace(
-                  '-',
-                  ''
-                );
+                productToUpdate.price = event.target.value.replace('-', '');
               }
             "
           />
@@ -105,6 +127,52 @@ const handleFileUpload = async (event) => {
               $
             </span>
           </div>
+        </div>
+        <br />
+        <label>Collaborator:</label>
+        <select class="form-control" v-model="productToUpdate.collaboratorId">
+          <option value="">Select a collaborator</option>
+          <option
+            v-for="collaborator in collaboratorStore.collaborators"
+            :key="collaborator.id"
+            :value="collaborator.id"
+          >
+            {{ collaborator.name }}
+          </option>
+        </select>
+        <br />
+        <label>Tags:</label>
+        <div class="d-flex flex-wrap">
+          <span
+            v-for="tag in productToUpdate.tags"
+            :key="tag"
+            class="badge bg-primary me-2 mb-2 d-flex align-items-center"
+          >
+            {{ capitalizeKebab(tag) }}
+            <i
+              class="fas fa-times ms-2"
+              style="cursor: pointer"
+              @click="
+                productToUpdate.tags = productToUpdate.tags.filter(
+                  (t) => t !== tag
+                )
+              "
+            ></i>
+          </span>
+        </div>
+        <div class="input-group">
+          <input
+            v-model="newTag"
+            class="form-control"
+            placeholder="Add a new Tag"
+          />
+          <button
+            class="ms-1 btn btn-primary"
+            type="button"
+            @click="addTag(true)"
+          >
+            {{ "Add Tag" }}
+          </button>
         </div>
         <br />
         <label>Image:</label>
@@ -161,7 +229,7 @@ const handleFileUpload = async (event) => {
             step="any"
             @input="
               (event) => {
-                price.value = event.target.value.replace('-', '');
+                price = event.target.value.replace('-', '');
               }
             "
           />
@@ -172,6 +240,48 @@ const handleFileUpload = async (event) => {
               $
             </span>
           </div>
+        </div>
+        <br />
+        <label>Collaborator:</label>
+        <select class="form-control" v-model="collaboratorId">
+          <option value="">Select a collaborator</option>
+          <option
+            v-for="collaborator in collaboratorStore.collaborators"
+            :key="collaborator.id"
+            :value="collaborator.id"
+          >
+            {{ collaborator.name }}
+          </option>
+        </select>
+        <br />
+        <label>Tags:</label>
+        <div class="d-flex flex-wrap">
+          <span
+            v-for="tag in tags"
+            :key="tag"
+            class="badge bg-primary me-2 mb-2 d-flex align-items-center"
+          >
+            {{ capitalizeKebab(tag) }}
+            <i
+              class="fas fa-times ms-2"
+              @click="tags = tags.filter((t) => t !== tag)"
+              style="cursor: pointer"
+            ></i>
+          </span>
+        </div>
+        <div class="input-group">
+          <input
+            v-model="newTag"
+            class="form-control"
+            placeholder="Add a new Tag"
+          />
+          <button
+            class="ms-1 btn btn-primary"
+            type="button"
+            @click="addTag(false)"
+          >
+            {{ "Add Tag" }}
+          </button>
         </div>
         <br />
         <label>Image:</label>
@@ -214,6 +324,8 @@ const handleFileUpload = async (event) => {
           <th>Image</th>
           <th>Description</th>
           <th>Price</th>
+          <th>Collaborator</th>
+          <th>Tags</th>
           <th>Actions</th>
         </tr>
       </thead>
@@ -225,6 +337,21 @@ const handleFileUpload = async (event) => {
           </td>
           <td>{{ product.description }}</td>
           <td>{{ product.price }}</td>
+          <td>
+            {{
+              collaboratorStore.getCollaboratorById(product?.collaboratorId)
+                ?.name ?? "None"
+            }}
+          </td>
+          <td>
+            <span
+              v-for="tag in product.tags"
+              :key="tag"
+              class="badge bg-primary me-2"
+            >
+              {{ capitalizeKebab(tag) }}
+            </span>
+          </td>
           <td>
             <button class="btn btn-secondary" @click="updateProduct(product)">
               Update

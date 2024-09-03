@@ -1,20 +1,27 @@
 <script setup>
 import { ref } from "vue";
 import { useCollaboratorStore } from "@/stores/useCollaboratorStore";
+import { capitalizeKebab, toKebabCase } from "@/utils/functions";
 
 const collaboratorStore = useCollaboratorStore();
 
 const name = ref("");
 const description = ref("");
 const image = ref(null);
+const tags = ref([]);
 const uploadFile = ref(false);
 
 const collaboratorToUpdate = ref(null);
+
+const newTag = ref("");
 
 const clearForm = () => {
   name.value = "";
   image.value = "";
   description.value = "";
+  tags.value = [];
+
+  newTag.value = "";
 
   uploadFile.value = false;
   collaboratorToUpdate.value = null;
@@ -26,6 +33,7 @@ const handleCreateCollaborator = async () => {
       name: name.value,
       image: image.value,
       description: description.value,
+      tags: tags.value,
     },
     uploadFile.value
   );
@@ -60,6 +68,19 @@ const handleFileUpload = async (event) => {
   image.value = file;
   uploadFile.value = true;
 };
+
+const addTag = async (update = false) => {
+  if (!newTag.value) return;
+
+  const tag = toKebabCase(newTag.value);
+  const tagList = update ? collaboratorToUpdate.value.tags : tags.value;
+
+  // Check if the tag is already in the list
+  if (tagList.includes(tag)) return;
+
+  tagList.push(tag);
+  newTag.value = "";
+};
 </script>
 
 <template>
@@ -80,6 +101,40 @@ const handleFileUpload = async (event) => {
           v-model="collaboratorToUpdate.description"
           required
         />
+        <br />
+        <label>Tags:</label>
+        <div class="d-flex flex-wrap">
+          <span
+            v-for="tag in collaboratorToUpdate.tags"
+            :key="tag"
+            class="badge bg-primary me-2 mb-2 d-flex align-items-center"
+          >
+            {{ capitalizeKebab(tag) }}
+            <i
+              class="fas fa-times ms-2"
+              style="cursor: pointer"
+              @click="
+                collaboratorToUpdate.tags = collaboratorToUpdate.tags.filter(
+                  (t) => t !== tag
+                )
+              "
+            ></i>
+          </span>
+        </div>
+        <div class="input-group">
+          <input
+            v-model="newTag"
+            class="form-control"
+            placeholder="Add a new Tag"
+          />
+          <button
+            class="ms-1 btn btn-primary"
+            type="button"
+            @click="addTag(true)"
+          >
+            {{ "Add Tag" }}
+          </button>
+        </div>
         <br />
         <label>Image:</label>
         <div class="input-group">
@@ -128,6 +183,36 @@ const handleFileUpload = async (event) => {
         <label>Description:</label>
         <input class="form-control w-100" v-model="description" required />
         <br />
+        <label>Tags:</label>
+        <div class="d-flex flex-wrap">
+          <span
+            v-for="tag in tags"
+            :key="tag"
+            class="badge bg-primary me-2 mb-2 d-flex align-items-center"
+          >
+            {{ capitalizeKebab(tag) }}
+            <i
+              class="fas fa-times ms-2"
+              @click="tags = tags.filter((t) => t !== tag)"
+              style="cursor: pointer"
+            ></i>
+          </span>
+        </div>
+        <div class="input-group">
+          <input
+            v-model="newTag"
+            class="form-control"
+            placeholder="Add a new Tag"
+          />
+          <button
+            class="ms-1 btn btn-primary"
+            type="button"
+            @click="addTag(false)"
+          >
+            {{ "Add Tag" }}
+          </button>
+        </div>
+        <br />
         <label>Image:</label>
         <div class="input-group">
           <input
@@ -169,6 +254,7 @@ const handleFileUpload = async (event) => {
           <th>Name</th>
           <th>Image</th>
           <th>Description</th>
+          <th>Tags</th>
           <th>Actions</th>
         </tr>
       </thead>
@@ -185,6 +271,15 @@ const handleFileUpload = async (event) => {
             />
           </td>
           <td>{{ collaborator.description }}</td>
+          <td>
+            <span
+              v-for="tag in collaborator.tags"
+              :key="tag"
+              class="badge bg-primary me-2"
+            >
+              {{ capitalizeKebab(tag) }}
+            </span>
+          </td>
           <td>
             <button
               class="btn btn-secondary"

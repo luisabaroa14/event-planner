@@ -1,8 +1,15 @@
 <script setup>
 import { ref } from "vue";
 import { useEventStore } from "@/stores/useEventStore";
-import { formatDateForInput, parseDateAtMidnight } from "@/utils/functions";
+import { useCollaboratorStore } from "@/stores/useCollaboratorStore";
+import {
+  formatDateForInput,
+  parseDateAtMidnight,
+  capitalizeKebab,
+  toKebabCase,
+} from "@/utils/functions";
 
+const collaboratorStore = useCollaboratorStore();
 const eventStore = useEventStore();
 
 const name = ref("");
@@ -11,7 +18,11 @@ const location = ref("");
 const date = ref("");
 const price = ref(0);
 const image = ref(null);
+const collaboratorId = ref("");
+const tags = ref([]);
 const uploadFile = ref(false);
+
+const newTag = ref("");
 
 const eventToUpdate = ref(null);
 
@@ -20,8 +31,11 @@ const clearForm = () => {
   image.value = "";
   location.value = "";
   description.value = "";
-  price.value = "";
+  price.value = 0;
+  collaboratorId.value = "";
+  tags.value = [];
   date.value = "";
+  newTag.value = "";
 
   uploadFile.value = false;
   eventToUpdate.value = null;
@@ -35,6 +49,8 @@ const handleCreateEvent = async () => {
       location: location.value,
       description: description.value,
       price: price.value,
+      collaboratorId: collaboratorId.value,
+      tags: tags.value,
       date: date.value,
     },
     uploadFile.value
@@ -67,6 +83,19 @@ const handleFileUpload = async (event) => {
   // Set the image value to the file
   image.value = file;
   uploadFile.value = true;
+};
+
+const addTag = async (update = false) => {
+  if (!newTag.value) return;
+
+  const tag = toKebabCase(newTag.value);
+  const tagList = update ? eventToUpdate.value.tags : tags.value;
+
+  // Check if the tag is already in the list
+  if (tagList.includes(tag)) return;
+
+  tagList.push(tag);
+  newTag.value = "";
 };
 </script>
 
@@ -106,7 +135,7 @@ const handleFileUpload = async (event) => {
             step="any"
             @input="
               (event) => {
-                eventToUpdate.value.price = event.target.value.replace('-', '');
+                eventToUpdate.price = event.target.value.replace('-', '');
               }
             "
           />
@@ -117,6 +146,50 @@ const handleFileUpload = async (event) => {
               $
             </span>
           </div>
+        </div>
+        <br />
+        <label>Collaborator:</label>
+        <select class="form-control" v-model="eventToUpdate.collaboratorId">
+          <option value="">Select a collaborator</option>
+          <option
+            v-for="collaborator in collaboratorStore.collaborators"
+            :key="collaborator.id"
+            :value="collaborator.id"
+          >
+            {{ collaborator.name }}
+          </option>
+        </select>
+        <br />
+        <label>Tags:</label>
+        <div class="d-flex flex-wrap">
+          <span
+            v-for="tag in eventToUpdate.tags"
+            :key="tag"
+            class="badge bg-primary me-2 mb-2 d-flex align-items-center"
+          >
+            {{ capitalizeKebab(tag) }}
+            <i
+              class="fas fa-times ms-2"
+              style="cursor: pointer"
+              @click="
+                eventToUpdate.tags = eventToUpdate.tags.filter((t) => t !== tag)
+              "
+            ></i>
+          </span>
+        </div>
+        <div class="input-group">
+          <input
+            v-model="newTag"
+            class="form-control"
+            placeholder="Add a new Tag"
+          />
+          <button
+            class="ms-1 btn btn-primary"
+            type="button"
+            @click="addTag(true)"
+          >
+            {{ "Add Tag" }}
+          </button>
         </div>
         <br />
         <label>Image:</label>
@@ -183,7 +256,7 @@ const handleFileUpload = async (event) => {
             step="any"
             @input="
               (event) => {
-                price.value = event.target.value.replace('-', '');
+                price = event.target.value.replace('-', '');
               }
             "
           />
@@ -194,6 +267,48 @@ const handleFileUpload = async (event) => {
               $
             </span>
           </div>
+        </div>
+        <br />
+        <label>Collaborator:</label>
+        <select class="form-control" v-model="collaboratorId">
+          <option value="">Select a collaborator</option>
+          <option
+            v-for="collaborator in collaboratorStore.collaborators"
+            :key="collaborator.id"
+            :value="collaborator.id"
+          >
+            {{ collaborator.name }}
+          </option>
+        </select>
+        <br />
+        <label>Tags:</label>
+        <div class="d-flex flex-wrap">
+          <span
+            v-for="tag in tags"
+            :key="tag"
+            class="badge bg-primary me-2 mb-2 d-flex align-items-center"
+          >
+            {{ capitalizeKebab(tag) }}
+            <i
+              class="fas fa-times ms-2"
+              @click="tags = tags.filter((t) => t !== tag)"
+              style="cursor: pointer"
+            ></i>
+          </span>
+        </div>
+        <div class="input-group">
+          <input
+            v-model="newTag"
+            class="form-control"
+            placeholder="Add a new Tag"
+          />
+          <button
+            class="ms-1 btn btn-primary"
+            type="button"
+            @click="addTag(false)"
+          >
+            {{ "Add Tag" }}
+          </button>
         </div>
         <br />
         <label>Image:</label>
@@ -240,6 +355,8 @@ const handleFileUpload = async (event) => {
           <th>Description</th>
           <th>Location</th>
           <th>Date</th>
+          <th>Collaborator</th>
+          <th>Tags</th>
           <th>Actions</th>
         </tr>
       </thead>
@@ -249,10 +366,25 @@ const handleFileUpload = async (event) => {
           <td>
             <img :src="event.image" style="width: 100px; height: 100px" />
           </td>
-          <td>{{ event.price }}</td>
+          <td class="fw-bold">{{ event.price }}$</td>
           <td>{{ event.description }}</td>
           <td>{{ event.location }}</td>
           <td>{{ event.date.toDateString() }}</td>
+          <td>
+            {{
+              collaboratorStore.getCollaboratorById(event?.collaboratorId)
+                ?.name ?? "None"
+            }}
+          </td>
+          <td>
+            <span
+              v-for="tag in event.tags"
+              :key="tag"
+              class="badge bg-primary me-2"
+            >
+              {{ capitalizeKebab(tag) }}
+            </span>
+          </td>
           <td>
             <button class="btn btn-secondary" @click="updateEvent(event)">
               Update

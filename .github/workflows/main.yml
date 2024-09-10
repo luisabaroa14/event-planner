@@ -25,5 +25,5 @@ jobs:
         server: ${{ secrets.FTP_SERVER }}
         username: ${{ secrets.FTP_USER }}
         password: ${{ secrets.FTP_PASS }}
-        local-dir: ./frontend/dist
+        local-dir: ./frontend/dist/
         dangerous-clean-slate: true  # Keeps previous files, change to true to remove old files

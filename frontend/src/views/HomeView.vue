@@ -1,6 +1,6 @@
 <script setup>
 import EventList from "../components/EventList.vue";
-import img from "@/assets/images/chef2.png";
+import img from "@/assets/images/chef.png";
 import ImageGrid from "@/components/ImageGrid.vue";
 import SocialIcons from "@/components/SocialIcons.vue";
 import CardComponent from "@/components/CardComponent.vue";

@@ -38,4 +38,4 @@ jobs:
         local-dir: ./frontend/dist/
         dangerous-clean-slate: true  # Keeps previous files, change to true to remove old files
         exclude: |
-          .htaccess
+          */.htaccess

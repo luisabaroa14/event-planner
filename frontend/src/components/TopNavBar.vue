@@ -4,7 +4,7 @@
     style="background: linear-gradient(to right, #769bba, var(--bs-secondary))"
   >
     <div class="d-flex">
-      <img :src="img" alt="logo" style="width: 100px" />
+      <img :src="icon" alt="logo" style="width: 50px" />
     </div>
     <div class="d-flex w-100 justify-content-center">
       <nav class="d-flex navbar shadow-sm rounded-pill border p-0">
@@ -57,7 +57,7 @@
                 <p class="large-screen m-0">Chefs</p>
               </router-link>
             </li>
-            <li class="nav-item">
+            <!-- <li class="nav-item">
               <router-link
                 class="nav-link"
                 active-class="active"
@@ -67,7 +67,7 @@
                 <i class="fas fa-lock"></i>
                 <p class="large-screen m-0">Admin</p>
               </router-link>
-            </li>
+            </li> -->
           </ul>
         </div>
       </nav>
@@ -80,7 +80,7 @@
 
 <script setup>
 import ChefIcon from "@/assets/icons/ChefIcon.vue";
-import img from "@/assets/images/bottle.png";
+import icon from "@/assets/images/icon.png";
 </script>
 
 <style scoped>

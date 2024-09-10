@@ -17,7 +17,7 @@ const updateRating = (product, rating) => {
   <div class="w-100 mt-3">
     <div class="tab-content" style="overflow-x: hidden">
       <div v-if="props.products?.length === 0" class="text-center">
-        <p>Loading productes...</p>
+        <p>Loading products...</p>
       </div>
       <div class="card-container" v-else>
         <div

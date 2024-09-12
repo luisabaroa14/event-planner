@@ -29,6 +29,9 @@ jobs:
     - name: Build the project
       run: cd frontend && npm run build --no-cache
 
+    - name: Add .htaccess to dist folder
+      run: cp frontend/.htaccess frontend/dist/.htaccess
+
     - name: Upload to cPanel via FTP
       uses: SamKirkland/FTP-Deploy-Action@v4.3.4
       with:
@@ -37,5 +40,3 @@ jobs:
         password: ${{ secrets.FTP_PASS }}
         local-dir: ./frontend/dist/
         dangerous-clean-slate: true  # Keeps previous files, change to true to remove old files
-        exclude: |
-          */.htaccess

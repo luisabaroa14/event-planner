@@ -1,16 +1,10 @@
 <script setup>
 import { defineProps } from "vue";
+import { capitalizeKebab } from "@/utils/functions";
 
 const props = defineProps({
   products: Array,
-  categories: Array,
-  activeCategoryId: Number,
 });
-
-const updateRating = (product, rating) => {
-  // Actualiza el rating del evento
-  product.rating = rating;
-};
 </script>
 
 <template>
@@ -23,40 +17,41 @@ const updateRating = (product, rating) => {
         <div
           v-for="product in props.products"
           :key="product.id"
-          class="card border-0"
+          class="card border-0 h-100"
         >
           <img :src="product.image" class="rounded-top" />
-          <button
+          <!-- <button
             class="position-absolute btn btn-sm btn-black border border-dark btn-black-hover rounded-circle"
             style="top: 10px; right: 10px"
           >
             <i class="fa fa-heart"></i>
-          </button>
+          </button> -->
           <div class="card-body">
             <h5 class="card-title">{{ product.name }}</h5>
-            <div class="rating">
-              <button
-                v-for="i in 5"
-                :key="i"
-                @click="updateRating(product, i)"
-                :class="{ active: i <= product.rating }"
+            <div class="d-flex flex-wrap">
+              <span
+                v-for="tag in product.tags"
+                :key="tag"
+                class="badge bg-primary me-2 mb-2 d-flex align-items-center"
               >
-                <i class="fa fa-star"></i>
-              </button>
+                {{ capitalizeKebab(tag) }}
+              </span>
             </div>
-            <p class="text-muted">{{ product.description }}</p>
-            <div class="container">
-              <div class="row">
-                <p class="col fs-5" style="font-weight: bold">
-                  {{ product.price }}$
-                </p>
-                <button
-                  type="button"
-                  class="col btn btn-black bg-white border border-dark btn-black-hover rounded-pill"
-                >
-                  Add to Cart
-                </button>
-              </div>
+            <p
+              class="overflow-hidden elispe-text-3-lines m-0"
+              style="max-height: 70px"
+            >
+              {{ product.description }}
+            </p>
+            <div
+              class="d-flex flex-row align-items-center justify-content-between"
+            >
+              <p class="fs-5 m-0" style="font-weight: bold">
+                {{ product.price }}$
+              </p>
+              <button type="button" class="btn btn-primary rounded-pill">
+                Add to Cart
+              </button>
             </div>
           </div>
         </div>

@@ -3,48 +3,28 @@ import ProductList from "../components/ProductList.vue";
 import ProductsCarousel from "@/components/ProductsCarousel.vue";
 import { ref, computed } from "vue";
 import { useProductStore } from "@/stores/useProductStore";
+import { productsFilterTags } from "@/utils/tagGroups";
+import { capitalizeKebab } from "@/utils/functions";
 
 const productStore = useProductStore();
 
-const categories = ref([
-  { id: 1, name: "Breakfast" },
-  { id: 2, name: "Meal" },
-  { id: 3, name: "Dinner" },
-]);
-
-const activeCategoryId = ref(0);
+const selectedFilterTag = ref("all");
 
 const activeName = ref("");
 
 const filteredProducts = computed(() => {
-  // if (activeCategoryId.value === 0) {
-  //   return productStore.products;
-  // }
-  //  else {
-  //   return productStore.products.filter((product) => product.categoryId === activeCategoryId.value);
-  // }
+  return productStore.products.filter((product) => {
+    const matchesTag =
+      selectedFilterTag.value === "all" ||
+      product.tags.includes(selectedFilterTag.value);
+    const matchesName =
+      activeName.value === "" ||
+      product.name.toLowerCase().includes(activeName.value.toLowerCase());
+
+    return matchesTag && matchesName;
+  });
 });
 
-const searchProducts = computed(() => {
-  if (activeName.value === "") {
-    return productStore.products;
-  } else {
-    return productStore.products.filter((product) => {
-      return product.name
-        .toLowerCase()
-        .includes(activeName.value.toLowerCase());
-    });
-  }
-});
-
-const updateRating = (productId, newRating) => {
-  const productIndex = productStore.products.findIndex(
-    (product) => product.id === productId
-  );
-  if (productIndex !== -1) {
-    productStore.products[productIndex].rating = newRating;
-  }
-};
 </script>
 
 <template>
@@ -70,7 +50,11 @@ const updateRating = (productId, newRating) => {
               aria-haspopup="true"
               aria-expanded="false"
             >
-              Type of food
+              {{
+                selectedFilterTag === "all"
+                  ? "Type of food"
+                  : capitalizeKebab(selectedFilterTag)
+              }}
             </button>
             <ul
               class="dropdown-menu"
@@ -81,29 +65,25 @@ const updateRating = (productId, newRating) => {
                 <a
                   class="dropdown-item"
                   href="#"
-                  @click.prevent="activeCategoryId = 0"
+                  @click.prevent="selectedFilterTag = 'all'"
                   >All</a
                 >
               </li>
-              <li v-for="category in categories" :key="category.id">
+              <li v-for="tag in productsFilterTags" :key="tag">
                 <a
                   class="dropdown-item"
                   href="#"
-                  @click.prevent="activeCategoryId = category.id"
-                  >{{ category.name }}</a
+                  @click.prevent="selectedFilterTag = tag"
                 >
+                  {{ capitalizeKebab(tag) }}
+                </a>
               </li>
             </ul>
           </div>
         </div>
       </div>
       <div v-if="productStore.products">
-        <ProductList
-          :products="searchProducts"
-          :categories="categories"
-          :active-category-id="activeCategoryId"
-          @update-rating="updateRating"
-        />
+        <ProductList :products="filteredProducts" />
         <div class="my-5">
           <ProductsCarousel
             v-if="productStore.products"

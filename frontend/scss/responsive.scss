@@ -22,7 +22,7 @@ $breakpoint-md: 992px;
 // Utility class for changing flex direction on small screens
 .flex-row-lg-column-sm {
   flex-direction: row !important;
-  
+
   @media (max-width: $breakpoint-md) {
     flex-direction: column !important;
   }
@@ -34,4 +34,18 @@ $breakpoint-md: 992px;
   @media (max-width: $breakpoint-md) {
     width: 100% !important;
   }
+}
+
+@mixin ellipsis-text($lines: 3) {
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  -webkit-line-clamp: $lines;
+}
+
+.elispe-text-3-lines {
+  @include ellipsis-text(3);
+}
+.elispe-text-5-lines {
+  @include ellipsis-text(5);
 }

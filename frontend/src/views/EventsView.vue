@@ -18,7 +18,7 @@ const loadEvents = async () => {
 
 <template>
   <div class="d-flex flex-column mt-5 mx-3 p-3">
-    <div class="d-flex flex-row my-3" style="height: 250px">
+    <div class="d-flex flex-row my-3" style="height: 270px">
       <img :src="img" class="large-screen rounded" />
       <EventsCalendar :events="eventStore.events" :collaborator-id="null" />
     </div>

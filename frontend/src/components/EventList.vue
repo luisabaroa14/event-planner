@@ -1,5 +1,6 @@
 <script setup>
 import { capitalizeKebab } from "@/utils/functions";
+import EventModal from "./EventModal.vue";
 
 const props = defineProps({ title: String, events: Array });
 </script>
@@ -21,7 +22,7 @@ const props = defineProps({ title: String, events: Array });
             class="rounded-top img-fluid object-fit-cover w-100"
             style="height: 30vh"
           />
-          <div class="card-body ">
+          <div class="card-body">
             <h5 class="card-title">{{ event.name }}</h5>
             <p class="text-muted">{{ event.date.toDateString() }}</p>
             <div class="d-flex flex-wrap">
@@ -45,9 +46,15 @@ const props = defineProps({ title: String, events: Array });
               <p class="fs-5 m-0" style="font-weight: bold">
                 {{ event.price }}$
               </p>
-              <button type="button" class="btn btn-primary rounded-pill">
+              <button
+                type="button"
+                class="btn btn-primary rounded-pill"
+                data-bs-toggle="modal"
+                :data-bs-target="`#event-${event.id}`"
+              >
                 View Event
               </button>
+              <EventModal :eventId="event.id" />
             </div>
           </div>
         </div>

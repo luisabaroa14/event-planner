@@ -93,7 +93,12 @@ const infoPills = [
           <div
             class="rounded-pill position-absolute top-0 start-0 w-100 h-100"
             :style="{
-              backgroundImage: 'url(' + eventStore.events?.[0]?.image + ')',
+              backgroundImage:
+                'url(' +
+                eventStore.events?.[
+                  Math.floor(Math.random() * eventStore.events?.length)
+                ]?.image +
+                ')',
               backgroundSize: 'cover',
               backgroundPosition: 'center',
               filter: 'brightness(25%) grayscale(100%)',

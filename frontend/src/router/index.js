@@ -34,12 +34,12 @@ const router = createRouter({
       component: ChefsView,
       meta: { adminOnly: false }
     },
-    {
-      path: '/cart',
-      name: 'cart',
-      component: CartView,
-      meta: { adminOnly: false }
-    },
+    // {
+    //   path: '/cart',
+    //   name: 'cart',
+    //   component: CartView,
+    //   meta: { adminOnly: false }
+    // },
     {
       path: '/admin',
       name: 'admin',

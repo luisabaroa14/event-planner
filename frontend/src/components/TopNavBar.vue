@@ -81,7 +81,8 @@ const router = useRouter();
       </nav>
     </div>
     <div class="large-screen d-flex">
-      <i class="fas fa-cart-shopping fs-3" @click="router.push('/cart')"></i>
+      <i class="fas fa-user-circle fa-2x"></i>
+      <!-- <i class="fas fa-cart-shopping fs-3" @click="router.push('/cart')"></i> -->
     </div>
   </div>
 </template>

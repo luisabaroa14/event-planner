@@ -5,6 +5,7 @@ import EventsView from '@/views/EventsView.vue'
 import ChefsView from '@/views/ChefsView.vue'
 import AdminView from '@/views/AdminView.vue'
 import NotFoundView from '@/views/NotFoundView.vue'
+import CartView from '@/views/CartView.vue'
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -31,6 +32,12 @@ const router = createRouter({
       path: '/chefs',
       name: 'chefs',
       component: ChefsView,
+      meta: { adminOnly: false }
+    },
+    {
+      path: '/cart',
+      name: 'cart',
+      component: CartView,
       meta: { adminOnly: false }
     },
     {

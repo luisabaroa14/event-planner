@@ -17,6 +17,7 @@ const collaboratorStore = useCollaboratorStore();
 const event = computed(() =>
   eventStore.events?.find((e) => e.id === props.eventId)
 );
+
 const collaborator = computed(() =>
   collaboratorStore.collaborators?.find(
     (c) => c.id === event.value?.collaboratorId
@@ -77,7 +78,7 @@ const collaborator = computed(() =>
           >
             Close
           </button>
-          <button type="button" class="btn btn-primary">Add to Cart</button>
+          <button type="button" class="btn btn-primary" @click="eventStore.addToCart(eventId)" data-bs-dismiss="modal">Add to Cart</button>
         </div>
       </div>
     </div>

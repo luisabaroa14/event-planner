@@ -2,12 +2,17 @@ import { defineStore } from "pinia";
 import eventService from "@/services/events";
 import filesService from "@/services/files";
 import { v4 as uuidv4 } from "uuid";
-import { ref } from "vue";
+import { ref, computed } from "vue";
 
 export const useEventStore = defineStore("eventStore", () => {
   // State
   const events = ref([]);
+  const cartEventIds = ref([]);
   const errorMessage = ref(null);
+
+  const cartEvents = computed(() =>
+    events.value.filter((event) => cartEventIds.value.includes(event.id))
+  );
 
   // Actions
   fetchEvents();
@@ -58,7 +63,7 @@ export const useEventStore = defineStore("eventStore", () => {
         return { success: false, error: response.error };
       }
     }
-    
+
     const response = await eventService.updateEvent(event);
     if (response.success) {
       const index = events.value.findIndex((e) => e.id === event.id);
@@ -79,19 +84,35 @@ export const useEventStore = defineStore("eventStore", () => {
     }
   };
 
+  const addToCart = (eventId) => {
+    if (events.value.find((event) => event.id === eventId)) {
+      cartEventIds.value.push(eventId);
+    }
+  };
+
+  const removeFromCart = (eventId) => {
+    cartEventIds.value = cartEventIds.value.filter((id) => id !== eventId);
+  };
+
   // Getters
   const getEventById = (id) => {
     return events.value.find((event) => event.id === id);
   };
 
-  // Return state, actions, and getters
   return {
+    // State
     events,
+    cartEvents,
+    cartEventIds,
+
+    // Actions
     errorMessage,
     fetchEvents,
     createEvent,
     updateEvent,
     deleteEvent,
     getEventById,
+    addToCart,
+    removeFromCart,
   };
 });

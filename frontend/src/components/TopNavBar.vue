@@ -1,3 +1,11 @@
+<script setup>
+import ChefIcon from "@/assets/icons/ChefIcon.vue";
+import icon from "@/assets/images/icon.png";
+import { useRouter } from "vue-router";
+
+const router = useRouter();
+</script>
+
 <template>
   <div
     class="position-fixed d-flex justify-content-between align-items-center w-100 pt-3 pb-3 z-3 px-3 bl-btm"
@@ -57,7 +65,7 @@
                 <p class="large-screen m-0">Chefs</p>
               </router-link>
             </li>
-            <!-- <li class="nav-item">
+            <li class="nav-item">
               <router-link
                 class="nav-link"
                 active-class="active"
@@ -67,21 +75,16 @@
                 <i class="fas fa-lock"></i>
                 <p class="large-screen m-0">Admin</p>
               </router-link>
-            </li> -->
+            </li>
           </ul>
         </div>
       </nav>
     </div>
     <div class="large-screen d-flex">
-      <i class="fas fa-user-circle fa-2x"></i>
+      <i class="fas fa-cart-shopping fs-3" @click="router.push('/cart')"></i>
     </div>
   </div>
 </template>
-
-<script setup>
-import ChefIcon from "@/assets/icons/ChefIcon.vue";
-import icon from "@/assets/images/icon.png";
-</script>
 
 <style scoped>
 .nav-link {

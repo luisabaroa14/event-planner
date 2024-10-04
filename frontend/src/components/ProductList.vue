@@ -1,10 +1,13 @@
 <script setup>
 import { defineProps } from "vue";
 import { capitalizeKebab } from "@/utils/functions";
+import { useProductStore } from "../stores/useProductStore";
 
 const props = defineProps({
   products: Array,
 });
+
+const productStore = useProductStore();
 </script>
 
 <template>
@@ -49,7 +52,11 @@ const props = defineProps({
               <p class="fs-5 m-0" style="font-weight: bold">
                 {{ product.price }}$
               </p>
-              <button type="button" class="btn btn-primary rounded-pill">
+              <button
+                type="button"
+                class="btn btn-primary rounded-pill"
+                @click="productStore.addToCart(product.id)"
+              >
                 Add to Cart
               </button>
             </div>

@@ -5,15 +5,6 @@ import img from "@/assets/images/plate.png";
 import { useEventStore } from "@/stores/useEventStore";
 
 const eventStore = useEventStore();
-
-const loadEvents = async () => {
-  try {
-    const response = await fetch("http://localhost:3300/api/events");
-    events.value = await response.json();
-  } catch (error) {
-    console.error("Error loading events:", error);
-  }
-};
 </script>
 
 <template>

@@ -3,6 +3,9 @@ import { ref } from "vue";
 import SocialIcons from "@/components/SocialIcons.vue";
 import { Carousel, Slide } from "vue3-carousel";
 import { useCollaboratorStore } from "@/stores/useCollaboratorStore";
+import { useRouter } from "vue-router";
+
+const router = useRouter();
 
 const collaboratorStore = useCollaboratorStore();
 
@@ -67,14 +70,32 @@ const chefSocialIcons = ["instagram", "spotify"];
                   <SocialIcons
                     :icon-names="chefSocialIcons"
                     color="var(--bs-dark)"
-                    class="me-2"
                   />
-                  <button
-                    class="btn btn-primary w-100"
-                    @click="slideTo(chef.id)"
-                  >
-                    View Profile
-                  </button>
+
+                  <div class="row gap-1 mx-3">
+                    <button
+                      class="col btn btn-primary"
+                      @click="
+                        router.push({
+                          name: 'products',
+                          query: { c: collaborator.id },
+                        })
+                      "
+                    >
+                      Products
+                    </button>
+                    <button
+                      class="col btn btn-primary"
+                      @click="
+                        router.push({
+                          name: 'events',
+                          query: { c: collaborator.id },
+                        })
+                      "
+                    >
+                      Events
+                    </button>
+                  </div>
                 </div>
               </div>
             </div>

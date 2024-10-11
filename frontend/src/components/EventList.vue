@@ -1,13 +1,30 @@
 <script setup>
 import { capitalizeKebab } from "@/utils/functions";
 import EventModal from "./EventModal.vue";
+import { useRouter } from "vue-router";
+import { useCollaboratorStore } from "@/stores/useCollaboratorStore";
 
-const props = defineProps({ title: String, events: Array });
+const router = useRouter();
+const collaboratorStore = useCollaboratorStore();
+
+const props = defineProps({
+  title: String,
+  events: Array,
+  collaboratorId: String,
+});
 </script>
 
 <template>
   <div class="w-100 mt-3">
-    <h4 class="my-3">{{ title }}</h4>
+    <div class="d-flex flex-row align-items-center">
+      <h4 class="my-3 me-4">{{ title }}</h4>
+      <span v-if="collaboratorId" class=" h-100 badge bg-primary pill py-2 me-2">
+        {{
+          collaboratorStore.getCollaboratorById(collaboratorId)?.name ?? "All"
+        }}
+        <i class="fas fa-close" @click="router.replace({ name: 'events' })"></i>
+      </span>
+    </div>
     <div v-if="events?.length === 0" class="text-center">
       <p>Loading events...</p>
     </div>

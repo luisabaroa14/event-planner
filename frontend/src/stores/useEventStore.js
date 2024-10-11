@@ -2,16 +2,43 @@ import { defineStore } from "pinia";
 import eventService from "@/services/events";
 import filesService from "@/services/files";
 import { v4 as uuidv4 } from "uuid";
-import { ref, computed } from "vue";
+import { ref, computed, watch } from "vue";
 
 export const useEventStore = defineStore("eventStore", () => {
   // State
   const events = ref([]);
   const cartEventIds = ref([]);
   const errorMessage = ref(null);
+  const quantities = ref({});
 
-  const cartEvents = computed(() =>
-    events.value.filter((event) => cartEventIds.value.includes(event.id))
+  // Load data
+  if (localStorage.getItem("cartEventIds")) {
+    cartEventIds.value = JSON.parse(localStorage.getItem("cartEventIds"));
+  }
+  if (localStorage.getItem("eventQuantities")) {
+    quantities.value = JSON.parse(localStorage.getItem("eventQuantities"));
+  }
+
+  const cartEvents = computed(() => {
+    return events.value.filter((event) =>
+      cartEventIds.value.includes(event.id)
+    );
+  });
+
+  watch(
+    () => quantities.value,
+    () => {
+      localStorage.setItem("eventQuantities", JSON.stringify(quantities.value));
+    },
+    { deep: true }
+  );
+
+  watch(
+    () => cartEventIds.value,
+    () => {
+      localStorage.setItem("cartEventIds", JSON.stringify(cartEventIds.value));
+    },
+    { deep: true }
   );
 
   // Actions
@@ -85,13 +112,26 @@ export const useEventStore = defineStore("eventStore", () => {
   };
 
   const addToCart = (eventId) => {
-    if (events.value.find((event) => event.id === eventId)) {
+    if (
+      events.value.find((event) => event.id === eventId) &&
+      !cartEventIds.value.includes(eventId)
+    ) {
       cartEventIds.value.push(eventId);
+      quantities.value[eventId] = 1;
     }
   };
 
   const removeFromCart = (eventId) => {
     cartEventIds.value = cartEventIds.value.filter((id) => id !== eventId);
+    delete quantities.value[eventId];
+  };
+
+  const decrementQuantity = (eventId) => {
+    if (quantities.value[eventId] > 1) {
+      quantities.value[eventId]--;
+    } else {
+      removeFromCart(eventId);
+    }
   };
 
   // Getters
@@ -104,6 +144,7 @@ export const useEventStore = defineStore("eventStore", () => {
     events,
     cartEvents,
     cartEventIds,
+    quantities,
 
     // Actions
     errorMessage,
@@ -114,5 +155,6 @@ export const useEventStore = defineStore("eventStore", () => {
     getEventById,
     addToCart,
     removeFromCart,
+    decrementQuantity,
   };
 });

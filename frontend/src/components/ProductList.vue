@@ -1,5 +1,4 @@
 <script setup>
-import { defineProps } from "vue";
 import { capitalizeKebab } from "@/utils/functions";
 import { useProductStore } from "../stores/useProductStore";
 

@@ -2,18 +2,53 @@ import { defineStore } from "pinia";
 import productService from "@/services/products";
 import filesService from "@/services/files";
 import { v4 as uuidv4 } from "uuid";
-import { ref, computed } from "vue";
+import { ref, computed, watch } from "vue";
 
 export const useProductStore = defineStore("productStore", () => {
   // State
   const products = ref([]);
   const cartProductIds = ref([]);
   const errorMessage = ref(null);
+  const quantities = ref({});
 
-  const cartProducts = computed(() =>
-    products.value.filter((product) =>
+  // Load data
+  if (localStorage.getItem("cartProductIds")) {
+    cartProductIds.value = JSON.parse(localStorage.getItem("cartProductIds"));
+  }
+  if (localStorage.getItem("productQuantities")) {
+    quantities.value = JSON.parse(localStorage.getItem("productQuantities"));
+  }
+
+  const cartProducts = computed(() => {
+    localStorage.setItem(
+      "cartProductIds",
+      JSON.stringify(cartProductIds.value)
+    );
+    return products.value.filter((product) =>
       cartProductIds.value.includes(product.id)
-    )
+    );
+  });
+
+  watch(
+    () => cartProductIds.value,
+    () => {
+      localStorage.setItem(
+        "cartProductIds",
+        JSON.stringify(cartProductIds.value)
+      );
+    },
+    { deep: true }
+  );
+
+  watch(
+    () => quantities.value,
+    () => {
+      localStorage.setItem(
+        "productQuantities",
+        JSON.stringify(quantities.value)
+      );
+    },
+    { deep: true }
   );
 
   // Actions
@@ -93,8 +128,13 @@ export const useProductStore = defineStore("productStore", () => {
   };
 
   const addToCart = (productId) => {
-    if (products.value.find((product) => product.id === productId)) {
+    if (
+      products.value.find((product) => product.id === productId) &&
+      !cartProductIds.value.includes(productId)
+    ) {
       cartProductIds.value.push(productId);
+      quantities.value[productId] = 1;
+      console.log(quantities.value);
     }
   };
 
@@ -102,6 +142,15 @@ export const useProductStore = defineStore("productStore", () => {
     cartProductIds.value = cartProductIds.value.filter(
       (id) => id !== productId
     );
+    delete quantities.value[productId];
+  };
+
+  const decrementQuantity = (productId) => {
+    if (quantities.value[productId] > 1) {
+      quantities.value[productId]--;
+    } else {
+      removeFromCart(productId);
+    }
   };
 
   // Getters
@@ -114,6 +163,7 @@ export const useProductStore = defineStore("productStore", () => {
     products,
     cartProducts,
     cartProductIds,
+    quantities,
 
     // Actions
     errorMessage,
@@ -124,5 +174,6 @@ export const useProductStore = defineStore("productStore", () => {
     getProductById,
     addToCart,
     removeFromCart,
+    decrementQuantity,
   };
 });

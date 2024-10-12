@@ -134,7 +134,6 @@ export const useProductStore = defineStore("productStore", () => {
     ) {
       cartProductIds.value.push(productId);
       quantities.value[productId] = 1;
-      console.log(quantities.value);
     }
   };
 

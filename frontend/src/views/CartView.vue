@@ -29,8 +29,11 @@ const sendEmail = async (subject, body) => {
   const sbj = encodeURIComponent(subject);
   const message = encodeURIComponent(body);
 
+  console.log(`/mail.php?sbj=${sbj}&message=${message}`);
+
   try {
     const response = await axios.get(`/mail.php?sbj=${sbj}&message=${message}`);
+    console.log("Email sent successfully", response);
   } catch (error) {
     console.error("Failed to send email", error);
   }

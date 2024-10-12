@@ -3,6 +3,7 @@ import { useEventStore } from "@/stores/useEventStore";
 import { useProductStore } from "@/stores/useProductStore";
 import axios from "axios";
 import { computed } from "vue";
+import CartModal from "@/components/CartModal.vue";
 
 const eventStore = useEventStore();
 const productsStore = useProductStore();
@@ -24,16 +25,53 @@ const total = computed(() => {
   }, 0);
 });
 
-const sendEmail = async () => {
-  const sbj = encodeURIComponent("Subject Example");
-  const message = encodeURIComponent("This is the cart text example");
+const sendEmail = async (subject, body) => {
+  const sbj = encodeURIComponent(subject);
+  const message = encodeURIComponent(body);
 
   try {
     const response = await axios.get(`/mail.php?sbj=${sbj}&message=${message}`);
-    console.log(response.data); // You can handle success response here
   } catch (error) {
     console.error("Failed to send email", error);
   }
+};
+
+const handleConfirm = (userData) => {
+  // Get user details from userData
+  const { name, email, phone } = userData;
+
+  // Get the products in the cart
+  const cartItems = [...eventStore.cartEvents, ...productsStore.cartProducts];
+
+  // Get the quantities of each product
+  const quantities = { ...eventStore.quantities, ...productsStore.quantities };
+
+  // Create the email content
+  let productDetails = cartItems
+    .map((item) => {
+      const quantity = quantities[item.id] || 0; // Get the quantity for each product
+      const price = item.price; // Assuming price is a number
+      return `- ${item.name}: ${quantity} x $${price}`;
+    })
+    .join("\n");
+
+  // Calculate total and format it
+  const total = cartItems.reduce((acc, item) => {
+    return acc + item.price * (quantities[item.id] || 0);
+  }, 0);
+
+  // Construct the email body
+  const emailBody =
+    `Dear ${name},\n\n` +
+    `Thank you for your purchase! Below are the details of your order:\n\n` +
+    `${productDetails}\n\n` +
+    `Total: $${total}\n\n` +
+    `Your contact details are as follows:\n` +
+    `Email: ${email}\n` +
+    `Phone: ${phone}\n\n` +
+    `Thank you for shopping with us! If you have any questions, feel free to contact us.`;
+
+    sendEmail("Order Confirmation", emailBody);
 };
 </script>
 
@@ -176,8 +214,15 @@ const sendEmail = async () => {
     </div>
 
     <h3 class="fw-bold">Total: ${{ total }}</h3>
-    <button @click="sendEmail" class="btn btn-primary mt-4">Send Email</button>
+    <button
+      data-bs-toggle="modal"
+      data-bs-target="#cart-modal"
+      class="btn btn-primary mt-4"
+    >
+      Confirm
+    </button>
   </div>
+  <CartModal @confirm="handleConfirm" />
 </template>
 
 <style scoped>

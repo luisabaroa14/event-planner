@@ -1,7 +1,17 @@
 <script setup>
+import { computed } from "vue";
 import ChefIcon from "@/assets/icons/ChefIcon.vue";
 import icon from "@/assets/images/icon.png";
+import { useEventStore } from "@/stores/useEventStore";
+import { useProductStore } from "@/stores/useProductStore";
 import { useRouter } from "vue-router";
+
+const eventStore = useEventStore();
+const productsStore = useProductStore();
+
+const totalItems = computed(
+  () => eventStore.cartEventIds?.length + productsStore.cartProductIds?.length
+);
 
 const router = useRouter();
 </script>
@@ -65,24 +75,23 @@ const router = useRouter();
                 <p class="large-screen m-0">Chefs</p>
               </router-link>
             </li>
-            <li class="nav-item">
-              <router-link
-                class="nav-link"
-                active-class="active"
-                aria-current="page"
-                to="/admin"
-              >
-                <i class="fas fa-lock"></i>
-                <p class="large-screen m-0">Admin</p>
-              </router-link>
-            </li>
           </ul>
         </div>
       </nav>
     </div>
     <div class="large-screen d-flex">
-      <i class="fas fa-user-circle fa-2x"></i>
-      <!-- <i class="fas fa-cart-shopping fs-3" @click="router.push('/cart')"></i> -->
+      <div class="position-relative">
+        <i
+          class="fas fa-cart-shopping fs-3 text-primary me-2"
+          @click="router.push('/cart')"
+        ></i>
+        <span
+          v-if="totalItems"
+          class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger"
+        >
+          {{ totalItems }}
+        </span>
+      </div>
     </div>
   </div>
 </template>

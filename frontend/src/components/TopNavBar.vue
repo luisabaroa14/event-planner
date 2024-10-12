@@ -79,7 +79,7 @@ const router = useRouter();
         </div>
       </nav>
     </div>
-    <div class="large-screen d-flex">
+    <div class="d-flex">
       <div class="position-relative">
         <i
           class="fas fa-cart-shopping fs-3 text-primary me-2"

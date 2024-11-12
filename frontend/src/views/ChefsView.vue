@@ -46,7 +46,7 @@ const chefSocialIcons = ["instagram", "spotify"];
               <div class="d-flex flex-row">
                 <img
                   :src="collaborator.image"
-                  class="rounded-start object-fit-cover w-50"
+                  class="rounded-start object-fit-cover"
                   style="height: 50vh"
                 />
                 <div class="card-body d-flex flex-column w-50">

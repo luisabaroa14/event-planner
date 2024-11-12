@@ -58,7 +58,7 @@ const collaborator = computed(() =>
           </p>
           <p v-if="event?.tags?.length">
             <strong>Tags:</strong> 
-            <div class="d-flex flex-wrap">
+            <span class="d-flex flex-wrap">
               <span
                 v-for="tag in event.tags"
                 :key="tag"
@@ -66,7 +66,7 @@ const collaborator = computed(() =>
               >
                 {{ capitalizeKebab(tag) }}
               </span>
-            </div>
+            </span>
           </p>
           <p><strong>Date:</strong> {{ event.date.toDateString()  }}</p>
         </div>

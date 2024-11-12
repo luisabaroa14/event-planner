@@ -1,4 +1,5 @@
 <script setup>
+import { computed } from "vue";
 import EventList from "../components/EventList.vue";
 import img from "@/assets/images/chef.png";
 import ImageGrid from "@/components/ImageGrid.vue";
@@ -7,16 +8,29 @@ import CardComponent from "@/components/CardComponent.vue";
 import ProductsCarousel from "@/components/ProductsCarousel.vue";
 import { useEventStore } from "@/stores/useEventStore";
 import { useCollaboratorStore } from "@/stores/useCollaboratorStore";
+import { useProductStore } from "@/stores/useProductStore";
 
 const eventStore = useEventStore();
 const collaboratorStore = useCollaboratorStore();
+const productStore = useProductStore();
 
-const infoPills = [
-  { title: "Events", value: 33 },
-  { title: "Chefs", value: 6 },
-  { title: "Products", value: 54 },
-  { title: "Locations", value: 2 },
-];
+const infoPills = computed(() => [
+  { id: 1, title: "Events", value: eventStore.events?.length },
+  { id: 2, title: "Chefs", value: collaboratorStore.collaborators?.length },
+  { id: 3, title: "Products", value: productStore.products?.length },
+  { id: 4, title: "Locations", value: 2 },
+]);
+
+const mixedImages = computed(() => {
+  // Get image arrays from events and products
+  const images = [
+    ...(eventStore.events?.map((event) => event.image) || []),
+    ...(productStore.products?.map((product) => product.image) || []),
+  ];
+
+  // Shuffle the combined array
+  return images.sort(() => Math.random() - 0.5);
+});
 </script>
 
 <template>
@@ -42,7 +56,7 @@ const infoPills = [
           class="d-flex align-items-center justify-content-center w-50-lg-w-100-sm h-100 mb-2"
         >
           <ImageGrid
-            :images="eventStore.events?.map((event) => event.image)"
+            :images="mixedImages"
             style="filter: drop-shadow(16px 16px 16px black)"
           />
         </div>
@@ -87,18 +101,13 @@ const infoPills = [
       <div class="d-flex flex-row justify-content-between w-100 my-5">
         <div
           v-for="pill in infoPills"
-          :key="pill.value"
+          :key="`pill-${pill.title}`"
           class="d-flex w-20 position-relative hover-bounce"
         >
           <div
             class="rounded-pill position-absolute top-0 start-0 w-100 h-100"
             :style="{
-              backgroundImage:
-                'url(' +
-                eventStore.events?.[
-                  Math.floor(Math.random() * eventStore.events?.length)
-                ]?.image +
-                ')',
+              backgroundImage: 'url(' + mixedImages?.[pill.id] + ')',
               backgroundSize: 'cover',
               backgroundPosition: 'center',
               filter: 'brightness(25%) grayscale(100%)',

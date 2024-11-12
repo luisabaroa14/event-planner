@@ -21,7 +21,7 @@
       },
       "cwd": "${workspaceFolder}/frontend",
       "runtimeExecutable": "npm",
-      "runtimeArgs": ["run-script", "dev"]
+      "runtimeArgs": ["run", "dev"]
     },
     {
       "name": "Backend",

@@ -20,6 +20,7 @@ const price = ref(0);
 const image = ref(null);
 const collaboratorId = ref("");
 const tags = ref([]);
+const participants = ref({ current: 0, max: 0 });
 const uploadFile = ref(false);
 
 const newTag = ref("");
@@ -36,6 +37,7 @@ const clearForm = () => {
   tags.value = [];
   date.value = "";
   newTag.value = "";
+  participants.value = { current: 0, max: 0 };
 
   uploadFile.value = false;
   eventToUpdate.value = null;
@@ -51,6 +53,7 @@ const handleCreateEvent = async () => {
       price: price.value,
       collaboratorId: collaboratorId.value,
       tags: tags.value,
+      participants: participants.value,
       date: date.value,
     },
     uploadFile.value
@@ -159,6 +162,26 @@ const addTag = async (update = false) => {
             {{ collaborator.name }}
           </option>
         </select>
+        <br />
+        <label>Participants:</label>
+        <div class="input-group">
+          <span class="input-group-text">Current</span>
+          <input
+            type="number"
+            class="form-control"
+            v-model="eventToUpdate.participants.current"
+            required
+            step="any"
+          />
+          <span class="input-group-text">Max</span>
+          <input
+            type="number"
+            class="form-control"
+            v-model="eventToUpdate.participants.max"
+            required
+            step="any"
+          />
+        </div>
         <br />
         <label>Tags:</label>
         <div class="d-flex flex-wrap">
@@ -281,6 +304,26 @@ const addTag = async (update = false) => {
           </option>
         </select>
         <br />
+        <label>Participants:</label>
+        <div class="input-group">
+          <span class="input-group-text">Current</span>
+          <input
+            type="number"
+            class="form-control"
+            v-model="participants.current"
+            required
+            step="any"
+          />
+          <span class="input-group-text">Max</span>
+          <input
+            type="number"
+            class="form-control"
+            v-model="participants.max"
+            required
+            step="any"
+          />
+        </div>
+        <br />
         <label>Tags:</label>
         <div class="d-flex flex-wrap">
           <span
@@ -356,24 +399,30 @@ const addTag = async (update = false) => {
           <th>Location</th>
           <th>Date</th>
           <th>Collaborator</th>
+          <th>Participants</th>
           <th>Tags</th>
           <th>Actions</th>
         </tr>
       </thead>
-      <tbody>
+      <tbody class="table-group-divider">
         <tr v-for="event in eventStore.events" :key="event.id">
-          <td>{{ event.name }}</td>
+          <td class="text-center">{{ event.name }}</td>
           <td>
             <img :src="event.image" style="width: 100px; height: 100px" />
           </td>
           <td class="fw-bold">{{ event.price }}$</td>
           <td>{{ event.description }}</td>
-          <td>{{ event.location }}</td>
+          <td class="text-center">{{ event.location }}</td>
           <td>{{ event.date.toDateString() }}</td>
-          <td>
+          <td class="text-center">
             {{
               collaboratorStore.getCollaboratorById(event?.collaboratorId)
                 ?.name ?? "None"
+            }}
+          </td>
+          <td class="text-center fw-bold">
+            {{ event?.participants?.current ?? 0 }}/{{
+              event?.participants?.max ?? 0
             }}
           </td>
           <td>
@@ -401,3 +450,10 @@ const addTag = async (update = false) => {
     </table>
   </div>
 </template>
+
+<style scoped>
+table {
+  border-collapse: separate;
+  border-spacing: 1em;
+}
+</style>

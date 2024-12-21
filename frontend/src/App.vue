@@ -6,6 +6,6 @@ import TopNavBar from "./components/TopNavBar.vue";
 <template>
   <div class="h-100">
     <TopNavBar />
-    <RouterView />
+    <RouterView style="margin-top: 70px" />
   </div>
 </template>

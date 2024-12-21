@@ -39,11 +39,10 @@ const filteredProducts = computed(() => {
 
 <template>
   <div class="h-100 d-flex flex-column p-3">
-    <div class="mt-5 mx-3">
+    <div class="mx-3">
       <div
-        class="d-flex justify-content-between align-items-center mb-3 flex-wrap"
+        class="d-flex justify-content-end align-items-center mb-3 flex-wrap"
       >
-        <h1>Products</h1>
         <div class="d-flex align-items-center ms-md-2 mt-md-0 mt-3">
           <span v-if="collaboratorId" class="badge bg-primary pill py-2 me-2">
             {{

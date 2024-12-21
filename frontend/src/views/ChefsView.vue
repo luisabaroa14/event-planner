@@ -29,8 +29,7 @@ const chefSocialIcons = ["instagram", "spotify"];
 
 <template>
   <div class="h-100 d-flex flex-column p-3">
-    <div class="mt-5 mx-3">
-      <h1>Chefs</h1>
+    <div class="mx-3">
       <Carousel
         :items-to-show="1"
         :wrap-around="true"

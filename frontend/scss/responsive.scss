@@ -36,6 +36,14 @@ $breakpoint-md: 992px;
   }
 }
 
+.w-25-lg-w-50-sm {
+  width: 25% !important;
+
+  @media (max-width: $breakpoint-md) {
+    width: 50% !important;
+  }
+}
+
 @mixin ellipsis-text($lines: 3) {
   display: -webkit-box;
   -webkit-box-orient: vertical;

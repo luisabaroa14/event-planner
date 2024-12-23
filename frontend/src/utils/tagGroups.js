@@ -6,3 +6,11 @@ export const productsFilterTags = [
   "dessert",
   "drink",
 ];
+
+export const cuisineFilterTags = [
+  "american",
+  "asian",
+  "mediterranean",
+  "spanish",
+  "sea",
+];

@@ -7,6 +7,7 @@ const collaboratorStore = useCollaboratorStore();
 
 const name = ref("");
 const description = ref("");
+const brief = ref("");
 const image = ref(null);
 const tags = ref([]);
 const uploadFile = ref(false);
@@ -19,6 +20,7 @@ const clearForm = () => {
   name.value = "";
   image.value = "";
   description.value = "";
+  brief.value = "";
   tags.value = [];
 
   newTag.value = "";
@@ -33,6 +35,7 @@ const handleCreateCollaborator = async () => {
       name: name.value,
       image: image.value,
       description: description.value,
+      brief: brief.value,
       tags: tags.value,
     },
     uploadFile.value
@@ -92,6 +95,13 @@ const addTag = async (update = false) => {
         <input
           class="form-control w-100"
           v-model="collaboratorToUpdate.name"
+          required
+        />
+        <br />
+        <label>Brief:</label>
+        <input
+          class="form-control w-100"
+          v-model="collaboratorToUpdate.brief"
           required
         />
         <br />
@@ -180,6 +190,9 @@ const addTag = async (update = false) => {
         <label>Name:</label>
         <input class="form-control w-100" v-model="name" required />
         <br />
+        <label>Brief:</label>
+        <input class="form-control w-100" v-model="brief" required />
+        <br />
         <label>Description:</label>
         <input class="form-control w-100" v-model="description" required />
         <br />
@@ -253,6 +266,7 @@ const addTag = async (update = false) => {
         <tr>
           <th>Name</th>
           <th>Image</th>
+          <th>Brief</th>
           <th>Description</th>
           <th>Tags</th>
           <th>Actions</th>
@@ -270,6 +284,7 @@ const addTag = async (update = false) => {
               style="width: 100px; height: 100px"
             />
           </td>
+          <td>{{ collaborator.brief }}</td>
           <td>{{ collaborator.description }}</td>
           <td>
             <span

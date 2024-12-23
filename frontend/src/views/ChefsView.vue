@@ -1,137 +1,93 @@
 <script setup>
-import { ref } from "vue";
-import SocialIcons from "@/components/SocialIcons.vue";
-import { Carousel, Slide } from "vue3-carousel";
+import { ref, computed } from "vue";
 import { useCollaboratorStore } from "@/stores/useCollaboratorStore";
-import { useRouter } from "vue-router";
-
-const router = useRouter();
+import CollaboratorList from "../components/CollaboratorList.vue";
+import { capitalizeKebab } from "@/utils/functions";
+import { cuisineFilterTags } from "@/utils/tagGroups";
 
 const collaboratorStore = useCollaboratorStore();
 
-const currentSlide = ref(0);
+const selectedFilterTag = ref("all");
 
-function slideTo(id) {
-  const index = collaboratorStore.collaborators.findIndex((c) => c.id === id);
-  if (index !== -1) {
-    currentSlide.value = index;
-  }
-}
+const activeName = ref("");
 
-const breakpoints = ref({
-  0: { itemsToShow: 2 },
-  // 992px and up
-  992: { itemsToShow: 4 },
+const filteredCollaborators = computed(() => {
+  return collaboratorStore.collaborators.filter((collaborator) => {
+    const matchesTag =
+      selectedFilterTag.value === "all" ||
+      collaborator.tags.includes(selectedFilterTag.value);
+    const matchesName =
+      activeName.value === "" ||
+      collaborator.name.toLowerCase().includes(activeName.value.toLowerCase());
+    const matchesBrief =
+      activeName.value === "" ||
+      collaborator.brief?.toLowerCase().includes(activeName.value.toLowerCase());
+
+    return matchesTag && (matchesName || matchesBrief);
+  });
 });
-
-const chefSocialIcons = ["instagram", "spotify"];
 </script>
 
 <template>
-  <div class="h-100 d-flex flex-column p-3">
+  <div class="d-flex flex-column p-3">
     <div class="mx-3">
-      <Carousel
-        :items-to-show="1"
-        :wrap-around="true"
-        v-model="currentSlide"
-        class="mt-2"
-      >
-        <Slide
-          v-for="collaborator in collaboratorStore.collaborators"
-          :key="`main-chef-${collaborator.id}`"
-        >
-          <div class="w-100">
-            <div class="card border-0" style="height: 50vh">
-              <div class="d-flex flex-row">
-                <img
-                  :src="collaborator.image"
-                  class="rounded-start object-fit-cover"
-                  style="height: 50vh"
-                />
-                <div class="card-body d-flex flex-column w-50">
-                  <h2 class="fw-bold mb-3">{{ collaborator.name }}</h2>
-                  <p
-                    class="text-muted flex-grow-1 mb-3"
-                    style="font-size: 1rem; max-height: 100px; overflow-y: auto"
-                  >
-                    {{ collaborator.description }}
-                  </p>
-                  <!-- <div>
-                    <span
-                      v-for="cuisine in collaborator.cuisineTypes"
-                      :key="cuisine"
-                      class="badge rounded-pill bg-primary me-2"
-                    >
-                      {{ cuisine }}
-                    </span>
-                  </div> -->
-
-                  <SocialIcons
-                    :icon-names="chefSocialIcons"
-                    color="var(--bs-dark)"
-                  />
-
-                  <div class="row gap-1 mx-3">
-                    <button
-                      class="col btn btn-primary"
-                      @click="
-                        router.push({
-                          name: 'products',
-                          query: { c: collaborator.id },
-                        })
-                      "
-                    >
-                      Products
-                    </button>
-                    <button
-                      class="col btn btn-primary"
-                      @click="
-                        router.push({
-                          name: 'events',
-                          query: { c: collaborator.id },
-                        })
-                      "
-                    >
-                      Events
-                    </button>
-                  </div>
-                </div>
-              </div>
-            </div>
+      <div class="d-flex justify-content-end align-items-center mb-3 flex-wrap">
+        <div class="d-flex align-items-center ms-md-2 mt-md-0 mt-3">
+          <input
+            type="search"
+            class="form-control"
+            placeholder="Search chefs"
+            v-model="activeName"
+          />
+          <div class="dropdown ms-2">
+            <button
+              class="btn btn-secondary dropdown-toggle bg-white"
+              type="button"
+              id="dropdownMenuButton"
+              data-bs-toggle="dropdown"
+              aria-haspopup="true"
+              aria-expanded="false"
+            >
+              {{
+                selectedFilterTag === "all"
+                  ? "Type of food"
+                  : capitalizeKebab(selectedFilterTag)
+              }}
+            </button>
+            <ul
+              class="dropdown-menu"
+              aria-labelledby="dropdownMenuButton"
+              id="dropdownMenu"
+            >
+              <li>
+                <a
+                  class="dropdown-item"
+                  href="#"
+                  @click.prevent="selectedFilterTag = 'all'"
+                >
+                  All
+                </a>
+              </li>
+              <li v-for="tag in cuisineFilterTags" :key="tag">
+                <a
+                  class="dropdown-item"
+                  href="#"
+                  @click.prevent="selectedFilterTag = tag"
+                >
+                  {{ capitalizeKebab(tag) }}
+                </a>
+              </li>
+            </ul>
           </div>
-        </Slide>
-      </Carousel>
+        </div>
+      </div>
 
-      <Carousel
-        :breakpoints="breakpoints"
-        snap-align="start"
-        :wrap-around="true"
-        :autoplay="500"
-        :transition="3000"
-        class="my-3"
-      >
-        <Slide
-          v-for="chef in collaboratorStore.collaborators"
-          :key="`thumbnails-${chef.name}`"
-        >
-          <div class="w-80" @click="slideTo(chef.id)">
-            <div class="card card-scale border-0">
-              <img
-                :src="chef.image"
-                class="rounded object-fit-cover"
-                style="height: 30vh"
-              />
-            </div>
-          </div>
-        </Slide>
-      </Carousel>
+      <CollaboratorList
+        v-if="filteredCollaborators?.length"
+        class="mt-4"
+        :gridLayout="true"
+        :collaborators="filteredCollaborators"
+      />
     </div>
   </div>
 </template>
-
-<style scoped>
-.card-scale:hover {
-  transform: scale(0.9);
-  transition: transform 0.3s ease-in-out, z-index 0.3s ease-in-out;
-}
-</style>

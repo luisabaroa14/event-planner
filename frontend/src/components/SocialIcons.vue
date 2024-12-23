@@ -1,10 +1,11 @@
 <script setup>
 import { computed } from "vue";
+import strings from "../utils/strings";
 const icons = [
-  { name: "instagram", url: "https://www.instagram.com" },
+  { name: "instagram", url: strings.instagram},
   { name: "spotify", url: "https://www.spotify.com" },
   { name: "facebook", url: "https://www.facebook.com" },
-  { name: "whatsapp", url: "https://www.whatsapp.com" },
+  { name: "whatsapp", url: strings.whatsapp },
 ];
 
 const filteredIcons = computed(() =>

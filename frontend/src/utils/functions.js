@@ -63,7 +63,7 @@ export const toKebabCase = (str) => {
     .replace(/([a-z])([A-Z])/g, "$1-$2") // Convert camelCase to kebab-case
     .toLowerCase()
     .replace(/_/g, "-") // Convert underscores to hyphens
-    .replace(/[^a-z0-9\s-]/g, "") // Remove special characters
+    .replace(/[^a-zñáéíóúü0-9\s-]/g, "") // Remove special characters
     .replace(/\s+/g, "-") // Convert spaces to hyphens
     .replace(/-+/g, "-"); // Convert multiple consecutive hyphens to a single hyphen
 };

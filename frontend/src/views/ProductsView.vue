@@ -6,8 +6,7 @@ import { useProductStore } from "@/stores/useProductStore";
 import { useCollaboratorStore } from "@/stores/useCollaboratorStore";
 import { productsFilterTags } from "@/utils/tagGroups";
 import { capitalizeKebab } from "@/utils/functions";
-import { useRoute } from "vue-router";
-import { useRouter } from "vue-router";
+import { useRoute, useRouter } from "vue-router";
 
 const router = useRouter();
 const route = useRoute();
@@ -38,7 +37,7 @@ const filteredProducts = computed(() => {
 </script>
 
 <template>
-  <div class="h-100 d-flex flex-column p-3">
+  <div class="d-flex flex-column p-3">
     <div class="mx-3">
       <div
         class="d-flex justify-content-end align-items-center mb-3 flex-wrap"

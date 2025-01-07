@@ -1,7 +1,13 @@
 <script setup>
 import { ref } from "vue";
 import { useCollaboratorStore } from "@/stores/useCollaboratorStore";
-import { capitalizeKebab, toKebabCase } from "@/utils/functions";
+import {
+  capitalizeKebab,
+  toKebabCase,
+  capitalizeFirstLetter,
+} from "@/utils/functions";
+import { daysOfWeekTags } from "../../utils/tagGroups";
+import dayjs from "dayjs";
 
 const collaboratorStore = useCollaboratorStore();
 
@@ -10,6 +16,12 @@ const description = ref("");
 const brief = ref("");
 const image = ref(null);
 const tags = ref([]);
+const availableDates = ref({
+  patterns: [],
+  blockedDates: [],
+  extraDates: [],
+});
+
 const uploadFile = ref(false);
 
 const collaboratorToUpdate = ref(null);
@@ -22,6 +34,11 @@ const clearForm = () => {
   description.value = "";
   brief.value = "";
   tags.value = [];
+  availableDates.value = {
+    patterns: [],
+    blockedDates: [],
+    extraDates: [],
+  };
 
   newTag.value = "";
 
@@ -36,6 +53,7 @@ const handleCreateCollaborator = async () => {
       image: image.value,
       description: description.value,
       brief: brief.value,
+      availableDates: availableDates.value,
       tags: tags.value,
     },
     uploadFile.value
@@ -57,6 +75,14 @@ const handleUpdateCollaborator = async () => {
 };
 
 const updateCollaborator = (collaborator) => {
+  if (!collaborator.availableDates) {
+    collaborator.availableDates = {
+      patterns: [],
+      blockedDates: [],
+      extraDates: [],
+    };
+  }
+
   collaboratorToUpdate.value = JSON.parse(JSON.stringify(collaborator));
 
   // If the image is a URL, set uploadFile to false
@@ -83,6 +109,37 @@ const addTag = async (update = false) => {
 
   tagList.push(tag);
   newTag.value = "";
+};
+
+const addDate = (availableDates, date, blocked = false) => {
+  const array = blocked
+    ? availableDates.blockedDates
+    : availableDates.extraDates;
+
+  if (date && !array?.includes(date)) {
+    array.push(date);
+  }
+};
+
+const removeDate = (availableDates, date, blocked = false) => {
+  const array = blocked
+    ? availableDates.blockedDates
+    : availableDates.extraDates;
+
+  const index = array.indexOf(date);
+  if (index > -1) {
+    array.splice(index, 1);
+  }
+};
+
+const togglePattern = (availableDates, day) => {
+  if (!availableDates?.patterns) return;
+
+  if (availableDates.patterns?.includes(day)) {
+    availableDates.patterns = availableDates.patterns.filter((d) => d !== day);
+  } else {
+    availableDates.patterns.push(day);
+  }
 };
 </script>
 
@@ -112,6 +169,91 @@ const addTag = async (update = false) => {
           required
         />
         <br />
+        <label>Available Days:</label>
+        <div class="w-100">
+          <div
+            v-for="day in daysOfWeekTags"
+            :key="`${day}-button`"
+            class="btn btn-primary me-2 mb-2"
+            type="button"
+            :class="
+              collaboratorToUpdate?.availableDates?.patterns?.includes(day)
+                ? 'btn-primary'
+                : 'btn-secondary'
+            "
+            @click="togglePattern(collaboratorToUpdate?.availableDates, day)"
+          >
+            {{ day.charAt(0).toUpperCase() + day.slice(1) }}
+          </div>
+        </div>
+        <br />
+        <label>Blocked dates:</label>
+        <div class="input-group">
+          <div class="d-flex flex-wrap form-control">
+            <span
+              v-for="date in collaboratorToUpdate?.availableDates?.blockedDates"
+              :key="date"
+              class="badge bg-primary me-2 my-2 d-flex align-items-center"
+            >
+              {{ dayjs(date).format("DD MMM YYYY") }}
+              <i
+                class="fas fa-times ms-2"
+                @click="
+                  removeDate(collaboratorToUpdate?.availableDates, date, true)
+                "
+                style="cursor: pointer"
+              ></i>
+            </span>
+          </div>
+          <input
+            type="date"
+            ref="dateInput"
+            class="btn btn-primary text-white"
+            style="color-scheme: dark"
+            @change="
+              addDate(
+                collaboratorToUpdate?.availableDates,
+                $event.target.value,
+                true
+              )
+            "
+          />
+        </div>
+        <br />
+        <label>Extra dates:</label>
+        <div class="input-group">
+          <div class="d-flex flex-wrap form-control">
+            <span
+              v-for="date in collaboratorToUpdate?.availableDates?.extraDates"
+              :key="date"
+              class="badge bg-primary me-2 my-2 d-flex align-items-center"
+            >
+              {{ dayjs(date).format("DD MMM YYYY") }}
+              <i
+                class="fas fa-times ms-2"
+                @click="
+                  removeDate(collaboratorToUpdate?.availableDates, date, false)
+                "
+                style="cursor: pointer"
+              ></i>
+            </span>
+          </div>
+          <input
+            type="date"
+            ref="dateInput"
+            class="btn btn-primary text-white"
+            style="color-scheme: dark"
+            @change="
+              addDate(
+                collaboratorToUpdate?.availableDates,
+                $event.target.value,
+                false
+              )
+            "
+          />
+        </div>
+        <br />
+
         <label>Tags:</label>
         <div class="d-flex flex-wrap">
           <span
@@ -196,6 +338,74 @@ const addTag = async (update = false) => {
         <label>Description:</label>
         <input class="form-control w-100" v-model="description" required />
         <br />
+        <label>Available Days:</label>
+        <div class="w-100">
+          <div
+            v-for="day in daysOfWeekTags"
+            :key="`${day}-button`"
+            class="btn btn-primary me-2 mb-2"
+            type="button"
+            :class="
+              availableDates.patterns?.includes(day)
+                ? 'btn-primary'
+                : 'btn-secondary'
+            "
+            @click="togglePattern(availableDates, day)"
+          >
+            {{ day.charAt(0).toUpperCase() + day.slice(1) }}
+          </div>
+        </div>
+        <br />
+        <label>Blocked dates:</label>
+        <div class="input-group">
+          <div class="d-flex flex-wrap form-control">
+            <span
+              v-for="date in availableDates.blockedDates"
+              :key="date"
+              class="badge bg-primary me-2 my-2 d-flex align-items-center"
+            >
+              {{ dayjs(date).format("DD MMM YYYY") }}
+              <i
+                class="fas fa-times ms-2"
+                @click="removeDate(availableDates, date, true)"
+                style="cursor: pointer"
+              ></i>
+            </span>
+          </div>
+          <input
+            type="date"
+            ref="dateInput"
+            class="btn btn-primary text-white"
+            style="color-scheme: dark"
+            @change="addDate(availableDates, $event.target.value, true)"
+          />
+        </div>
+        <br />
+        <label>Extra dates:</label>
+        <div class="input-group">
+          <div class="d-flex flex-wrap form-control">
+            <span
+              v-for="date in availableDates.extraDates"
+              :key="date"
+              class="badge bg-primary me-2 my-2 d-flex align-items-center"
+            >
+              {{ dayjs(date).format("DD MMM YYYY") }}
+              <i
+                class="fas fa-times ms-2"
+                @click="removeDate(availableDates, date, false)"
+                style="cursor: pointer"
+              ></i>
+            </span>
+          </div>
+          <input
+            type="date"
+            ref="dateInput"
+            class="btn btn-primary text-white"
+            style="color-scheme: dark"
+            @change="addDate(availableDates, $event.target.value, false)"
+          />
+        </div>
+        <br />
         <label>Tags:</label>
         <div class="d-flex flex-wrap">
           <span
@@ -269,6 +479,7 @@ const addTag = async (update = false) => {
           <th>Brief</th>
           <th>Description</th>
           <th>Tags</th>
+          <th>Available Dates</th>
           <th>Actions</th>
         </tr>
       </thead>
@@ -294,6 +505,32 @@ const addTag = async (update = false) => {
             >
               {{ capitalizeKebab(tag) }}
             </span>
+          </td>
+          <td style="width: 150px">
+            <div>
+              <strong>Days:</strong>
+              {{
+                collaborator.availableDates?.patterns
+                  ?.map((d) => capitalizeFirstLetter(d))
+                  .join(", ") || "None"
+              }}
+            </div>
+            <div>
+              <strong>Blocked:</strong>
+              {{
+                collaborator.availableDates?.blockedDates
+                  ?.map((d) => dayjs(d).format("DD/MMM/YYYY"))
+                  .join(", ") || "None"
+              }}
+            </div>
+            <div>
+              <strong>Extras:</strong>
+              {{
+                collaborator.availableDates?.extraDates
+                  ?.map((d) => dayjs(d).format("DD/MMM/YYYY"))
+                  .join(", ") || "None"
+              }}
+            </div>
           </td>
           <td>
             <button

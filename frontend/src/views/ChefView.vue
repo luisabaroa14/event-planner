@@ -1,17 +1,15 @@
 <script setup>
-import { ref, computed } from "vue";
+import { computed } from "vue";
 import { useCollaboratorStore } from "@/stores/useCollaboratorStore";
 import { useProductStore } from "@/stores/useProductStore";
-import { useEventStore } from "@/stores/useEventStore";
 import ProductList from "../components/ProductList.vue";
-import EventsCalendar from "../components/EventsCalendar.vue";
+import AvailabilityCalendar from "../components/AvailabilityCalendar.vue";
 import { capitalizeKebab } from "@/utils/functions";
 import { useRoute } from "vue-router";
 
 const route = useRoute();
 
 const collaboratorStore = useCollaboratorStore();
-const eventStore = useEventStore();
 const productStore = useProductStore();
 
 const collaborator = computed(() =>
@@ -52,9 +50,10 @@ const filteredProducts = computed(() =>
           </span>
         </div>
       </div>
-      <EventsCalendar :events="eventStore.events" :collaborator-id="null" />
+      <AvailabilityCalendar
+        :available-dates="collaborator?.availableDates"
+        @schedule-experience="(date) => console.log(date)"
+      />
     </div>
-    <h2 class="fw-bold mt-3">Products</h2>
-    <ProductList :products="filteredProducts" />
   </div>
 </template>

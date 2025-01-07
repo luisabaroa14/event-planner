@@ -14,3 +14,13 @@ export const cuisineFilterTags = [
   "spanish",
   "sea",
 ];
+
+export const daysOfWeekTags = [
+  "monday",
+  "tuesday",
+  "wednesday",
+  "thursday",
+  "friday",
+  "saturday",
+  "sunday",
+];

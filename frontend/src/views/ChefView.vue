@@ -27,16 +27,17 @@ const filteredProducts = computed(() =>
 
 <template>
   <div class="d-flex flex-column p-3">
-    <div v-if="collaborator" class="d-flex flew-row">
-      <div class="d-flex flex-column col-3">
+    <div v-if="collaborator" class="d-flex flex-row-lg-column-sm">
+      <div class="d-flex flex-column justify-content-center align-items-center">
         <img
           :src="collaborator.image"
           :alt="collaborator.name"
-          class="img-fluid mb-3 object-fit-cover rounded"
-          style="width: 300px; height: 300px"
+          class="img-fluid img-300 mb-3 object-fit-cover rounded"
         />
       </div>
-      <div class="d-flex flex-column mx-4">
+      <div
+        class="d-flex flex-column justify-content-center align-items-center text-center mx-4"
+      >
         <h1 class="fw-bold">{{ collaborator.name }}</h1>
         <h4 class="ms-1">{{ collaborator.brief }}</h4>
         <p class="ms-1">{{ collaborator.description }}</p>
@@ -51,9 +52,29 @@ const filteredProducts = computed(() =>
         </div>
       </div>
       <AvailabilityCalendar
+        class="mt-2"
         :available-dates="collaborator?.availableDates"
         @schedule-experience="(date) => console.log(date)"
       />
     </div>
+    <h2 class="fw-bold mt-5">Products</h2>
+    <ProductList
+      :products="
+        filteredProducts.filter((p) => !p.tags.includes('experiencia'))
+      "
+    />
+    <h2 class="fw-bold mt-5">Food Experiences</h2>
+    <ProductList
+      :products="filteredProducts.filter((p) => p.tags.includes('experiencia'))"
+    />
   </div>
 </template>
+
+<style scoped>
+.img-300 {
+  width: 300px;
+  height: 300px;
+  min-width: 300px;
+  min-height: 300px;
+}
+</style>

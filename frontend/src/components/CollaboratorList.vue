@@ -27,8 +27,7 @@ const props = defineProps({
             <img
               :src="collaborator.image"
               :alt="collaborator.name"
-              class="rounded-circle img-fluid mb-3 object-fit-cover"
-              style="width: 200px; height: 200px"
+              class="rounded-circle img-fluid img-sm-100-lg-200 mb-3 object-fit-cover"
             />
             <h5 class="fw-bold mb-3">{{ collaborator.name }}</h5>
             <h6 class="mb-3">{{ collaborator.brief }}</h6>

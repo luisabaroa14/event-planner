@@ -3,7 +3,7 @@
 import { ref, computed } from "vue";
 
 // Define props for event dates
-const props = defineProps({ events: Array, collaboratorId: Number });
+const props = defineProps({ events: Array, collaboratorId: String });
 
 const selectedDate = ref(new Date());
 

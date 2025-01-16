@@ -2,6 +2,7 @@
 import { computed } from "vue";
 import { useCollaboratorStore } from "@/stores/useCollaboratorStore";
 import { useProductStore } from "@/stores/useProductStore";
+import { useExperienceStore } from "@/stores/useExperienceStore";
 import ProductList from "../components/ProductList.vue";
 import AvailabilityCalendar from "../components/AvailabilityCalendar.vue";
 import { capitalizeKebab } from "@/utils/functions";
@@ -11,6 +12,7 @@ const route = useRoute();
 
 const collaboratorStore = useCollaboratorStore();
 const productStore = useProductStore();
+const experienceStore = useExperienceStore();
 
 const collaborator = computed(() =>
   collaboratorStore.collaborators.find(
@@ -21,6 +23,11 @@ const collaborator = computed(() =>
 const filteredProducts = computed(() =>
   productStore.products.filter(
     (product) => product.collaboratorId === route.params.id
+  )
+);
+const filteredExperiences = computed(() =>
+  experienceStore.experiences.filter(
+    (experience) => experience.collaboratorId === route.params.id
   )
 );
 </script>
@@ -58,15 +65,9 @@ const filteredProducts = computed(() =>
       />
     </div>
     <h2 class="fw-bold mt-5">Products</h2>
-    <ProductList
-      :products="
-        filteredProducts.filter((p) => !p.tags.includes('experiencia'))
-      "
-    />
+    <ProductList :products="filteredProducts" />
     <h2 class="fw-bold mt-5">Food Experiences</h2>
-    <ProductList
-      :products="filteredProducts.filter((p) => p.tags.includes('experiencia'))"
-    />
+    <ProductList :products="filteredExperiences" />
   </div>
 </template>
 

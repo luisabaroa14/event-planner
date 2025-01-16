@@ -1,6 +1,6 @@
 <script setup>
 import ProductList from "../components/ProductList.vue";
-import ProductsCarousel from "@/components/ProductsCarousel.vue";
+import ImageCarousel from "@/components/ImageCarousel.vue";
 import { ref, computed } from "vue";
 import { useProductStore } from "@/stores/useProductStore";
 import { useCollaboratorStore } from "@/stores/useCollaboratorStore";
@@ -103,8 +103,8 @@ const filteredProducts = computed(() => {
       <div v-if="productStore.products">
         <ProductList :products="filteredProducts" />
         <div class="my-5">
-          <ProductsCarousel
-            v-if="productStore.products"
+          <ImageCarousel
+            v-if="productStore.products?.length"
             :images="productStore.products.map((p) => p.image)"
             :numberOfRows="1"
             :withSpace="false"

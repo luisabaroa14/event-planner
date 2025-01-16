@@ -7,6 +7,7 @@ import ChefView from '@/views/ChefView.vue'
 import AdminView from '@/views/AdminView.vue'
 import NotFoundView from '@/views/NotFoundView.vue'
 import CartView from '@/views/CartView.vue'
+import ExperienceView from '@/views/ExperienceView.vue'
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -21,6 +22,12 @@ const router = createRouter({
       path: '/events',
       name: 'events',
       component: EventsView,
+      meta: { adminOnly: false }
+    },
+    {
+      path: '/experiences',
+      name: 'experiences',
+      component: ExperienceView,
       meta: { adminOnly: false }
     },
     {

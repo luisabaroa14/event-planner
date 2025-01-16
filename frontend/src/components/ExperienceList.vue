@@ -1,39 +1,41 @@
 <script setup>
 import { capitalizeKebab } from "@/utils/functions";
-import { useProductStore } from "../stores/useProductStore";
+import { useExperienceStore } from "../stores/useExperienceStore";
 import Empty from "../assets/lottie/empty.json";
 
 const props = defineProps({
-  products: Array,
+  experiences: Array,
 });
 
-const productStore = useProductStore();
+const experienceStore = useExperienceStore();
 </script>
 
 <template>
   <div class="w-100 mt-3">
     <div class="tab-content" style="overflow-x: hidden">
-      <div v-if="!props.products?.length" class="mt-3">
+      <div v-if="!props.experiences?.length" class="mt-3">
         <Vue3Lottie :animationData="Empty" :height="400" />
       </div>
       <div class="card-container" v-else>
         <div
-          v-for="product in props.products"
-          :key="product.id"
+          v-for="experience in props.experiences"
+          :key="experience.id"
           class="card border-0 h-100"
         >
-          <img :src="product.image" class="rounded-top" />
-          <!-- <button
-            class="position-absolute btn btn-sm btn-black border border-dark btn-black-hover rounded-circle"
-            style="top: 10px; right: 10px"
+          <img :src="experience.image" class="rounded-top" />
+          <button
+            v-if="experience.participants?.min"
+            class="position-absolute d-flex justify-content-center align-items-center btn btn-sm btn-primary"
+            style="top: 10px; right: 10px; height: 25px"
           >
-            <i class="fa fa-heart"></i>
-          </button> -->
+            <i class="fa fa-user-plus fs-7"></i>
+            <span class="fw-bold ms-1">{{ experience.participants.min }}</span>
+          </button>
           <div class="card-body">
-            <h5 class="card-title">{{ product.name }}</h5>
+            <h5 class="card-title">{{ experience.name }}</h5>
             <div class="d-flex flex-wrap">
               <span
-                v-for="tag in product.tags"
+                v-for="tag in experience.tags"
                 :key="tag"
                 class="badge bg-primary me-2 mb-2 d-flex align-items-center"
               >
@@ -44,21 +46,20 @@ const productStore = useProductStore();
               class="overflow-hidden elispe-text-3-lines m-0"
               style="max-height: 70px"
             >
-              {{ product.description }}
+              {{ experience.description }}
             </p>
             <div
               class="d-flex flex-row align-items-center justify-content-between"
             >
               <p class="fs-5 m-0" style="font-weight: bold">
-                {{ product.price }}$
+                {{ experience.price }}$
               </p>
               <button
                 type="button"
                 class="btn btn-primary rounded-pill"
-                @click="productStore.addToCart(product.id)"
+                @click="experienceStore.addToCart(experience.id)"
               >
-                Add
-                <i class="fa fa-cart-shopping"></i>
+                Schedule
               </button>
             </div>
           </div>

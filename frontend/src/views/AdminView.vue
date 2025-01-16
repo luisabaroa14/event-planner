@@ -4,6 +4,7 @@ import { capitalizeFirstLetter } from "@/utils/functions";
 import AdminEvents from "@/components/admin/AdminEvents.vue";
 import AdminProducts from '@/components/admin/AdminProducts.vue';
 import AdminCollaborators from '@/components/admin/AdminCollaborators.vue';
+import AdminExperiences from '@/components/admin/AdminExperiences.vue';
 
 // Selected option state
 const selectedOption = ref("events");
@@ -20,12 +21,14 @@ const selectedOption = ref("events");
       <select v-model="selectedOption" class="form-control w-10 mb-4 p-2">
         <option value="events">Events</option>
         <option value="products">Products</option>
+        <option value="experiences">Experiences</option>
         <option value="collaborator">Collaborator</option>
       </select>
     </div>
 
     <AdminEvents v-if="selectedOption === 'events'" class="mt-2" />
     <AdminProducts v-if="selectedOption === 'products'" class="mt-2" />
+    <AdminExperiences v-if="selectedOption === 'experiences'" class="mt-2" />
     <AdminCollaborators v-if="selectedOption === 'collaborator'" class="mt-2" />
   </div>
 </template>

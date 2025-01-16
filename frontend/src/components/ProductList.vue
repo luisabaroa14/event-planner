@@ -1,6 +1,7 @@
 <script setup>
 import { capitalizeKebab } from "@/utils/functions";
 import { useProductStore } from "../stores/useProductStore";
+import Empty from "../assets/lottie/empty.json";
 
 const props = defineProps({
   products: Array,
@@ -12,8 +13,8 @@ const productStore = useProductStore();
 <template>
   <div class="w-100 mt-3">
     <div class="tab-content" style="overflow-x: hidden">
-      <div v-if="props.products?.length === 0" class="text-center">
-        <p>Loading products...</p>
+      <div v-if="!props.products?.length" class="mt-3">
+        <Vue3Lottie :animationData="Empty" :height="400" />
       </div>
       <div class="card-container" v-else>
         <div

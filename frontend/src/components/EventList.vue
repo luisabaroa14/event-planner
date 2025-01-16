@@ -3,6 +3,7 @@ import { capitalizeKebab } from "@/utils/functions";
 import EventModal from "./EventModal.vue";
 import { useRouter } from "vue-router";
 import { useCollaboratorStore } from "@/stores/useCollaboratorStore";
+import Empty from "@/assets/lottie/empty.json";
 
 const router = useRouter();
 const collaboratorStore = useCollaboratorStore();
@@ -25,8 +26,8 @@ const props = defineProps({
         <i class="fas fa-close" @click="router.replace({ name: 'events' })"></i>
       </span>
     </div>
-    <div v-if="events?.length === 0" class="text-center">
-      <p>Loading events...</p>
+    <div v-if="!events?.length">
+      <Vue3Lottie :animationData="Empty" :height="400" />
     </div>
     <div
       v-else

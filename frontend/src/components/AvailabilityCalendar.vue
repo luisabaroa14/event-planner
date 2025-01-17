@@ -1,11 +1,17 @@
 <script setup>
-import { ref, computed } from "vue";
+import { computed } from "vue";
 import { getNextDates } from "@/utils/functions";
+import { useExperienceStore } from "@/stores/useExperienceStore";
 
-const props = defineProps({ availableDates: Object });
+const experienceStore = useExperienceStore();
+
 const emit = defineEmits(["scheduleExperience"]);
 
-const selectedDate = ref(new Date());
+const props = defineProps({
+  availableDates: Object,
+  finalDates: Array,
+  popover: { type: Boolean, default: false },
+});
 
 // Define the attributes for the select date
 const selectAttribute = {
@@ -17,6 +23,20 @@ const selectAttribute = {
     },
   },
 };
+
+// Used for when the final dates are passed in
+const mappedCalendarDates = computed(() => {
+  const finalDates = props.finalDates;
+
+  // If there are no final dates, return null
+  if (!finalDates?.length) return null;
+
+  return finalDates.map((date) => ({
+    highlight: { class: "bg-danger" },
+    dates: date,
+    popover: props.popover,
+  }));
+});
 
 const calendarDates = computed(() => {
   const availableDates = props.availableDates;
@@ -40,7 +60,7 @@ const calendarDates = computed(() => {
   return allDates.map((date) => ({
     highlight: { class: "bg-primary" },
     dates: date,
-    popover: true,
+    popover: props.popover,
   }));
 });
 </script>
@@ -48,8 +68,8 @@ const calendarDates = computed(() => {
 <template>
   <VDatePicker
     class="w-100 h-100"
-    v-model="selectedDate"
-    :attributes="calendarDates"
+    v-model="experienceStore.customExperience.date"
+    :attributes="mappedCalendarDates ?? calendarDates"
     :select-attribute="selectAttribute"
     :first-day-of-week="2"
     color="orange"
@@ -58,7 +78,7 @@ const calendarDates = computed(() => {
     <template #day-popover>
       <div
         class="btn btn-primary"
-        @click="emit('scheduleExperience', selectedDate)"
+        @click="emit('scheduleExperience', experienceStore.customExperience.date)"
       >
         Schedule experience
         <i class="fas fa-champagne-glasses"></i>

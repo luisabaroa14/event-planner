@@ -11,9 +11,20 @@ export const useExperienceStore = defineStore("experienceStore", () => {
   const errorMessage = ref(null);
   const quantities = ref({});
 
+  const customExperience = ref({
+    date: null,
+    experienceIds: [],
+    people: 0,
+    location: null,
+    time: null,
+    productIds: null,
+  });
+
   // Load data
   if (localStorage.getItem("cartExperienceIds")) {
-    cartExperienceIds.value = JSON.parse(localStorage.getItem("cartExperienceIds"));
+    cartExperienceIds.value = JSON.parse(
+      localStorage.getItem("cartExperienceIds")
+    );
   }
   if (localStorage.getItem("experienceQuantities")) {
     quantities.value = JSON.parse(localStorage.getItem("experienceQuantities"));
@@ -25,10 +36,26 @@ export const useExperienceStore = defineStore("experienceStore", () => {
     );
   });
 
+  const status = computed(() => {
+    return {
+      1:
+        customExperience.value?.date &&
+        customExperience.value?.experienceIds?.length,
+      2:
+        customExperience.value?.people &&
+        customExperience.value?.location &&
+        customExperience.value?.time,
+      3: customExperience.value?.productIds,
+    };
+  });
+
   watch(
     () => quantities.value,
     () => {
-      localStorage.setItem("experienceQuantities", JSON.stringify(quantities.value));
+      localStorage.setItem(
+        "experienceQuantities",
+        JSON.stringify(quantities.value)
+      );
     },
     { deep: true }
   );
@@ -36,7 +63,10 @@ export const useExperienceStore = defineStore("experienceStore", () => {
   watch(
     () => cartExperienceIds.value,
     () => {
-      localStorage.setItem("cartExperienceIds", JSON.stringify(cartExperienceIds.value));
+      localStorage.setItem(
+        "cartExperienceIds",
+        JSON.stringify(cartExperienceIds.value)
+      );
     },
     { deep: true }
   );
@@ -60,7 +90,10 @@ export const useExperienceStore = defineStore("experienceStore", () => {
       const imageId = uuidv4();
       const storagePath = `experiences/${imageId}`;
 
-      const response = await filesService.uploadFile(experience.image, storagePath);
+      const response = await filesService.uploadFile(
+        experience.image,
+        storagePath
+      );
       if (response.success) {
         experience.image = response.data;
       } else {
@@ -83,7 +116,10 @@ export const useExperienceStore = defineStore("experienceStore", () => {
       const imageId = uuidv4();
       const storagePath = `experiences/${imageId}`;
 
-      const response = await filesService.uploadFile(experience.image, storagePath);
+      const response = await filesService.uploadFile(
+        experience.image,
+        storagePath
+      );
       if (response.success) {
         experience.image = response.data;
       } else {
@@ -105,7 +141,9 @@ export const useExperienceStore = defineStore("experienceStore", () => {
   const deleteExperience = async (experienceId) => {
     const response = await experienceService.deleteExperience(experienceId);
     if (response.success) {
-      experiences.value = experiences.value.filter((e) => e.id !== experienceId);
+      experiences.value = experiences.value.filter(
+        (e) => e.id !== experienceId
+      );
     } else {
       errorMessage.value = "Failed to delete experience";
     }
@@ -122,7 +160,9 @@ export const useExperienceStore = defineStore("experienceStore", () => {
   };
 
   const removeFromCart = (experienceId) => {
-    cartExperienceIds.value = cartExperienceIds.value.filter((id) => id !== experienceId);
+    cartExperienceIds.value = cartExperienceIds.value.filter(
+      (id) => id !== experienceId
+    );
     delete quantities.value[experienceId];
   };
 
@@ -139,12 +179,45 @@ export const useExperienceStore = defineStore("experienceStore", () => {
     return experiences.value.find((experience) => experience.id === id);
   };
 
+  const addCollaborator = (collaboratorId) => {
+    if (!customExperience.value.collaboratorIds.includes(collaboratorId)) {
+      customExperience.value.collaboratorIds.push(collaboratorId);
+    }
+  };
+
+  const addExperience = (experienceId) => {
+    if (!customExperience.value.experienceIds.includes(experienceId)) {
+      customExperience.value.experienceIds.push(experienceId);
+    }
+  };
+
+  const removeCollaborator = (id) => {
+    customExperience.value.collaboratorIds =
+      customExperience.value.collaboratorIds?.filter(
+        (collaboratorId) => collaboratorId !== id
+      );
+  };
+
+  const clearExperiences = () => {
+    customExperience.value.experienceIds = [];
+  };
+
+  const removeExperiencesByCollaborator = (collaboratorId) => {
+    customExperience.value.experienceIds =
+      customExperience.value.experienceIds?.filter((experienceId) => {
+        const experience = getExperienceById(experienceId);
+        return experience.collaboratorId !== collaboratorId;
+      });
+  };
+
   return {
     // State
     experiences,
     cartExperiences,
     cartExperienceIds,
     quantities,
+    customExperience,
+    status,
 
     // Actions
     errorMessage,
@@ -156,5 +229,10 @@ export const useExperienceStore = defineStore("experienceStore", () => {
     addToCart,
     removeFromCart,
     decrementQuantity,
+    addCollaborator,
+    removeCollaborator,
+    addExperience,
+    clearExperiences,
+    removeExperiencesByCollaborator,
   };
 });

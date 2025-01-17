@@ -1,5 +1,5 @@
 <script setup>
-import ExperienceList from "../components/ExperienceList.vue";
+import ExperienceList from "@/components/ExperienceList.vue";
 import ImageCarousel from "@/components/ImageCarousel.vue";
 import { ref, computed } from "vue";
 import { useExperienceStore } from "@/stores/useExperienceStore";
@@ -30,8 +30,6 @@ const filteredExperiences = computed(() => {
       experience.name.toLowerCase().includes(activeName.value.toLowerCase());
     const matchesCollaborator =
       !collaboratorId.value || experience.collaboratorId === collaboratorId.value;
-
-      console.log(experience, matchesTag, matchesName, matchesCollaborator);
 
     return matchesTag && matchesName && matchesCollaborator;
   });

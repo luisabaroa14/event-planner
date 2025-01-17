@@ -6,9 +6,10 @@ import { useExperienceStore } from "@/stores/useExperienceStore";
 import ProductList from "../components/ProductList.vue";
 import AvailabilityCalendar from "../components/AvailabilityCalendar.vue";
 import { capitalizeKebab } from "@/utils/functions";
-import { useRoute } from "vue-router";
+import { useRoute, useRouter } from "vue-router";
 
 const route = useRoute();
+const router = useRouter();
 
 const collaboratorStore = useCollaboratorStore();
 const productStore = useProductStore();
@@ -30,6 +31,11 @@ const filteredExperiences = computed(() =>
     (experience) => experience.collaboratorId === route.params.id
   )
 );
+
+const openCreateExperience = () => {
+  experienceStore.addCollaborator(collaborator.value.id);
+  router.push("/create-experience");
+};
 </script>
 
 <template>
@@ -60,8 +66,9 @@ const filteredExperiences = computed(() =>
       </div>
       <AvailabilityCalendar
         class="mt-2"
+        popover
         :available-dates="collaborator?.availableDates"
-        @schedule-experience="(date) => console.log(date)"
+        @schedule-experience="(date) => openCreateExperience()"
       />
     </div>
     <h2 class="fw-bold mt-5">Products</h2>

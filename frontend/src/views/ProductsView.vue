@@ -50,7 +50,7 @@ const filteredProducts = computed(() => {
             }}
             <i
               class="fas fa-close"
-              @click="router.replace({ name: 'products' })"
+              @click="router.push({ name: 'products' })"
             ></i>
           </span>
           <input

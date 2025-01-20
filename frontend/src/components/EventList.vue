@@ -23,7 +23,7 @@ const props = defineProps({
         {{
           collaboratorStore.getCollaboratorById(collaboratorId)?.name ?? "All"
         }}
-        <i class="fas fa-close" @click="router.replace({ name: 'events' })"></i>
+        <i class="fas fa-close" @click="router.push({ name: 'events' })"></i>
       </span>
     </div>
     <div v-if="!events?.length">

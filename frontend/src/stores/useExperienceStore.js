@@ -17,6 +17,7 @@ export const useExperienceStore = defineStore("experienceStore", () => {
     people: 0,
     location: null,
     time: null,
+    comments: "",
     productIds: null,
   });
 
@@ -179,22 +180,16 @@ export const useExperienceStore = defineStore("experienceStore", () => {
     return experiences.value.find((experience) => experience.id === id);
   };
 
-  const addCollaborator = (collaboratorId) => {
-    if (!customExperience.value.collaboratorIds.includes(collaboratorId)) {
-      customExperience.value.collaboratorIds.push(collaboratorId);
-    }
-  };
-
   const addExperience = (experienceId) => {
-    if (!customExperience.value.experienceIds.includes(experienceId)) {
+    if (!customExperience.value.experienceIds?.includes(experienceId)) {
       customExperience.value.experienceIds.push(experienceId);
     }
   };
 
-  const removeCollaborator = (id) => {
-    customExperience.value.collaboratorIds =
-      customExperience.value.collaboratorIds?.filter(
-        (collaboratorId) => collaboratorId !== id
+  const removeExperience = (id) => {
+    customExperience.value.experienceIds =
+      customExperience.value.experienceIds?.filter(
+        (experienceId) => experienceId !== id
       );
   };
 
@@ -229,10 +224,9 @@ export const useExperienceStore = defineStore("experienceStore", () => {
     addToCart,
     removeFromCart,
     decrementQuantity,
-    addCollaborator,
-    removeCollaborator,
     addExperience,
     clearExperiences,
+    removeExperience,
     removeExperiencesByCollaborator,
   };
 });

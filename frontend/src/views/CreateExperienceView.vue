@@ -1,10 +1,12 @@
 <script setup>
-import { ref, computed } from "vue";
+import { ref, computed, watch } from "vue";
 import { useExperienceStore } from "@/stores/useExperienceStore";
 import { useCollaboratorStore } from "@/stores/useCollaboratorStore";
 import AvailabilityCalendar from "@/components/AvailabilityCalendar.vue";
 import ExperienceList from "@/components/ExperienceList.vue";
 import { getNextDates } from "@/utils/functions";
+import dayjs from "dayjs";
+import { toasts } from "@/utils/toast.js";
 
 const collaboratorStore = useCollaboratorStore();
 const experienceStore = useExperienceStore();
@@ -74,34 +76,93 @@ const allCollaboratorsAvailableDates = computed(() => {
   return result;
 });
 
+// Get all available dates for all collaborators
 const availableDates = computed(() => {
   let finalDates = [];
+
+  // Used to define the collaborators from the selected experiences
+  let filteredCollaborators = [];
+
+  const date = experienceStore.customExperience?.date;
+  const experienceIds = experienceStore.customExperience?.experienceIds;
+
+  // If a date isn't selected and experiences are selected filter the collaborators
+  // by the selected experiences
+  if (!date && experienceIds?.length) {
+    filteredCollaborators = experienceStore.experiences
+      .filter((experience) => experienceIds?.includes(experience.id))
+      .map((experience) => experience.collaboratorId);
+  }
 
   // Get all pattern dates, extra dates, and blocked dates
   collaboratorStore.collaborators?.forEach((collaborator) => {
     const allDates = allCollaboratorsAvailableDates.value[collaborator.id];
 
-    finalDates.push(...allDates);
+    // If no collaborator is selected return all available dates
+    if (!filteredCollaborators?.length) {
+      finalDates.push(...allDates);
+
+      // If a collaborator is selected return only the available dates for that collaborator
+    } else if (filteredCollaborators.includes(collaborator.id)) {
+      finalDates.push(...allDates);
+    }
   });
 
   return finalDates;
 });
 
+watch(
+  () => experienceStore.customExperience.date,
+  (date, previousDate) => {
+    if (date !== previousDate && date) {
+      // Check if the experiences are still available or remove them
+      experienceStore.customExperience.experienceIds =
+        experienceStore.customExperience.experienceIds.filter(
+          (experienceId) => {
+            const experience = experienceStore.getExperienceById(experienceId);
+            const availableDates =
+              allCollaboratorsAvailableDates.value[experience?.collaboratorId];
+
+            const isEventAvailable = availableDates.some(
+              (availableDate) => availableDate.getTime() === date?.getTime()
+            );
+            if (!isEventAvailable) {
+              toasts.show("Experience not available on selected date");
+            }
+
+            return isEventAvailable;
+          }
+        );
+    }
+  },
+  { deep: true }
+);
+
 const filteredExperiencesByDate = computed(() => {
-  const date = experienceStore.customExperience.date;
+  const date = experienceStore.customExperience?.date;
+  const experienceIds = experienceStore.customExperience?.experienceIds;
 
-  // If no date is selected return empty array
-  if (!date) return [];
+  let availableCollaboratorIds = [];
 
-  const availableCollaboratorIds = collaboratorStore.collaborators
-    .filter((collaborator) => {
-      const availableDates =
-        allCollaboratorsAvailableDates.value[collaborator.id];
-      return availableDates.some(
-        (availableDate) => availableDate.getTime() === date?.getTime()
-      );
-    })
-    .map((collaborator) => collaborator.id);
+  // If a date is selected filter the collaborators that have that date available
+  if (date) {
+    availableCollaboratorIds = collaboratorStore.collaborators
+      .filter((collaborator) => {
+        const availableDates =
+          allCollaboratorsAvailableDates.value[collaborator.id];
+        return availableDates.some(
+          (availableDate) => availableDate.getTime() === date?.getTime()
+        );
+      })
+      .map((collaborator) => collaborator.id);
+
+    // If a experience is selected filter the collaborators that have that experience available
+  } else if (experienceIds?.length) {
+    const collaboratorIds = experienceStore.experiences
+      .filter((experience) => experienceIds?.includes(experience.id))
+      .map((experience) => experience.collaboratorId);
+    availableCollaboratorIds = collaboratorIds;
+  }
 
   // If no collaborator is available that day return empty array
   if (!availableCollaboratorIds?.length) return [];
@@ -115,15 +176,41 @@ const filteredExperiencesByDate = computed(() => {
 
 <template>
   <div class="d-flex flex-column justify-content-center align-items-center p-4">
-    <h2 class="mb-3">Create Your Own Experience</h2>
+    <h2 class="fw-bold mb-4">Create Your Own Experience</h2>
     <div class="d-flex flex-column w-100" v-if="currentStep === 1">
-      <h3>Pick your Experience</h3>
-      <AvailabilityCalendar
-        class="mt-2"
-        :final-dates="availableDates"
-        @schedule-experience="(date) => console.log(date)"
-      />
-      <h2 class="fw-bold mt-5">Food Experiences</h2>
+      <div class="d-flex flex-wrap align-items-center">
+        <h3 class="fw-bold me-4">Select a date</h3>
+        <span
+          v-if="experienceStore.customExperience?.date"
+          class="d-flex align-items-center badge bg-primary pill me-2"
+          style="height: 25px"
+        >
+          {{
+            dayjs(experienceStore.customExperience.date).format("DD MMM YYYY")
+          }}
+          <i
+            class="fas fa-close ms-2"
+            @click="experienceStore.customExperience.date = null"
+          ></i>
+        </span>
+      </div>
+      <AvailabilityCalendar class="mt-2" :final-dates="availableDates" />
+      <div class="d-flex flex-wrap align-items-center mt-5">
+        <h3 class="fw-bold me-4">Food Experiences</h3>
+        <span
+          v-for="experienceId in experienceStore.customExperience
+            ?.experienceIds"
+          :key="`selected-experience-${experienceId}`"
+          class="d-flex align-items-center badge bg-primary pill me-2"
+          style="height: 25px"
+        >
+          {{ experienceStore.getExperienceById(experienceId)?.name ?? "" }}
+          <i
+            class="fas fa-close ms-2"
+            @click="experienceStore.removeExperience(experienceId)"
+          ></i>
+        </span>
+      </div>
       <ExperienceList :experiences="filteredExperiencesByDate" />
     </div>
     <div v-if="currentStep === 2">
@@ -152,7 +239,7 @@ const filteredExperiencesByDate = computed(() => {
       <h3>Go to Cart</h3>
     </div>
 
-    <div class="d-flex w-100 mt-4 mb-4">
+    <div class="d-flex w-100 mt-5 mb-4">
       <div class="d-flex flex-row justify-content-between w-100">
         <template v-for="step in stepsSize" :key="step">
           <div
@@ -164,7 +251,7 @@ const filteredExperiencesByDate = computed(() => {
       </div>
     </div>
 
-    <div class="d-flex justify-content-center w-100 mt-2 gap-5">
+    <div class="d-flex justify-content-center w-100 gap-5">
       <div class="btn btn-secondary" @click="prevStep">Previous</div>
       <div class="btn btn-primary" @click="nextStep">Continue</div>
     </div>

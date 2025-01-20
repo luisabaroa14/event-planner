@@ -3,11 +3,20 @@ import { capitalizeKebab } from "@/utils/functions";
 import { useExperienceStore } from "../stores/useExperienceStore";
 import Empty from "../assets/lottie/empty.json";
 
-const props = defineProps({
-  experiences: Array,
-});
+const props = defineProps({ experiences: Array });
+const emit = defineEmits(["schedule"]);
 
 const experienceStore = useExperienceStore();
+
+const handleScheduleClick = (experienceId, remove = false) => {
+  if (remove) {
+    experienceStore.removeExperience(experienceId);
+  } else {
+    experienceStore.addExperience(experienceId);
+  }
+
+  emit("schedule", remove);
+};
 </script>
 
 <template>
@@ -55,9 +64,22 @@ const experienceStore = useExperienceStore();
                 {{ experience.price }}$
               </p>
               <button
+                v-if="
+                  experienceStore.customExperience?.experienceIds?.includes(
+                    experience.id
+                  )
+                "
+                type="button"
+                class="btn btn-danger rounded-pill"
+                @click="handleScheduleClick(experience.id, true)"
+              >
+                Remove
+              </button>
+              <button
+                v-else
                 type="button"
                 class="btn btn-primary rounded-pill"
-                @click="experienceStore.addToCart(experience.id)"
+                @click="handleScheduleClick(experience.id)"
               >
                 Schedule
               </button>

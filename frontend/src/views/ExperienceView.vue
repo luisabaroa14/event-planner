@@ -29,19 +29,24 @@ const filteredExperiences = computed(() => {
       activeName.value === "" ||
       experience.name.toLowerCase().includes(activeName.value.toLowerCase());
     const matchesCollaborator =
-      !collaboratorId.value || experience.collaboratorId === collaboratorId.value;
+      !collaboratorId.value ||
+      experience.collaboratorId === collaboratorId.value;
 
     return matchesTag && matchesName && matchesCollaborator;
   });
 });
+
+const openCreateExperience = (remove) => {
+  if (!remove) {
+    router.push("/create-experience");
+  }
+};
 </script>
 
 <template>
   <div class="d-flex flex-column p-3">
     <div class="mx-3">
-      <div
-        class="d-flex justify-content-end align-items-center mb-3 flex-wrap"
-      >
+      <div class="d-flex justify-content-end align-items-center mb-3 flex-wrap">
         <div class="d-flex align-items-center ms-md-2 mt-md-0 mt-3">
           <span v-if="collaboratorId" class="badge bg-primary pill py-2 me-2">
             {{
@@ -50,7 +55,7 @@ const filteredExperiences = computed(() => {
             }}
             <i
               class="fas fa-close"
-              @click="router.replace({ name: 'experiences' })"
+              @click="router.push({ name: 'experiences' })"
             ></i>
           </span>
           <input
@@ -101,7 +106,10 @@ const filteredExperiences = computed(() => {
         </div>
       </div>
       <div v-if="experienceStore.experiences">
-        <ExperienceList :experiences="filteredExperiences" />
+        <ExperienceList
+          @schedule="(data) => openCreateExperience(data)"
+          :experiences="filteredExperiences"
+        />
         <div class="my-5">
           <ImageCarousel
             v-if="experienceStore.experiences?.length"

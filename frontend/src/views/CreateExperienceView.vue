@@ -1,18 +1,16 @@
 <script setup>
-import { ref, computed, watch } from "vue";
+import { computed, ref } from "vue";
 import { useExperienceStore } from "@/stores/useExperienceStore";
-import { useCollaboratorStore } from "@/stores/useCollaboratorStore";
-import AvailabilityCalendar from "@/components/AvailabilityCalendar.vue";
-import ExperienceList from "@/components/ExperienceList.vue";
-import { getNextDates } from "@/utils/functions";
+import { useProductStore } from "@/stores/useProductStore";
+import ExperienceSelection from "@/components/ExperienceSelection.vue";
+import ProductList from "@/components/ProductList.vue";
 import dayjs from "dayjs";
-import { toasts } from "@/utils/toast.js";
 
-const collaboratorStore = useCollaboratorStore();
 const experienceStore = useExperienceStore();
+const productsStore = useProductStore();
 
 const currentStep = ref(1);
-const stepsSize = 4;
+const stepsSize = 5;
 
 const nextStep = () => {
   if (
@@ -45,215 +43,171 @@ const initiateProducts = () => {
   }
 };
 
-const allCollaboratorsAvailableDates = computed(() => {
-  const result = {};
-
-  // Map the available dates for each collaborator
-  collaboratorStore.collaborators.forEach((collaborator) => {
-    const availableDates = collaborator.availableDates;
-    // Generate pattern and extra dates
-    const patternDates = getNextDates(availableDates?.patterns, new Date(), 4);
-    const extraDates =
-      availableDates?.extraDates.map((date) => new Date(date)) ?? [];
-
-    // Combine all available dates
-    let allDates = [...patternDates, ...extraDates];
-
-    // Collect blocked dates
-    const blockedDates =
-      availableDates?.blockedDates.map((date) => new Date(date)) ?? [];
-
-    // Remove blocked dates from allDates
-    allDates = allDates.filter(
-      (date) =>
-        !blockedDates.some(
-          (blockedDate) => blockedDate.getTime() === date.getTime()
-        )
-    );
-    result[collaborator.id] = allDates;
-  });
-
-  return result;
-});
-
-// Get all available dates for all collaborators
-const availableDates = computed(() => {
-  let finalDates = [];
-
-  // Used to define the collaborators from the selected experiences
-  let filteredCollaborators = [];
-
-  const date = experienceStore.customExperience?.date;
+const sortedProducts = computed(() => {
   const experienceIds = experienceStore.customExperience?.experienceIds;
+  const collaboratorIds = experienceStore.experiences
+    .filter((experience) => experienceIds?.includes(experience.id))
+    .map((experience) => experience.collaboratorId);
 
-  // If a date isn't selected and experiences are selected filter the collaborators
-  // by the selected experiences
-  if (!date && experienceIds?.length) {
-    filteredCollaborators = experienceStore.experiences
-      .filter((experience) => experienceIds?.includes(experience.id))
-      .map((experience) => experience.collaboratorId);
-  }
-
-  // Get all pattern dates, extra dates, and blocked dates
-  collaboratorStore.collaborators?.forEach((collaborator) => {
-    const allDates = allCollaboratorsAvailableDates.value[collaborator.id];
-
-    // If no collaborator is selected return all available dates
-    if (!filteredCollaborators?.length) {
-      finalDates.push(...allDates);
-
-      // If a collaborator is selected return only the available dates for that collaborator
-    } else if (filteredCollaborators.includes(collaborator.id)) {
-      finalDates.push(...allDates);
-    }
-  });
-
-  return finalDates;
-});
-
-watch(
-  () => experienceStore.customExperience.date,
-  (date, previousDate) => {
-    if (date !== previousDate && date) {
-      // Check if the experiences are still available or remove them
-      experienceStore.customExperience.experienceIds =
-        experienceStore.customExperience.experienceIds.filter(
-          (experienceId) => {
-            const experience = experienceStore.getExperienceById(experienceId);
-            const availableDates =
-              allCollaboratorsAvailableDates.value[experience?.collaboratorId];
-
-            const isEventAvailable = availableDates.some(
-              (availableDate) => availableDate.getTime() === date?.getTime()
-            );
-            if (!isEventAvailable) {
-              toasts.show("Experience not available on selected date");
-            }
-
-            return isEventAvailable;
-          }
-        );
-    }
-  },
-  { deep: true }
-);
-
-const filteredExperiencesByDate = computed(() => {
-  const date = experienceStore.customExperience?.date;
-  const experienceIds = experienceStore.customExperience?.experienceIds;
-
-  let availableCollaboratorIds = [];
-
-  // If a date is selected filter the collaborators that have that date available
-  if (date) {
-    availableCollaboratorIds = collaboratorStore.collaborators
-      .filter((collaborator) => {
-        const availableDates =
-          allCollaboratorsAvailableDates.value[collaborator.id];
-        return availableDates.some(
-          (availableDate) => availableDate.getTime() === date?.getTime()
-        );
-      })
-      .map((collaborator) => collaborator.id);
-
-    // If a experience is selected filter the collaborators that have that experience available
-  } else if (experienceIds?.length) {
-    const collaboratorIds = experienceStore.experiences
-      .filter((experience) => experienceIds?.includes(experience.id))
-      .map((experience) => experience.collaboratorId);
-    availableCollaboratorIds = collaboratorIds;
-  }
-
-  // If no collaborator is available that day return empty array
-  if (!availableCollaboratorIds?.length) return [];
-
-  // Filter experience by collaborator
-  return experienceStore.experiences.filter((experience) =>
-    availableCollaboratorIds?.includes(experience.collaboratorId)
+  // Filter products by colaborators from their experienceIds
+  return productsStore.products.filter((product) =>
+    collaboratorIds.includes(product.collaboratorId)
   );
 });
 </script>
 
 <template>
-  <div class="d-flex flex-column justify-content-center align-items-center p-4">
-    <h2 class="fw-bold mb-4">Create Your Own Experience</h2>
-    <div class="d-flex flex-column w-100" v-if="currentStep === 1">
-      <div class="d-flex flex-wrap align-items-center">
-        <h3 class="fw-bold me-4">Select a date</h3>
-        <span
-          v-if="experienceStore.customExperience?.date"
-          class="d-flex align-items-center badge bg-primary pill me-2"
-          style="height: 25px"
-        >
-          {{
-            dayjs(experienceStore.customExperience.date).format("DD MMM YYYY")
-          }}
-          <i
-            class="fas fa-close ms-2"
-            @click="experienceStore.customExperience.date = null"
-          ></i>
-        </span>
-      </div>
-      <AvailabilityCalendar class="mt-2" :final-dates="availableDates" />
-      <div class="d-flex flex-wrap align-items-center mt-5">
-        <h3 class="fw-bold me-4">Food Experiences</h3>
-        <span
-          v-for="experienceId in experienceStore.customExperience
-            ?.experienceIds"
-          :key="`selected-experience-${experienceId}`"
-          class="d-flex align-items-center badge bg-primary pill me-2"
-          style="height: 25px"
-        >
-          {{ experienceStore.getExperienceById(experienceId)?.name ?? "" }}
-          <i
-            class="fas fa-close ms-2"
-            @click="experienceStore.removeExperience(experienceId)"
-          ></i>
-        </span>
-      </div>
-      <ExperienceList :experiences="filteredExperiencesByDate" />
+  <div
+    class="d-flex flex-column justify-content-center align-items-center px-4 py-2 overflow-hidden"
+    style="height: 90vh"
+  >
+    <div v-if="currentStep === 1" class="flex-grow-1 overflow-auto w-100">
+      <h2 class="fw-bold mb-4 text-center">Create Your Own Experience</h2>
+      <ExperienceSelection />
     </div>
-    <div v-if="currentStep === 2">
-      <h3>Select your experience</h3>
-      <button
-        @click="experienceStore.customExperience.selectedExperiences = 'Hiking'"
-      >
-        Hiking
-      </button>
-    </div>
-    <div v-if="currentStep === 3">
-      <h3>How many people</h3>
-      <button @click="experienceStore.customExperience.people = 5">
-        Add 5 people
-      </button>
-    </div>
-    <div v-if="currentStep === 4">
-      <h3>Other products</h3>
-      <button
-        @click="experienceStore.customExperience.selectedProducts = 'Water'"
-      >
-        Water
-      </button>
-    </div>
-    <div v-if="currentStep === 4">
-      <h3>Go to Cart</h3>
-    </div>
+    <div v-else-if="currentStep === 4" class="flex-grow-1 overflow-auto w-100">
+      <div class="d-flex flex-column mt-2">
+        <h2 class="fw-bold text-center">Any last product?</h2>
 
-    <div class="d-flex w-100 mt-5 mb-4">
-      <div class="d-flex flex-row justify-content-between w-100">
-        <template v-for="step in stepsSize" :key="step">
-          <div
-            @click="goToStep(step)"
-            class="progress flex-grow-1 mx-1"
-            :class="step <= currentStep ? 'bg-primary' : 'bg-light'"
-          ></div>
-        </template>
+        <h4 class="mt-5">Products from Your Selected Chefs</h4>
+        <ProductList :products="sortedProducts" />
       </div>
     </div>
 
-    <div class="d-flex justify-content-center w-100 gap-5">
-      <div class="btn btn-secondary" @click="prevStep">Previous</div>
-      <div class="btn btn-primary" @click="nextStep">Continue</div>
+    <div
+      v-else
+      class="d-flex flex-column h-100 align-items-center w-100 text-center"
+    >
+      <div
+        v-if="currentStep === 2"
+        class="d-flex flex-column w-40-lg-w-80-sm mt-2"
+      >
+        <h2 class="fw-bold text-center">How Many People Are Joining?</h2>
+
+        <h4 class="mt-5">Select the Number of Guests</h4>
+        <span class="text-muted">
+          Let us know how many guests will be attending your event.
+        </span>
+        <div class="input-group mt-2">
+          <input
+            type="number"
+            class="form-control"
+            v-model="experienceStore.customExperience.guests"
+            step="any"
+            @input="
+              (p) =>
+                (experienceStore.customExperience.guests =
+                  p.target.value.replace('-', ''))
+            "
+          />
+          <div class="input-group-append">
+            <span
+              class="input-group-text bg-primary border-primary rounded-0 rounded-end text-white ms-1 h-100"
+            >
+              <i class="fas fa-users"></i>
+            </span>
+          </div>
+        </div>
+        <span
+          v-if="
+            experienceStore.minNumberOfParts &&
+            experienceStore.minNumberOfParts >
+              experienceStore.customExperience.guests
+          "
+          class="d-block text-danger mt-2"
+        >
+          *The number of participants must be at least
+          <strong>{{ experienceStore.minNumberOfParts }}</strong
+          >.
+        </span>
+        <span
+          v-else-if="experienceStore.customExperience.guests < 5"
+          class="d-block text-danger mt-2"
+        >
+          *There is an extra fee for events with less than 5 guests.
+        </span>
+      </div>
+      <div
+        v-else-if="currentStep === 3"
+        class="d-flex flex-column w-40-lg-w-80-sm mt-2"
+      >
+        <h2 class="fw-bold text-center">Plan Your Experience</h2>
+
+        <h4 class="mt-5">Where Will Your Event Take Place?</h4>
+        <span class="text-muted">
+          Choose the location that best suits you.
+        </span>
+        <div class="input-group mt-2">
+          <input
+            class="form-control"
+            v-model="experienceStore.customExperience.location"
+            step="any"
+          />
+          <div class="input-group-append">
+            <span
+              class="input-group-text bg-primary border-primary rounded-0 rounded-end text-white ms-1 h-100"
+            >
+              <i class="fas fa-map-pin"></i>
+            </span>
+          </div>
+        </div>
+
+        <h4 class="mt-5">At What Time Will Your Event Start?</h4>
+        <span class="text-muted"> Select the time your event will begin. </span>
+        <div class="input-group mt-2">
+          <div class="d-flex form-control flex-grow-1">
+            {{
+              dayjs(experienceStore.customExperience.date).format(
+                "dddd, DD MMM YYYY"
+              )
+            }}
+          </div>
+          <input
+            type="time"
+            class="form-control btn btn-primary text-white"
+            style="color-scheme: dark"
+            v-model="experienceStore.customExperience.time"
+          />
+        </div>
+        <span
+          v-if="!experienceStore.isTimeValid"
+          class="d-block text-danger mt-2"
+        >
+          *The available start times are between 12PM and 10PM.
+        </span>
+      </div>
+      <div v-else-if="currentStep === 5">
+        <h3>Go to Cart</h3>
+      </div>
+    </div>
+
+    <div class="w-100">
+      <div class="d-flex w-100 mt-5 mb-4">
+        <div class="d-flex flex-row justify-content-between w-100">
+          <template v-for="step in stepsSize" :key="step">
+            <div
+              @click="goToStep(step)"
+              class="progress flex-grow-1 mx-1"
+              :class="step <= currentStep ? 'bg-primary' : 'bg-light'"
+            ></div>
+          </template>
+        </div>
+      </div>
+
+      <div class="d-flex justify-content-center w-100 gap-5">
+        <button class="btn btn-secondary" @click="prevStep">Previous</button>
+        <button
+          class="btn btn-primary"
+          @click="nextStep"
+          :disabled="
+            currentStep >= stepsSize || !experienceStore.status[currentStep]
+          "
+        >
+          Continue
+        </button>
+      </div>
     </div>
   </div>
 </template>
+
+<style scoped></style>

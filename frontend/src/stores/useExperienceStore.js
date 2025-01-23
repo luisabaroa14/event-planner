@@ -14,7 +14,7 @@ export const useExperienceStore = defineStore("experienceStore", () => {
   const customExperience = ref({
     date: null,
     experienceIds: [],
-    people: 0,
+    guests: 0,
     location: null,
     time: null,
     comments: "",
@@ -37,16 +37,40 @@ export const useExperienceStore = defineStore("experienceStore", () => {
     );
   });
 
+  const minNumberOfParts = computed(() => {
+    const experienceIds = customExperience.value?.experienceIds;
+
+    if (!experienceIds?.length) return 0;
+
+    const experienceMinParts = experiences.value
+      .filter((experience) => experienceIds?.includes(experience.id))
+      .map((experience) => experience?.participants?.min ?? 0);
+
+    // Get the highest number from experience min parts
+    return Math.max(...experienceMinParts);
+  });
+
+  const isTimeValid = computed(() => {
+    // Return false if null or outside valida range 12pm - 10pm
+    if (!customExperience.value?.time) return false;
+    const [hours, minutes] = customExperience.value?.time?.split(":").map(Number);
+
+    return hours >= 12 && hours <= 22;
+  });
+
   const status = computed(() => {
     return {
       1:
         customExperience.value?.date &&
         customExperience.value?.experienceIds?.length,
       2:
-        customExperience.value?.people &&
+        customExperience.value?.guests > 0 &&
+        customExperience.value?.guests >= minNumberOfParts.value,
+      3:
         customExperience.value?.location &&
-        customExperience.value?.time,
-      3: customExperience.value?.productIds,
+        customExperience.value?.time &&
+        isTimeValid.value,
+      4: customExperience.value?.productIds,
     };
   });
 
@@ -213,6 +237,8 @@ export const useExperienceStore = defineStore("experienceStore", () => {
     quantities,
     customExperience,
     status,
+    isTimeValid,
+    minNumberOfParts,
 
     // Actions
     errorMessage,

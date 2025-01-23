@@ -44,6 +44,14 @@ $breakpoint-md: 992px;
   }
 }
 
+.w-40-lg-w-80-sm {
+  width: 40% !important;
+
+  @media (max-width: $breakpoint-md) {
+    width: 80% !important;
+  }
+}
+
 .img-sm-100-lg-200 {
   width: 200px !important;
   height: 200px !important;

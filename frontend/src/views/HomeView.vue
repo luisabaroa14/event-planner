@@ -1,20 +1,24 @@
 <script setup>
-import { computed } from "vue";
-import EventList from "../components/EventList.vue";
+import { ref, computed } from "vue";
+import { useRouter } from "vue-router";
 import img from "@/assets/images/dinner.jpg";
 import SocialIcons from "@/components/SocialIcons.vue";
-import { useEventStore } from "@/stores/useEventStore";
+import { useExperienceStore } from "@/stores/useExperienceStore";
 import { useCollaboratorStore } from "@/stores/useCollaboratorStore";
 import { useProductStore } from "@/stores/useProductStore";
+import CollaboratorList from "@/components/CollaboratorList.vue";
+import CardComponent from "@/components/CardComponent.vue";
+import ImageCarousel from "@/components/ImageCarousel.vue";
 import strings from "@/utils/strings";
-import CollaboratorList from "../components/CollaboratorList.vue";
 
-const eventStore = useEventStore();
+const experienceStore = useExperienceStore();
 const collaboratorStore = useCollaboratorStore();
 const productStore = useProductStore();
 
+const router = useRouter();
+
 const infoPills = computed(() => [
-  { id: 1, title: "Events", value: eventStore.events?.length },
+  { id: 1, title: "Experiences", value: experienceStore.experiences?.length },
   { id: 2, title: "Chefs", value: collaboratorStore.collaborators?.length },
   { id: 3, title: "Products", value: productStore.products?.length },
   { id: 4, title: "Locations", value: 2 },
@@ -23,8 +27,8 @@ const infoPills = computed(() => [
 const mixedImages = computed(() => {
   // Get image arrays from events and products
   const images = [
-    ...(eventStore.events?.map((event) => event.image) || []),
-    ...(productStore.products?.map((product) => product.image) || []),
+    ...(experienceStore.experiences?.map((e) => e.image) || []),
+    ...(productStore.products?.map((p) => p.image) || []),
   ];
 
   // Shuffle the combined array
@@ -59,9 +63,45 @@ const mixedImages = computed(() => {
         :collaborators="collaboratorStore.collaborators"
       />
 
-      <hr class="mb-7" />
+      <hr class="mb-6" />
 
-      <EventList title="EVENTS" :events="eventStore.events" class="mb-7" />
+      <h2>EXPERIENCES</h2>
+      <div class="w-100 mb-8" @click="() => router.push('/experiences')">
+        <ImageCarousel
+          v-if="experienceStore.experiences?.length"
+          :images="experienceStore.experiences.map((e) => e.image)"
+          :numberOfRows="1"
+          :withSpace="false"
+        />
+      </div>
+
+      <CardComponent class="my-6 mx-3">
+        <div class="d-flex flex-column justify-content-center my-2 p-2">
+          <h2 class="text-center fw-bold">Create Your Own Event</h2>
+          <p class="text-center fs-6 mx-4">
+            Personalize every detail to make your event unique and memorable.
+            Choose from a wide range of options, from guest lists to location
+            settings, ensuring your event reflects your style and vision
+            perfectly.
+          </p>
+          <button
+            class="btn btn-primary mx-auto"
+            @click="router.push('/create-experience')"
+          >
+            Create Experience
+          </button>
+        </div>
+      </CardComponent>
+
+      <h2>PRODUCTS</h2>
+      <div class="w-100 mb-8" @click="() => router.push('/products')">
+        <ImageCarousel
+          v-if="productStore.products?.length"
+          :images="productStore.products.map((p) => p.image)"
+          :numberOfRows="1"
+          :withSpace="false"
+        />
+      </div>
 
       <div class="container my-5">
         <div class="row row-cols-2 row-cols-sm-2 row-cols-md-4 g-4">

@@ -5,12 +5,13 @@ import { useProductStore } from "@/stores/useProductStore";
 import { useExperienceStore } from "@/stores/useExperienceStore";
 import ProductList from "../components/ProductList.vue";
 import AvailabilityCalendar from "../components/AvailabilityCalendar.vue";
-import { capitalizeKebab } from "@/utils/functions";
+import { capitalizeKebab,  } from "@/utils/functions";
 import { useRoute, useRouter } from "vue-router";
 import ExperienceList from "@/components/ExperienceList.vue";
+import { useRouterNavigation } from '@/composables/useRouter';
 
+const { openCreateExperience } = useRouterNavigation();
 const route = useRoute();
-const router = useRouter();
 
 const collaboratorStore = useCollaboratorStore();
 const productStore = useProductStore();
@@ -32,12 +33,6 @@ const filteredExperiences = computed(() =>
     (experience) => experience.collaboratorId === route.params.id
   )
 );
-
-const openCreateExperience = (remove = false) => {
-  if (!remove) {
-    router.push("/create-experience");
-  }
-};
 </script>
 
 <template>

@@ -5,9 +5,11 @@ import { ref, computed } from "vue";
 import { useExperienceStore } from "@/stores/useExperienceStore";
 import { useCollaboratorStore } from "@/stores/useCollaboratorStore";
 import { productsFilterTags } from "@/utils/tagGroups";
-import { capitalizeKebab } from "@/utils/functions";
+import { capitalizeKebab,  } from "@/utils/functions";
 import { useRoute, useRouter } from "vue-router";
+import { useRouterNavigation } from '@/composables/useRouter';
 
+const { openCreateExperience } = useRouterNavigation();
 const router = useRouter();
 const route = useRoute();
 
@@ -36,11 +38,6 @@ const filteredExperiences = computed(() => {
   });
 });
 
-const openCreateExperience = (remove) => {
-  if (!remove) {
-    router.push("/create-experience");
-  }
-};
 </script>
 
 <template>

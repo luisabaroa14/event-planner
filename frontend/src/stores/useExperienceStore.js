@@ -55,7 +55,7 @@ export const useExperienceStore = defineStore("experienceStore", () => {
     if (!customExperience.value?.time) return false;
     const [hours, minutes] = customExperience.value?.time?.split(":").map(Number);
 
-    return hours >= 12 && hours <= 22;
+    return hours >= 12 && hours <= 21 || hours === 22 && minutes === 0;
   });
 
   const status = computed(() => {

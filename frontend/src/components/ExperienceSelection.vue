@@ -104,40 +104,43 @@ const filteredExperiencesByDate = computed(() => {
   );
 });
 
-// Get all available dates for all collaborators
 const availableDates = computed(() => {
-  let finalDates = [];
-
-  // Used to define the collaborators from the selected experiences
   let filteredCollaborators = [];
-
-  const date = experienceStore.customExperience?.date;
   const experienceIds = experienceStore.customExperience?.experienceIds;
 
-  // If a date isn't selected and experiences are selected filter the collaborators
-  // by the selected experiences
-  if (!date && experienceIds?.length) {
+  // If experiences are selected, filter the collaborators by the selected experiences
+  if (experienceIds?.length) {
     filteredCollaborators = experienceStore.experiences
-      .filter((experience) => experienceIds?.includes(experience.id))
+      .filter((experience) => experienceIds.includes(experience.id))
       .map((experience) => experience.collaboratorId);
   }
 
-  // Get all pattern dates, extra dates, and blocked dates
+  let allAvailableDates = [];
+
+  // Get available dates per collaborator
   collaboratorStore.collaborators?.forEach((collaborator) => {
     const allDates = allCollaboratorsAvailableDates.value[collaborator.id];
 
-    // If no collaborator is selected return all available dates
-    if (!filteredCollaborators?.length) {
-      finalDates.push(...allDates);
-
-      // If a collaborator is selected return only the available dates for that collaborator
+    if (!filteredCollaborators.length) {
+      allAvailableDates.push(allDates);
     } else if (filteredCollaborators.includes(collaborator.id)) {
-      finalDates.push(...allDates);
+      allAvailableDates.push(allDates);
     }
   });
 
-  return finalDates;
+  // If multiple collaborators are selected, find the intersection of available dates
+  if (filteredCollaborators.length > 1 && allAvailableDates.length > 0) {
+    return allAvailableDates.reduce((acc, dates) =>
+      acc.length === 0
+        ? dates
+        : acc.filter((date) => dates.some((d) => d.getTime() === date.getTime()))
+    );
+  }
+
+  // If only one collaborator is selected, return their dates
+  return allAvailableDates.flat();
 });
+
 </script>
 
 <template>

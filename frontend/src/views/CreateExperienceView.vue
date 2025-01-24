@@ -54,6 +54,16 @@ const sortedProducts = computed(() => {
     collaboratorIds.includes(product.collaboratorId)
   );
 });
+
+const timeInput = ref(null);
+
+const openTimePicker = () => {
+  if (timeInput.value) {
+    timeInput.value.showPicker(); // Try showPicker()
+    timeInput.value.focus(); // Fallback
+    timeInput.value.click(); // Fallback
+  }
+};
 </script>
 
 <template>
@@ -161,14 +171,27 @@ const sortedProducts = computed(() => {
                 "dddd, DD MMM YYYY"
               )
             }}
+            at
+            {{ experienceStore.customExperience.time }}
           </div>
+
           <input
             type="time"
-            class="form-control btn btn-primary text-white"
+            ref="timeInput"
             style="color-scheme: dark"
+            class="position-absolute w-0 h-0 opacity-0 btn btn-primary"
             v-model="experienceStore.customExperience.time"
           />
+
+          <div class="input-group-append" @click="openTimePicker" role="button">
+            <span
+              class="input-group-text bg-primary border-primary rounded-0 rounded-end text-white ms-1 h-100"
+            >
+              <i class="fas fa-clock"></i>
+            </span>
+          </div>
         </div>
+
         <span
           v-if="!experienceStore.isTimeValid"
           class="d-block text-danger mt-2"

@@ -207,7 +207,6 @@ const togglePattern = (availableDates, day) => {
           </div>
           <input
             type="date"
-            ref="dateInput"
             class="btn btn-primary text-white"
             style="color-scheme: dark"
             @change="
@@ -240,7 +239,6 @@ const togglePattern = (availableDates, day) => {
           </div>
           <input
             type="date"
-            ref="dateInput"
             class="btn btn-primary text-white"
             style="color-scheme: dark"
             @change="
@@ -374,7 +372,6 @@ const togglePattern = (availableDates, day) => {
           </div>
           <input
             type="date"
-            ref="dateInput"
             class="btn btn-primary text-white"
             style="color-scheme: dark"
             @change="addDate(availableDates, $event.target.value, true)"
@@ -399,7 +396,6 @@ const togglePattern = (availableDates, day) => {
           </div>
           <input
             type="date"
-            ref="dateInput"
             class="btn btn-primary text-white"
             style="color-scheme: dark"
             @change="addDate(availableDates, $event.target.value, false)"

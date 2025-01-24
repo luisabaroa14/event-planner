@@ -1,7 +1,7 @@
 <script setup>
 import { capitalizeKebab } from "@/utils/functions";
-import { useProductStore } from "../stores/useProductStore";
-import Empty from "../assets/lottie/empty.json";
+import { useProductStore } from "@/stores/useProductStore";
+import Empty from "@/assets/lottie/empty.json";
 
 const props = defineProps({
   products: Array,
@@ -16,20 +16,14 @@ const productStore = useProductStore();
       <div v-if="!props.products?.length" class="mt-3">
         <Vue3Lottie :animationData="Empty" :height="400" />
       </div>
-      <div class="card-container" v-else>
+      <div v-else class="card-container">
         <div
           v-for="product in props.products"
           :key="product.id"
           class="card border-0 h-100"
         >
           <img :src="product.image" class="rounded-top" />
-          <!-- <button
-            class="position-absolute btn btn-sm btn-black border border-dark btn-black-hover rounded-circle"
-            style="top: 10px; right: 10px"
-          >
-            <i class="fa fa-heart"></i>
-          </button> -->
-          <div class="card-body">
+          <div class="card-body d-flex flex-column flex-grow-1 h-100">
             <h5 class="card-title">{{ product.name }}</h5>
             <div class="d-flex flex-wrap">
               <span
@@ -41,20 +35,20 @@ const productStore = useProductStore();
               </span>
             </div>
             <p
-              class="overflow-hidden elispe-text-3-lines m-0"
+              class="flex-grow-1 overflow-hidden elispe-text-3-lines m-0"
               style="max-height: 70px"
             >
               {{ product.description }}
             </p>
             <div
-              class="d-flex flex-row align-items-center justify-content-between"
+              class="d-flex flex-row align-items-center justify-content-between mt-auto"
             >
-              <p class="fs-5 m-0" style="font-weight: bold">
+              <p class="fs-5 m-0 mt-1" style="font-weight: bold">
                 {{ product.price }}$
               </p>
               <button
                 type="button"
-                class="btn btn-primary rounded-pill"
+                class="btn btn-primary rounded-pill mt-1"
                 @click="productStore.addToCart(product.id)"
               >
                 Add
@@ -87,31 +81,6 @@ const productStore = useProductStore();
   height: 150px;
   object-fit: cover;
   border-radius: 10px 10px 0 0;
-}
-
-.rating {
-  display: flex;
-  gap: 5px;
-}
-
-.rating button {
-  background-color: transparent;
-  border: none;
-  padding: 0;
-  cursor: pointer;
-}
-
-.rating button.active {
-  color: #ffd700;
-}
-
-.rating button i {
-  font-size: 18px;
-}
-
-.btn-black:hover {
-  background-color: #27486e !important;
-  color: white;
 }
 
 @media (max-width: 1200px) {

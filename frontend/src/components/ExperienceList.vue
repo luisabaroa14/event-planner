@@ -35,12 +35,13 @@ const handleScheduleClick = (experienceId, remove = false) => {
           <button
             v-if="experience.participants?.min"
             class="position-absolute d-flex justify-content-center align-items-center btn btn-sm btn-primary"
+            :title="`Minimum participants: ${experience.participants.min}`"
             style="top: 10px; right: 10px; height: 25px"
           >
             <i class="fa fa-user-plus fs-7"></i>
             <span class="fw-bold ms-1">{{ experience.participants.min }}</span>
           </button>
-          <div class="card-body">
+          <div class="card-body d-flex flex-column flex-grow-1 h-100">
             <h5 class="card-title">{{ experience.name }}</h5>
             <div class="d-flex flex-wrap">
               <span
@@ -52,15 +53,15 @@ const handleScheduleClick = (experienceId, remove = false) => {
               </span>
             </div>
             <p
-              class="overflow-hidden elispe-text-3-lines m-0"
+              class="flex-grow-1 overflow-hidden elispe-text-3-lines m-0"
               style="max-height: 70px"
             >
               {{ experience.description }}
             </p>
             <div
-              class="d-flex flex-row align-items-center justify-content-between"
+              class="d-flex flex-row align-items-center justify-content-between mt-auto"
             >
-              <p class="fs-5 m-0" style="font-weight: bold">
+              <p class="fs-5 m-0 mt-1" style="font-weight: bold">
                 {{ experience.price }}$
               </p>
               <button
@@ -70,7 +71,7 @@ const handleScheduleClick = (experienceId, remove = false) => {
                   )
                 "
                 type="button"
-                class="btn btn-danger rounded-pill"
+                class="btn btn-danger rounded-pill mt-1"
                 @click="handleScheduleClick(experience.id, true)"
               >
                 Remove
@@ -78,7 +79,7 @@ const handleScheduleClick = (experienceId, remove = false) => {
               <button
                 v-else
                 type="button"
-                class="btn btn-primary rounded-pill"
+                class="btn btn-primary rounded-pill mt-1"
                 @click="handleScheduleClick(experience.id)"
               >
                 Schedule
@@ -110,31 +111,6 @@ const handleScheduleClick = (experienceId, remove = false) => {
   height: 150px;
   object-fit: cover;
   border-radius: 10px 10px 0 0;
-}
-
-.rating {
-  display: flex;
-  gap: 5px;
-}
-
-.rating button {
-  background-color: transparent;
-  border: none;
-  padding: 0;
-  cursor: pointer;
-}
-
-.rating button.active {
-  color: #ffd700;
-}
-
-.rating button i {
-  font-size: 18px;
-}
-
-.btn-black:hover {
-  background-color: #27486e !important;
-  color: white;
 }
 
 @media (max-width: 1200px) {

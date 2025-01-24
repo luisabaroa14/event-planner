@@ -7,6 +7,7 @@ import ProductList from "../components/ProductList.vue";
 import AvailabilityCalendar from "../components/AvailabilityCalendar.vue";
 import { capitalizeKebab } from "@/utils/functions";
 import { useRoute, useRouter } from "vue-router";
+import ExperienceList from "@/components/ExperienceList.vue";
 
 const route = useRoute();
 const router = useRouter();
@@ -32,9 +33,10 @@ const filteredExperiences = computed(() =>
   )
 );
 
-const openCreateExperience = () => {
-  experienceStore.addCollaborator(collaborator.value.id);
-  router.push("/create-experience");
+const openCreateExperience = (remove = false) => {
+  if (!remove) {
+    router.push("/create-experience");
+  }
 };
 </script>
 
@@ -74,7 +76,10 @@ const openCreateExperience = () => {
     <h2 class="fw-bold mt-5">Products</h2>
     <ProductList :products="filteredProducts" />
     <h2 class="fw-bold mt-5">Food Experiences</h2>
-    <ProductList :products="filteredExperiences" />
+    <ExperienceList
+      :experiences="filteredExperiences"
+      @schedule="(data) => openCreateExperience(data)"
+    />
   </div>
 </template>
 

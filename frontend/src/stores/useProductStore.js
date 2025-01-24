@@ -11,17 +11,20 @@ export const useProductStore = defineStore("productStore", () => {
   const errorMessage = ref(null);
   const quantities = ref({});
 
+  const CART_PRODUCT_IDS = "cartProductIds";
+  const PRODUCT_QUANTITIES = "productQuantities";
+
   // Load data
-  if (localStorage.getItem("cartProductIds")) {
-    cartProductIds.value = JSON.parse(localStorage.getItem("cartProductIds"));
+  if (localStorage.getItem(CART_PRODUCT_IDS)) {
+    cartProductIds.value = JSON.parse(localStorage.getItem(CART_PRODUCT_IDS));
   }
-  if (localStorage.getItem("productQuantities")) {
-    quantities.value = JSON.parse(localStorage.getItem("productQuantities"));
+  if (localStorage.getItem(PRODUCT_QUANTITIES)) {
+    quantities.value = JSON.parse(localStorage.getItem(PRODUCT_QUANTITIES));
   }
 
   const cartProducts = computed(() => {
     localStorage.setItem(
-      "cartProductIds",
+      CART_PRODUCT_IDS,
       JSON.stringify(cartProductIds.value)
     );
     return products.value.filter((product) =>
@@ -33,7 +36,7 @@ export const useProductStore = defineStore("productStore", () => {
     () => cartProductIds.value,
     () => {
       localStorage.setItem(
-        "cartProductIds",
+        CART_PRODUCT_IDS,
         JSON.stringify(cartProductIds.value)
       );
     },
@@ -44,7 +47,7 @@ export const useProductStore = defineStore("productStore", () => {
     () => quantities.value,
     () => {
       localStorage.setItem(
-        "productQuantities",
+        PRODUCT_QUANTITIES,
         JSON.stringify(quantities.value)
       );
     },

@@ -11,12 +11,15 @@ export const useEventStore = defineStore("eventStore", () => {
   const errorMessage = ref(null);
   const quantities = ref({});
 
+  const CART_EVENT_IDS = "cartEventIds";
+  const EVENT_QUANTITIES = "eventQuantities";
+
   // Load data
-  if (localStorage.getItem("cartEventIds")) {
-    cartEventIds.value = JSON.parse(localStorage.getItem("cartEventIds"));
+  if (localStorage.getItem(CART_EVENT_IDS)) {
+    cartEventIds.value = JSON.parse(localStorage.getItem(CART_EVENT_IDS));
   }
-  if (localStorage.getItem("eventQuantities")) {
-    quantities.value = JSON.parse(localStorage.getItem("eventQuantities"));
+  if (localStorage.getItem(EVENT_QUANTITIES)) {
+    quantities.value = JSON.parse(localStorage.getItem(EVENT_QUANTITIES));
   }
 
   const cartEvents = computed(() => {
@@ -28,7 +31,7 @@ export const useEventStore = defineStore("eventStore", () => {
   watch(
     () => quantities.value,
     () => {
-      localStorage.setItem("eventQuantities", JSON.stringify(quantities.value));
+      localStorage.setItem(EVENT_QUANTITIES, JSON.stringify(quantities.value));
     },
     { deep: true }
   );
@@ -36,7 +39,7 @@ export const useEventStore = defineStore("eventStore", () => {
   watch(
     () => cartEventIds.value,
     () => {
-      localStorage.setItem("cartEventIds", JSON.stringify(cartEventIds.value));
+      localStorage.setItem(CART_EVENT_IDS, JSON.stringify(cartEventIds.value));
     },
     { deep: true }
   );

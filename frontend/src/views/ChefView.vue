@@ -78,6 +78,7 @@ const openCreateExperience = (remove = false) => {
     <h2 class="fw-bold mt-5">Food Experiences</h2>
     <ExperienceList
       :experiences="filteredExperiences"
+      clear-data
       @schedule="(data) => openCreateExperience(data)"
     />
   </div>

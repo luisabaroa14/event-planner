@@ -108,6 +108,7 @@ const openCreateExperience = (remove) => {
       <div v-if="experienceStore.experiences">
         <ExperienceList
           @schedule="(data) => openCreateExperience(data)"
+          clear-data
           :experiences="filteredExperiences"
         />
         <div class="my-5">

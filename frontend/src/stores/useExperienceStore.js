@@ -229,6 +229,18 @@ export const useExperienceStore = defineStore("experienceStore", () => {
       });
   };
 
+  const clearSelectedData = () => {
+    customExperience.value = {
+      date: null,
+      experienceIds: [],
+      guests: 0,
+      location: null,
+      time: null,
+      comments: "",
+      productIds: null,
+    };
+  }
+
   return {
     // State
     experiences,
@@ -252,6 +264,7 @@ export const useExperienceStore = defineStore("experienceStore", () => {
     decrementQuantity,
     addExperience,
     clearExperiences,
+    clearSelectedData,
     removeExperience,
     removeExperiencesByCollaborator,
   };

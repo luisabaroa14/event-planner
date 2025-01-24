@@ -3,7 +3,7 @@ import { capitalizeKebab } from "@/utils/functions";
 import { useExperienceStore } from "../stores/useExperienceStore";
 import Empty from "../assets/lottie/empty.json";
 
-const props = defineProps({ experiences: Array });
+const props = defineProps({ experiences: Array, clearData: Boolean });
 const emit = defineEmits(["schedule"]);
 
 const experienceStore = useExperienceStore();
@@ -12,6 +12,7 @@ const handleScheduleClick = (experienceId, remove = false) => {
   if (remove) {
     experienceStore.removeExperience(experienceId);
   } else {
+    if (props.clearData) experienceStore.clearSelectedData();
     experienceStore.addExperience(experienceId);
   }
 

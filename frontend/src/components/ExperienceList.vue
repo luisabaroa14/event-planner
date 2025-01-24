@@ -72,10 +72,13 @@ const handleScheduleClick = (experienceId, remove = false) => {
                   )
                 "
                 type="button"
-                class="btn btn-danger rounded-pill mt-1"
+                class="btn btn-warning rounded-pill mt-1"
                 @click="handleScheduleClick(experience.id, true)"
               >
-                Remove
+                <!-- Text visible on larger screens -->
+                <span class="d-none d-sm-inline me-2">Remove</span>
+                <!-- Icon visible on smaller screens -->
+                <i class="fa fa-times"></i>
               </button>
               <button
                 v-else
@@ -83,7 +86,10 @@ const handleScheduleClick = (experienceId, remove = false) => {
                 class="btn btn-primary rounded-pill mt-1"
                 @click="handleScheduleClick(experience.id)"
               >
-                Schedule
+                <!-- Text visible on larger screens -->
+                <span class="d-none d-sm-inline me-2">Schedule</span>
+                <!-- Icon visible on smaller screens -->
+                <i class="fas fa-calendar-plus "></i>
               </button>
             </div>
           </div>

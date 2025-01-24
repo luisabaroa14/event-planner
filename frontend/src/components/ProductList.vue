@@ -48,11 +48,24 @@ const productStore = useProductStore();
               </p>
               <button
                 type="button"
-                class="btn btn-primary rounded-pill mt-1"
+                class="btn btn-primary rounded-pill mt-2"
                 @click="productStore.addToCart(product.id)"
               >
-                Add
-                <i class="fa fa-cart-shopping"></i>
+                <!-- Show text only on larger screens -->
+                <span class="d-none d-sm-inline me-2">
+                  {{
+                    productStore.cartProductIds?.includes(product.id)
+                      ? "Added"
+                      : "Add"
+                  }}
+                </span>
+                <i
+                  :class="
+                    productStore.cartProductIds?.includes(product.id)
+                      ? 'fa fa-check'
+                      : 'fa fa-cart-shopping'
+                  "
+                ></i>
               </button>
             </div>
           </div>

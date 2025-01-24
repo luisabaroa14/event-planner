@@ -32,7 +32,7 @@ const mappedCalendarDates = computed(() => {
   if (!finalDates?.length) return null;
 
   return finalDates.map((date) => ({
-    highlight: { class: "bg-danger" },
+    highlight: { class: "bg-primary" },
     dates: date,
     popover: props.popover,
   }));

@@ -36,7 +36,6 @@ const router = useRouter();
                 to="/"
               >
                 <i class="fas fa-house-chimney"></i>
-                <!-- <i class="fas fa-home"></i> -->
                 <p class="large-screen m-0">Home</p>
               </router-link>
             </li>
@@ -45,11 +44,10 @@ const router = useRouter();
                 class="nav-link"
                 active-class="active"
                 aria-current="page"
-                to="/events"
+                to="/experiences"
               >
                 <i class="fas fa-champagne-glasses"></i>
-                <!-- <i class="fas fa-calendar-alt"></i> -->
-                <p class="large-screen m-0">Events</p>
+                <p class="large-screen m-0">Experiences</p>
               </router-link>
             </li>
             <li class="nav-item">

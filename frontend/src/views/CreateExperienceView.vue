@@ -6,8 +6,8 @@ import ExperienceSelection from "@/components/ExperienceSelection.vue";
 import ProductList from "@/components/ProductList.vue";
 import { toasts } from "@/utils/toast.js";
 import { useRouter } from "vue-router";
-import dayjs from "dayjs";
 import strings from "@/utils/strings";
+import { experienceTimeTags } from "@/utils/tagGroups";
 
 const experienceStore = useExperienceStore();
 const productsStore = useProductStore();
@@ -68,16 +68,6 @@ const sortedProducts = computed(() => {
     collaboratorIds.includes(product.collaboratorId)
   );
 });
-
-const timeInput = ref(null);
-
-const openTimePicker = () => {
-  if (timeInput.value) {
-    timeInput.value.showPicker(); // Try showPicker()
-    timeInput.value.focus(); // Fallback
-    timeInput.value.click(); // Fallback
-  }
-};
 </script>
 
 <template>
@@ -132,24 +122,23 @@ const openTimePicker = () => {
             </span>
           </div>
         </div>
-        <span
+        <div
           v-if="
+          experienceStore.customExperience.guests &&
             experienceStore.minNumberOfParts &&
             experienceStore.minNumberOfParts >
               experienceStore.customExperience.guests
           "
-          class="d-block text-danger mt-2"
         >
-          *{{ strings.minParticipantsForEvent }}
-          <strong>{{ experienceStore.minNumberOfParts }}</strong
-          >.
-        </span>
-        <span
-          v-else-if="experienceStore.customExperience.guests < 5"
-          class="d-block text-danger mt-2"
-        >
-          *{{ strings.extraFeeMessage }}
-        </span>
+          <span class="d-block text-danger mt-2">
+            *{{ strings.minParticipantsForEvent }}
+            <strong>{{ experienceStore.minNumberOfParts }}</strong
+            >.<br />
+            {{ strings.extraFeeMessage }}
+            <strong>{{ experienceStore.totalFees }}$</strong
+            >.<br />
+          </span>
+        </div>
       </div>
       <div
         v-else-if="currentStep === 3"
@@ -178,40 +167,21 @@ const openTimePicker = () => {
 
         <h4 class="mt-5">{{ strings.timeOfEvent }}</h4>
         <span class="text-muted"> {{ strings.timeOfEventSubtitle }} </span>
-        <div class="input-group mt-2">
-          <div class="d-flex form-control flex-grow-1">
-            {{
-              dayjs(experienceStore.customExperience.date).format(
-                "dddd, DD MMM YYYY"
-              )
-            }}
-            at
-            {{ experienceStore.customExperience.time }}
-          </div>
-
-          <input
-            type="time"
-            ref="timeInput"
-            style="color-scheme: dark"
-            class="position-absolute w-0 h-0 opacity-0 btn btn-primary"
-            v-model="experienceStore.customExperience.time"
-          />
-
-          <div class="input-group-append" @click="openTimePicker" role="button">
-            <span
-              class="input-group-text bg-primary border-primary rounded-0 rounded-end text-white ms-1 h-100"
-            >
-              <i class="fas fa-clock"></i>
-            </span>
-          </div>
+        <div class="input-group mt-2 w-100 d-flex justify-content-center">
+          <button
+            v-for="tag in experienceTimeTags"
+            :key="tag"
+            @click="experienceStore.customExperience.time = tag"
+            :class="[
+              'btn m-1',
+              experienceStore.customExperience.time === tag
+                ? 'btn-primary'
+                : 'btn-outline-primary',
+            ]"
+          >
+            {{ tag.toUpperCase() }}
+          </button>
         </div>
-
-        <span
-          v-if="!experienceStore.isTimeValid"
-          class="d-block text-danger mt-2"
-        >
-          *The available start times are between 12PM and 10PM.
-        </span>
       </div>
       <div v-else-if="currentStep === 5">
         <h3>{{ strings.goToCart }}</h3>

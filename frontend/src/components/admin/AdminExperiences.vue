@@ -14,7 +14,7 @@ const price = ref(0);
 const image = ref(null);
 const collaboratorId = ref("");
 const tags = ref([]);
-const participants = ref({ min: 0, max: 0 });
+const participants = ref({ min: 0, max: 0, fee: 0 });
 const uploadFile = ref(false);
 
 const newTag = ref("");
@@ -38,7 +38,7 @@ const clearForm = () => {
   collaboratorId.value = "";
   tags.value = [];
   newTag.value = "";
-  participants.value = { min: 0, max: 0 };
+  participants.value = { min: 0, max: 0, fee: 0 };
 
   uploadFile.value = false;
   experienceToUpdate.value = null;
@@ -180,6 +180,20 @@ const addTag = async (update = false) => {
             v-model="experienceToUpdate.participants.max"
             step="any"
           />
+          <span class="input-group-text">Fee</span>
+          <input
+            type="number"
+            class="form-control"
+            v-model="experienceToUpdate.participants.fee"
+            step="any"
+          />
+          <div class="input-group-append">
+            <span
+              class="input-group-text bg-primary border-primary rounded-0 rounded-end text-white ms-1"
+            >
+              $
+            </span>
+          </div>
         </div>
         <br />
         <label>Tags:</label>
@@ -306,8 +320,8 @@ const addTag = async (update = false) => {
             required
             step="any"
           />
-          <span class="input-group-text"
-            >Max
+          <span class="input-group-text">
+            Max
             <i
               class="fas fa-circle-info ms-2"
               data-bs-toggle="tooltip"
@@ -321,6 +335,28 @@ const addTag = async (update = false) => {
             v-model="participants.max"
             step="any"
           />
+          <span class="input-group-text">
+            Fee
+            <i
+              class="fas fa-circle-info ms-2"
+              data-bs-toggle="tooltip"
+              data-bs-placement="top"
+              title="The fee will be charged if the min participants is not reached"
+            ></i>
+          </span>
+          <input
+            type="number"
+            class="form-control"
+            v-model="participants.fee"
+            step="any"
+          />
+          <div class="input-group-append">
+            <span
+              class="input-group-text bg-primary border-primary rounded-0 rounded-end text-white ms-1"
+            >
+              $
+            </span>
+          </div>
         </div>
         <br />
         <label>Tags:</label>
@@ -418,9 +454,9 @@ const addTag = async (update = false) => {
             }}
           </td>
           <td class="text-center fw-bold">
-            {{ experience?.participants?.min ?? 0 }}-{{
-              experience?.participants?.max ?? 0
-            }}
+            Min: {{ experience?.participants?.min ?? 0 }}<br />
+            Max: {{ experience?.participants?.max || 'N/a' }}<br />
+            Fee: {{ experience?.participants?.fee ?? 0 }}$
           </td>
           <td>
             <span

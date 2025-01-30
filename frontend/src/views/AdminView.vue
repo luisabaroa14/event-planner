@@ -7,7 +7,7 @@ import AdminCollaborators from '@/components/admin/AdminCollaborators.vue';
 import AdminExperiences from '@/components/admin/AdminExperiences.vue';
 
 // Selected option state
-const selectedOption = ref("events");
+const selectedOption = ref("products");
 </script>
 
 <template>
@@ -19,10 +19,10 @@ const selectedOption = ref("events");
 
       <!-- Picker at the top -->
       <select v-model="selectedOption" class="form-control w-10 mb-4 p-2">
-        <option value="events">Events</option>
         <option value="products">Products</option>
         <option value="experiences">Experiences</option>
         <option value="collaborator">Collaborator</option>
+        <option value="events">Events</option>
       </select>
     </div>
 

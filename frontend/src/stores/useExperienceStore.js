@@ -37,25 +37,45 @@ export const useExperienceStore = defineStore("experienceStore", () => {
     );
   });
 
-  const minNumberOfParts = computed(() => {
+  const selectedExperiencesData = computed(() => {
     const experienceIds = customExperience.value?.experienceIds;
 
-    if (!experienceIds?.length) return 0;
+    if (!experienceIds?.length) return [];
 
-    const experienceMinParts = experiences.value
-      .filter((experience) => experienceIds?.includes(experience.id))
-      .map((experience) => experience?.participants?.min ?? 0);
+    // Filter experiences and map to an array of objects with min and fee
+    const experienceData = experiences.value
+      .filter((experience) => experienceIds.includes(experience.id))
+      .map((experience) => ({
+        id: experience.id,
+        min: experience?.participants?.min ?? 0,
+        fee: experience?.participants?.fee ?? 0,
+      }));
 
-    // Get the highest number from experience min parts
-    return Math.max(...experienceMinParts);
+    return experienceData;
   });
 
-  const isTimeValid = computed(() => {
-    // Return false if null or outside valida range 12pm - 10pm
-    if (!customExperience.value?.time) return false;
-    const [hours, minutes] = customExperience.value?.time?.split(":").map(Number);
+  const totalFees = computed(() => {
+    const guests = customExperience.value.guests;
 
-    return hours >= 12 && hours <= 21 || hours === 22 && minutes === 0;
+    // If no guests, return 0
+    if (!guests) return 0;
+
+    // Sum the fees for all experiences where the guests count is less than the min number of participants
+    const feeSum = selectedExperiencesData.value.reduce((sum, experience) => {
+      if (guests < experience.min) {
+        return sum + experience.fee; // Add fee if guests < min participants
+      }
+      return sum; // Otherwise, just return the current sum
+    }, 0);
+
+    return feeSum;
+  });
+
+  const minNumberOfParts = computed(() => {
+    // return the highest min value from selectedExperiencesData
+    return selectedExperiencesData.value.reduce((acc, curr) => {
+      return curr.min > acc ? curr.min : acc;
+    }, 0);
   });
 
   const status = computed(() => {
@@ -63,14 +83,10 @@ export const useExperienceStore = defineStore("experienceStore", () => {
       1:
         customExperience.value?.date &&
         customExperience.value?.experienceIds?.length,
-      2:
-        customExperience.value?.guests > 0 &&
-        customExperience.value?.guests >= minNumberOfParts.value,
-      3:
-        customExperience.value?.location &&
-        customExperience.value?.time &&
-        isTimeValid.value,
+      2: customExperience.value?.guests > 0 && customExperience.value?.guests,
+      3: customExperience.value?.location && customExperience.value?.time,
       4: customExperience.value?.productIds,
+      5: true,
     };
   });
 
@@ -239,7 +255,7 @@ export const useExperienceStore = defineStore("experienceStore", () => {
       comments: "",
       productIds: null,
     };
-  }
+  };
 
   return {
     // State
@@ -249,8 +265,9 @@ export const useExperienceStore = defineStore("experienceStore", () => {
     quantities,
     customExperience,
     status,
-    isTimeValid,
     minNumberOfParts,
+    selectedExperiencesData,
+    totalFees,
 
     // Actions
     errorMessage,

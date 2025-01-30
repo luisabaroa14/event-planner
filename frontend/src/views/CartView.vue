@@ -4,6 +4,7 @@ import { useProductStore } from "@/stores/useProductStore";
 import axios from "axios";
 import { computed } from "vue";
 import CartModal from "@/components/CartModal.vue";
+import strings from "@/utils/strings";
 
 const eventStore = useEventStore();
 const productsStore = useProductStore();
@@ -74,24 +75,24 @@ const handleConfirm = (userData) => {
     `Phone: ${phone}\n\n` +
     `Thank you for shopping with us! If you have any questions, feel free to contact us.`;
 
-    sendEmail("Order Confirmation", emailBody);
+  sendEmail("Order Confirmation", emailBody);
 };
 </script>
 
 <template>
   <div class="d-flex flex-column mt-5 mx-3 p-3">
-    <h2 class="mb-4">Your Cart</h2>
+    <h2 class="mb-4">{{ strings.yourCart }}</h2>
 
     <div v-if="eventStore.cartEvents?.length" class="mb-4">
       <div class="table-responsive rounded">
         <table class="table mb-0">
           <thead>
             <tr>
-              <th scope="col">Event</th>
-              <th scope="col">Date</th>
-              <th scope="col" class="text-center">Quantity</th>
-              <th scope="col" class="text-center">Remove</th>
-              <th scope="col" class="text-center">Price</th>
+              <th scope="col">{{ strings.event }}</th>
+              <th scope="col">{{ strings.date }}</th>
+              <th scope="col" class="text-center">{{ strings.quantity }}</th>
+              <th scope="col" class="text-center">{{ strings.remove }}</th>
+              <th scope="col" class="text-center">{{ strings.price }}</th>
             </tr>
           </thead>
           <tbody class="rounded">
@@ -155,10 +156,10 @@ const handleConfirm = (userData) => {
         <table class="table mb-0">
           <thead>
             <tr>
-              <th scope="col">Product</th>
-              <th scope="col" class="text-center">Quantity</th>
-              <th scope="col" class="text-center">Remove</th>
-              <th scope="col" class="text-center">Price</th>
+              <th scope="col">{{ strings.products }}</th>
+              <th scope="col" class="text-center">{{ strings.quantity }}</th>
+              <th scope="col" class="text-center">{{ strings.remove }}</th>
+              <th scope="col" class="text-center">{{ strings.price }}</th>
             </tr>
           </thead>
           <tbody class="rounded">
@@ -216,13 +217,13 @@ const handleConfirm = (userData) => {
       </div>
     </div>
 
-    <h3 class="fw-bold">Total: ${{ total }}</h3>
+    <h3 class="fw-bold">{{ strings.total }}: ${{ total }}</h3>
     <button
       data-bs-toggle="modal"
       data-bs-target="#cart-modal"
       class="btn btn-primary mt-4"
     >
-      Confirm
+      {{ strings.confirm }}
     </button>
   </div>
   <CartModal @confirm="handleConfirm" />

@@ -5,6 +5,7 @@ import img from "@/assets/images/plate.png";
 import { useEventStore } from "@/stores/useEventStore";
 import { computed } from "vue";
 import { useRoute } from "vue-router";
+import strings from "@/utils/strings";
 
 const route = useRoute();
 const eventStore = useEventStore();
@@ -27,6 +28,6 @@ const events = computed(() =>
       <img :src="img" class="large-screen rounded" />
       <EventsCalendar :events="events" :collaborator-id="collaboratorId" />
     </div>
-    <EventList title="Upcomming Events" :events="events" :collaborator-id="collaboratorId"  />
+    <EventList :title="strings.upcommingEvents" :events="events" :collaborator-id="collaboratorId"  />
   </div>
 </template>

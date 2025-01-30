@@ -2,6 +2,7 @@
 import { capitalizeKebab } from "@/utils/functions";
 import { useProductStore } from "@/stores/useProductStore";
 import Empty from "@/assets/lottie/empty.json";
+import strings from "@/utils/strings";
 
 const props = defineProps({
   products: Array,
@@ -55,8 +56,8 @@ const productStore = useProductStore();
                 <span class="d-none d-sm-inline me-2">
                   {{
                     productStore.cartProductIds?.includes(product.id)
-                      ? "Added"
-                      : "Add"
+                      ? strings.added
+                      : strings.add
                   }}
                 </span>
                 <i

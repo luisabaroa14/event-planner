@@ -5,10 +5,11 @@ import { useProductStore } from "@/stores/useProductStore";
 import { useExperienceStore } from "@/stores/useExperienceStore";
 import ProductList from "../components/ProductList.vue";
 import AvailabilityCalendar from "../components/AvailabilityCalendar.vue";
-import { capitalizeKebab,  } from "@/utils/functions";
+import { capitalizeKebab } from "@/utils/functions";
 import { useRoute, useRouter } from "vue-router";
 import ExperienceList from "@/components/ExperienceList.vue";
-import { useRouterNavigation } from '@/composables/useRouter';
+import { useRouterNavigation } from "@/composables/useRouter";
+import strings from "@/utils/strings";
 
 const { openCreateExperience } = useRouterNavigation();
 const route = useRoute();
@@ -68,9 +69,9 @@ const filteredExperiences = computed(() =>
         @schedule-experience="(date) => openCreateExperience()"
       />
     </div>
-    <h2 class="fw-bold mt-5">Products</h2>
+    <h2 class="fw-bold mt-5">{{ strings.products }}</h2>
     <ProductList :products="filteredProducts" />
-    <h2 class="fw-bold mt-5">Food Experiences</h2>
+    <h2 class="fw-bold mt-5">{{ strings.experiences }}</h2>
     <ExperienceList
       :experiences="filteredExperiences"
       clear-data

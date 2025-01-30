@@ -4,9 +4,10 @@ import ImageCarousel from "@/components/ImageCarousel.vue";
 import { ref, computed } from "vue";
 import { useProductStore } from "@/stores/useProductStore";
 import { useCollaboratorStore } from "@/stores/useCollaboratorStore";
-import { productsFilterTags } from "@/utils/tagGroups";
+import { foodFilterTags } from "@/utils/tagGroups";
 import { capitalizeKebab } from "@/utils/functions";
 import { useRoute, useRouter } from "vue-router";
+import strings from "@/utils/strings";
 
 const router = useRouter();
 const route = useRoute();
@@ -39,14 +40,12 @@ const filteredProducts = computed(() => {
 <template>
   <div class="d-flex flex-column p-3">
     <div class="mx-3">
-      <div
-        class="d-flex justify-content-end align-items-center mb-3 flex-wrap"
-      >
+      <div class="d-flex justify-content-end align-items-center mb-3 flex-wrap">
         <div class="d-flex align-items-center ms-md-2 mt-md-0 mt-3">
           <span v-if="collaboratorId" class="badge bg-primary pill py-2 me-2">
             {{
               collaboratorStore.getCollaboratorById(collaboratorId)?.name ??
-              "All"
+              strings.all
             }}
             <i
               class="fas fa-close"
@@ -56,7 +55,7 @@ const filteredProducts = computed(() => {
           <input
             type="search"
             class="form-control"
-            placeholder="Search products"
+            :placeholder="strings.search"
             v-model="activeName"
           />
           <div class="dropdown ms-2">
@@ -70,7 +69,7 @@ const filteredProducts = computed(() => {
             >
               {{
                 selectedFilterTag === "all"
-                  ? "Type of food"
+                  ? strings.typeOfFood
                   : capitalizeKebab(selectedFilterTag)
               }}
             </button>
@@ -84,10 +83,11 @@ const filteredProducts = computed(() => {
                   class="dropdown-item"
                   href="#"
                   @click.prevent="selectedFilterTag = 'all'"
-                  >All</a
                 >
+                  {{ strings.all }}
+                </a>
               </li>
-              <li v-for="tag in productsFilterTags" :key="tag">
+              <li v-for="tag in foodFilterTags" :key="tag">
                 <a
                   class="dropdown-item"
                   href="#"

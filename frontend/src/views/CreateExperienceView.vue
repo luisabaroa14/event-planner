@@ -7,6 +7,7 @@ import ProductList from "@/components/ProductList.vue";
 import { toasts } from "@/utils/toast.js";
 import { useRouter } from "vue-router";
 import dayjs from "dayjs";
+import strings from "@/utils/strings";
 
 const experienceStore = useExperienceStore();
 const productsStore = useProductStore();
@@ -23,7 +24,7 @@ const nextStep = () => {
     currentStep.value++;
     initiateProducts();
   } else if (currentStep.value === stepsSize) {
-    router.push('/cart')
+    router.push("/cart");
   }
 };
 
@@ -38,7 +39,7 @@ const goToStep = (step) => {
     currentStep.value = step;
     initiateProducts();
   } else {
-    toasts.show("Please complete all previous steps first.");
+    toasts.show(strings.pleaseCompleteTheSteps);
   }
 };
 
@@ -85,14 +86,14 @@ const openTimePicker = () => {
     style="height: 90vh"
   >
     <div v-if="currentStep === 1" class="flex-grow-1 overflow-auto w-100">
-      <h2 class="fw-bold mb-4 text-center">Create Your Own Experience</h2>
+      <h2 class="fw-bold mb-4 text-center">{{ strings.createYourOwnEvent }}</h2>
       <ExperienceSelection />
     </div>
     <div v-else-if="currentStep === 4" class="flex-grow-1 overflow-auto w-100">
       <div class="d-flex flex-column mt-2">
-        <h2 class="fw-bold text-center">Any last product?</h2>
+        <h2 class="fw-bold text-center">{{ strings.anyLastProduct }}</h2>
 
-        <h4 class="mt-5">Products from Your Selected Chefs</h4>
+        <h4 class="mt-5">{{ strings.productsFromSelectedChefs }}</h4>
         <ProductList :products="sortedProducts" />
       </div>
     </div>
@@ -105,11 +106,11 @@ const openTimePicker = () => {
         v-if="currentStep === 2"
         class="d-flex flex-column w-40-lg-w-80-sm mt-2"
       >
-        <h2 class="fw-bold text-center">How Many People Are Joining?</h2>
+        <h2 class="fw-bold text-center">{{ strings.numberOfParticipants }}</h2>
 
-        <h4 class="mt-5">Select the Number of Guests</h4>
+        <h4 class="mt-5">{{ strings.selectNumberOfParticipants }}</h4>
         <span class="text-muted">
-          Let us know how many guests will be attending your event.
+          {{ strings.numberOfParticipantsSubtitle }}
         </span>
         <div class="input-group mt-2">
           <input
@@ -139,7 +140,7 @@ const openTimePicker = () => {
           "
           class="d-block text-danger mt-2"
         >
-          *The number of participants must be at least
+          *{{ strings.minParticipantsForEvent }}
           <strong>{{ experienceStore.minNumberOfParts }}</strong
           >.
         </span>
@@ -147,18 +148,18 @@ const openTimePicker = () => {
           v-else-if="experienceStore.customExperience.guests < 5"
           class="d-block text-danger mt-2"
         >
-          *There is an extra fee for events with less than 5 guests.
+          *{{ strings.extraFeeMessage }}
         </span>
       </div>
       <div
         v-else-if="currentStep === 3"
         class="d-flex flex-column w-40-lg-w-80-sm mt-2"
       >
-        <h2 class="fw-bold text-center">Plan Your Experience</h2>
+        <h2 class="fw-bold text-center">{{ strings.planExperience }}</h2>
 
-        <h4 class="mt-5">Where Will Your Event Take Place?</h4>
+        <h4 class="mt-5">{{ strings.locationOfEvent }}</h4>
         <span class="text-muted">
-          Choose the location that best suits you.
+          {{ strings.locationOfEventSubtitle }}
         </span>
         <div class="input-group mt-2">
           <input
@@ -175,8 +176,8 @@ const openTimePicker = () => {
           </div>
         </div>
 
-        <h4 class="mt-5">At What Time Will Your Event Start?</h4>
-        <span class="text-muted"> Select the time your event will begin. </span>
+        <h4 class="mt-5">{{ strings.timeOfEvent }}</h4>
+        <span class="text-muted"> {{ strings.timeOfEventSubtitle }} </span>
         <div class="input-group mt-2">
           <div class="d-flex form-control flex-grow-1">
             {{
@@ -213,7 +214,7 @@ const openTimePicker = () => {
         </span>
       </div>
       <div v-else-if="currentStep === 5">
-        <h3>Go to Cart</h3>
+        <h3>{{ strings.goToCart }}</h3>
       </div>
     </div>
 
@@ -231,7 +232,9 @@ const openTimePicker = () => {
       </div>
 
       <div class="d-flex justify-content-center w-100 gap-5">
-        <button class="btn btn-secondary" @click="prevStep">Previous</button>
+        <button class="btn btn-secondary" @click="prevStep">
+          {{ strings.previous }}
+        </button>
         <button
           class="btn btn-primary"
           @click="nextStep"
@@ -239,11 +242,9 @@ const openTimePicker = () => {
             currentStep >= stepsSize || !experienceStore.status[currentStep]
           "
         >
-          Continue
+          {{ strings.continue }}
         </button>
       </div>
     </div>
   </div>
 </template>
-
-<style scoped></style>

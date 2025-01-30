@@ -18,10 +18,18 @@ const productStore = useProductStore();
 const router = useRouter();
 
 const infoPills = computed(() => [
-  { id: 1, title: "Experiences", value: experienceStore.experiences?.length },
-  { id: 2, title: "Chefs", value: collaboratorStore.collaborators?.length },
-  { id: 3, title: "Products", value: productStore.products?.length },
-  { id: 4, title: "Locations", value: 2 },
+  {
+    id: 1,
+    title: strings.experiences,
+    value: experienceStore.experiences?.length,
+  },
+  {
+    id: 2,
+    title: strings.chefs,
+    value: collaboratorStore.collaborators?.length,
+  },
+  { id: 3, title: strings.products, value: productStore.products?.length },
+  { id: 4, title: strings.locations, value: 2 },
 ]);
 
 const mixedImages = computed(() => {
@@ -58,14 +66,14 @@ const mixedImages = computed(() => {
     <div class="h-100 mx-5">
       <CollaboratorList
         class="mt-7"
-        title="CHEFS"
+        :title="strings.chefs.toUpperCase()"
         :gridLayout="false"
         :collaborators="collaboratorStore.collaborators"
       />
 
       <hr class="mb-6" />
 
-      <h2>EXPERIENCES</h2>
+      <h2>{{ strings.experiences.toUpperCase() }}</h2>
       <div class="w-100 mb-8" @click="() => router.push('/experiences')">
         <ImageCarousel
           v-if="experienceStore.experiences?.length"
@@ -77,23 +85,20 @@ const mixedImages = computed(() => {
 
       <CardComponent class="my-6 mx-3">
         <div class="d-flex flex-column justify-content-center my-2 p-2">
-          <h2 class="text-center fw-bold">Create Your Own Event</h2>
+          <h2 class="text-center fw-bold">{{ strings.createYourOwnEvent }}</h2>
           <p class="text-center fs-6 mx-4">
-            Personalize every detail to make your event unique and memorable.
-            Choose from a wide range of options, from guest lists to location
-            settings, ensuring your event reflects your style and vision
-            perfectly.
+            {{ strings.createOwnEventSubtitle }}
           </p>
           <button
             class="btn btn-primary mx-auto"
             @click="router.push('/create-experience')"
           >
-            Create Experience
+            {{ strings.createExperience }}
           </button>
         </div>
       </CardComponent>
 
-      <h2>PRODUCTS</h2>
+      <h2>{{ strings.products.toUpperCase() }}</h2>
       <div class="w-100 mb-8" @click="() => router.push('/products')">
         <ImageCarousel
           v-if="productStore.products?.length"

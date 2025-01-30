@@ -1,18 +1,17 @@
-export const productsFilterTags = [
-  "breakfast",
-  "lunch",
-  "dinner",
-  "snack",
-  "dessert",
-  "drink",
+export const foodFilterTags = [
+  "desayuno",
+  "comida",
+  "postre",
+  "cena",
+  "bebida",
 ];
 
 export const cuisineFilterTags = [
-  "american",
-  "asian",
-  "mediterranean",
-  "spanish",
-  "sea",
+  "americana",
+  "asiática",
+  "mediterránea",
+  "española",
+  "mexicana",
 ];
 
 export const daysOfWeekTags = [
@@ -24,3 +23,9 @@ export const daysOfWeekTags = [
   "saturday",
   "sunday",
 ];
+
+export const experienceTimeTags = [
+  "desayuno",
+  "comida",
+  "cena",
+]

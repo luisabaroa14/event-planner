@@ -2,6 +2,7 @@
 import { computed } from "vue";
 import { getNextDates } from "@/utils/functions";
 import { useExperienceStore } from "@/stores/useExperienceStore";
+import strings from "@/utils/strings";
 
 const experienceStore = useExperienceStore();
 
@@ -80,7 +81,7 @@ const calendarDates = computed(() => {
         class="btn btn-primary"
         @click="emit('scheduleExperience', experienceStore.customExperience.date)"
       >
-        Schedule experience
+        {{ strings.scheduleExperience }}
         <i class="fas fa-champagne-glasses"></i>
       </div>
     </template>

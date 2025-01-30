@@ -4,6 +4,7 @@ import { useCollaboratorStore } from "@/stores/useCollaboratorStore";
 import CollaboratorList from "../components/CollaboratorList.vue";
 import { capitalizeKebab } from "@/utils/functions";
 import { cuisineFilterTags } from "@/utils/tagGroups";
+import strings from "@/utils/strings";
 
 const collaboratorStore = useCollaboratorStore();
 
@@ -36,7 +37,7 @@ const filteredCollaborators = computed(() => {
           <input
             type="search"
             class="form-control"
-            placeholder="Search chefs"
+            :placeholder="strings.search"
             v-model="activeName"
           />
           <div class="dropdown ms-2">
@@ -50,7 +51,7 @@ const filteredCollaborators = computed(() => {
             >
               {{
                 selectedFilterTag === "all"
-                  ? "Type of food"
+                  ? strings.typeOfFood
                   : capitalizeKebab(selectedFilterTag)
               }}
             </button>
@@ -65,7 +66,7 @@ const filteredCollaborators = computed(() => {
                   href="#"
                   @click.prevent="selectedFilterTag = 'all'"
                 >
-                  All
+                  {{ strings.all }}
                 </a>
               </li>
               <li v-for="tag in cuisineFilterTags" :key="tag">

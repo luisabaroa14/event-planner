@@ -3,6 +3,7 @@ import { capitalizeKebab } from "@/utils/functions";
 import { useExperienceStore } from "@/stores/useExperienceStore";
 import { useCollaboratorStore } from "@/stores/useCollaboratorStore";
 import Empty from "@/assets/lottie/empty.json";
+import strings from "@/utils/strings";
 
 const props = defineProps({
   experiences: Array,
@@ -47,7 +48,7 @@ const collaboratorName = (collaboratorId) => {
           <button
             v-if="experience.participants?.min"
             class="position-absolute d-flex justify-content-center align-items-center btn btn-sm btn-primary"
-            :title="`Minimum participants: ${experience.participants.min}`"
+            :title="`${strings.minParticipants}: ${experience.participants.min}`"
             style="top: 10px; right: 10px; height: 25px"
           >
             <i class="fa fa-user-plus fs-7"></i>
@@ -90,7 +91,9 @@ const collaboratorName = (collaboratorId) => {
                 @click="handleScheduleClick(experience.id, true)"
               >
                 <!-- Text visible on larger screens -->
-                <span class="d-none d-sm-inline me-2">Remove</span>
+                <span class="d-none d-sm-inline me-2">{{
+                  strings.remove
+                }}</span>
                 <!-- Icon visible on smaller screens -->
                 <i class="fa fa-times"></i>
               </button>
@@ -101,7 +104,9 @@ const collaboratorName = (collaboratorId) => {
                 @click="handleScheduleClick(experience.id)"
               >
                 <!-- Text visible on larger screens -->
-                <span class="d-none d-sm-inline me-2">Schedule</span>
+                <span class="d-none d-sm-inline me-2">
+                  {{ strings.schedule }}
+                </span>
                 <!-- Icon visible on smaller screens -->
                 <i class="fas fa-calendar-plus"></i>
               </button>

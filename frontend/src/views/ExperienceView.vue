@@ -4,10 +4,11 @@ import ImageCarousel from "@/components/ImageCarousel.vue";
 import { ref, computed } from "vue";
 import { useExperienceStore } from "@/stores/useExperienceStore";
 import { useCollaboratorStore } from "@/stores/useCollaboratorStore";
-import { productsFilterTags } from "@/utils/tagGroups";
-import { capitalizeKebab,  } from "@/utils/functions";
+import { foodFilterTags } from "@/utils/tagGroups";
+import { capitalizeKebab } from "@/utils/functions";
 import { useRoute, useRouter } from "vue-router";
-import { useRouterNavigation } from '@/composables/useRouter';
+import { useRouterNavigation } from "@/composables/useRouter";
+import strings from "@/utils/strings";
 
 const { openCreateExperience } = useRouterNavigation();
 const router = useRouter();
@@ -37,7 +38,6 @@ const filteredExperiences = computed(() => {
     return matchesTag && matchesName && matchesCollaborator;
   });
 });
-
 </script>
 
 <template>
@@ -48,7 +48,7 @@ const filteredExperiences = computed(() => {
           <span v-if="collaboratorId" class="badge bg-primary pill py-2 me-2">
             {{
               collaboratorStore.getCollaboratorById(collaboratorId)?.name ??
-              "All"
+              strings.all
             }}
             <i
               class="fas fa-close"
@@ -58,7 +58,7 @@ const filteredExperiences = computed(() => {
           <input
             type="search"
             class="form-control"
-            placeholder="Search experiences"
+            :placeholder="strings.search"
             v-model="activeName"
           />
           <div class="dropdown ms-2">
@@ -72,7 +72,7 @@ const filteredExperiences = computed(() => {
             >
               {{
                 selectedFilterTag === "all"
-                  ? "Type of food"
+                  ? strings.typeOfFood
                   : capitalizeKebab(selectedFilterTag)
               }}
             </button>
@@ -86,10 +86,11 @@ const filteredExperiences = computed(() => {
                   class="dropdown-item"
                   href="#"
                   @click.prevent="selectedFilterTag = 'all'"
-                  >All</a
                 >
+                  {{ strings.all }}
+                </a>
               </li>
-              <li v-for="tag in productsFilterTags" :key="tag">
+              <li v-for="tag in foodFilterTags" :key="tag">
                 <a
                   class="dropdown-item"
                   href="#"

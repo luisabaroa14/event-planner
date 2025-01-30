@@ -1,4 +1,6 @@
 <script setup>
+import strings from "@/utils/strings";
+
 const props = defineProps({
   title: String,
   collaborators: Array,
@@ -35,7 +37,7 @@ const props = defineProps({
               :to="`/chefs/${collaborator.id}`"
               class="btn btn-primary"
             >
-              About Me
+              {{ strings.aboutMe }}
             </router-link>
           </div>
         </div>

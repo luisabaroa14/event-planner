@@ -5,6 +5,7 @@ import icon from "@/assets/images/icon.png";
 import { useEventStore } from "@/stores/useEventStore";
 import { useProductStore } from "@/stores/useProductStore";
 import { useRouter } from "vue-router";
+import strings from "@/utils/strings";
 
 const eventStore = useEventStore();
 const productsStore = useProductStore();
@@ -36,7 +37,7 @@ const router = useRouter();
                 to="/"
               >
                 <i class="fas fa-house-chimney"></i>
-                <p class="large-screen m-0">Home</p>
+                <p class="large-screen m-0">{{ strings.home}}</p>
               </router-link>
             </li>
             <li class="nav-item">
@@ -47,7 +48,7 @@ const router = useRouter();
                 to="/experiences"
               >
                 <i class="fas fa-champagne-glasses"></i>
-                <p class="large-screen m-0">Experiences</p>
+                <p class="large-screen m-0">{{ strings.experiences }}</p>
               </router-link>
             </li>
             <li class="nav-item">
@@ -58,7 +59,7 @@ const router = useRouter();
                 to="/products"
               >
                 <i class="fas fa-bowl-rice"></i>
-                <p class="large-screen m-0">Products</p>
+                <p class="large-screen m-0">{{ strings.products }}</p>
               </router-link>
             </li>
             <li class="nav-item">
@@ -69,8 +70,7 @@ const router = useRouter();
                 to="/chefs"
               >
                 <ChefIcon />
-                <!-- <i class="fas fa-bowl-rice"></i> -->
-                <p class="large-screen m-0">Chefs</p>
+                <p class="large-screen m-0">{{ strings.chefs }}</p>
               </router-link>
             </li>
           </ul>

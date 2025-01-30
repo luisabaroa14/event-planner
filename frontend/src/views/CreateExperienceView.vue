@@ -4,10 +4,13 @@ import { useExperienceStore } from "@/stores/useExperienceStore";
 import { useProductStore } from "@/stores/useProductStore";
 import ExperienceSelection from "@/components/ExperienceSelection.vue";
 import ProductList from "@/components/ProductList.vue";
+import { toasts } from "@/utils/toast.js";
+import { useRouter } from "vue-router";
 import dayjs from "dayjs";
 
 const experienceStore = useExperienceStore();
 const productsStore = useProductStore();
+const router = useRouter();
 
 const currentStep = ref(1);
 const stepsSize = 5;
@@ -19,13 +22,23 @@ const nextStep = () => {
   ) {
     currentStep.value++;
     initiateProducts();
+  } else if (currentStep.value === stepsSize) {
+    router.push('/cart')
   }
 };
 
 const goToStep = (step) => {
-  if (step === 1 || experienceStore.status[step - 1]) {
+  // Check if all previous steps are completed
+  const allPreviousStepsCompleted = Object.keys(experienceStore.status)
+    .slice(0, step - 1)
+    .every((key) => experienceStore.status[key]);
+
+  // Allow moving to the next step if previous steps are completed
+  if (step === 1 || allPreviousStepsCompleted) {
     currentStep.value = step;
     initiateProducts();
+  } else {
+    toasts.show("Please complete all previous steps first.");
   }
 };
 

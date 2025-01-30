@@ -1,12 +1,18 @@
 <script setup>
 import { capitalizeKebab } from "@/utils/functions";
-import { useExperienceStore } from "../stores/useExperienceStore";
-import Empty from "../assets/lottie/empty.json";
+import { useExperienceStore } from "@/stores/useExperienceStore";
+import { useCollaboratorStore } from "@/stores/useCollaboratorStore";
+import Empty from "@/assets/lottie/empty.json";
 
-const props = defineProps({ experiences: Array, clearData: Boolean });
+const props = defineProps({
+  experiences: Array,
+  clearData: Boolean,
+  collaboratorName: Boolean,
+});
 const emit = defineEmits(["schedule"]);
 
 const experienceStore = useExperienceStore();
+const collaboratorStore = useCollaboratorStore();
 
 const handleScheduleClick = (experienceId, remove = false) => {
   if (remove) {
@@ -17,6 +23,11 @@ const handleScheduleClick = (experienceId, remove = false) => {
   }
 
   emit("schedule", remove);
+};
+
+const collaboratorName = (collaboratorId) => {
+  const collaborator = collaboratorStore.getCollaboratorById(collaboratorId);
+  return collaborator?.name ?? "";
 };
 </script>
 
@@ -44,6 +55,9 @@ const handleScheduleClick = (experienceId, remove = false) => {
           </button>
           <div class="card-body d-flex flex-column flex-grow-1 h-100">
             <h5 class="card-title">{{ experience.name }}</h5>
+            <p class="fs-6 mb-2 text-muted">
+              {{ collaboratorName(experience.collaboratorId) }}
+            </p>
             <div class="d-flex flex-wrap">
               <span
                 v-for="tag in experience.tags"
@@ -63,7 +77,7 @@ const handleScheduleClick = (experienceId, remove = false) => {
               class="d-flex flex-row align-items-center justify-content-between mt-auto"
             >
               <p class="fs-5 m-0 mt-1" style="font-weight: bold">
-                {{ experience.price }}$
+                {{ experience.price }}$ pp
               </p>
               <button
                 v-if="
@@ -89,7 +103,7 @@ const handleScheduleClick = (experienceId, remove = false) => {
                 <!-- Text visible on larger screens -->
                 <span class="d-none d-sm-inline me-2">Schedule</span>
                 <!-- Icon visible on smaller screens -->
-                <i class="fas fa-calendar-plus "></i>
+                <i class="fas fa-calendar-plus"></i>
               </button>
             </div>
           </div>

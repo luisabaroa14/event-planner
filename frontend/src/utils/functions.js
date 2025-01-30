@@ -112,6 +112,7 @@ export const getNextDates = (pattern, startDate, monthsAhead) => {
       // Check if the date is within the correct month and matches the pattern
       if (date.getMonth() !== currentMonth) continue;
 
+      // Check if the date is in the future and matches the pattern
       if (
         date.getTime() > today.getTime() &&
         pattern.includes(

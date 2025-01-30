@@ -40,6 +40,7 @@ const mappedCalendarDates = computed(() => {
 });
 
 const calendarDates = computed(() => {
+  const today = new Date();
   const availableDates = props.availableDates;
 
   const patternDates = getNextDates(availableDates?.patterns, new Date(), 4); // Get the next 4 months' worth of pattern dates
@@ -50,12 +51,12 @@ const calendarDates = computed(() => {
   // Merge pattern dates with extra dates
   let allDates = [...patternDates, ...extraDates];
 
-  // Remove blocked dates
+  // Remove blocked dates and dates that are in the past
   allDates = allDates.filter(
     (date) =>
       !blockedDates.some(
         (blockedDate) => date.getTime() === blockedDate.getTime()
-      )
+      ) && date.getTime() > today.getTime()
   );
 
   return allDates.map((date) => ({
@@ -79,7 +80,9 @@ const calendarDates = computed(() => {
     <template #day-popover>
       <div
         class="btn btn-primary"
-        @click="emit('scheduleExperience', experienceStore.customExperience.date)"
+        @click="
+          emit('scheduleExperience', experienceStore.customExperience.date)
+        "
       >
         {{ strings.scheduleExperience }}
         <i class="fas fa-champagne-glasses"></i>

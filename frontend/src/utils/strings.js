@@ -33,6 +33,7 @@ const strings = {
   minParticipants: "Participantes mínimos",
   minParticipantsForEvent: "El mínimo de participantes para el evento debe ser de",
   extraFeeMessage: "Se aplicará un cargo adicional de ",
+  selectADate: "Selecciona una fecha",
   scheduleExperience: "Agendar experiencia",
   createYourOwnEvent: "Crea tu propio evento",
   createExperience: "Crea tu experiencia",

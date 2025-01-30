@@ -7,6 +7,7 @@ import ExperienceList from "@/components/ExperienceList.vue";
 import { getNextDates } from "@/utils/functions";
 import { toasts } from "@/utils/toast.js";
 import dayjs from "dayjs";
+import strings from "@/utils/strings";
 
 const experienceStore = useExperienceStore();
 const collaboratorStore = useCollaboratorStore();
@@ -16,6 +17,7 @@ const allCollaboratorsAvailableDates = computed(() => {
 
   // Map the available dates for each collaborator
   collaboratorStore.collaborators.forEach((collaborator) => {
+    const today = new Date();
     const availableDates = collaborator.availableDates;
     // Generate pattern and extra dates
     const patternDates = getNextDates(availableDates?.patterns, new Date(), 4);
@@ -29,12 +31,12 @@ const allCollaboratorsAvailableDates = computed(() => {
     const blockedDates =
       availableDates?.blockedDates.map((date) => new Date(date)) ?? [];
 
-    // Remove blocked dates from allDates
+    // Remove blocked dates and dates that are in the past
     allDates = allDates.filter(
       (date) =>
         !blockedDates.some(
           (blockedDate) => blockedDate.getTime() === date.getTime()
-        )
+        ) && date.getTime() > today.getTime()
     );
     result[collaborator.id] = allDates;
   });
@@ -133,20 +135,21 @@ const availableDates = computed(() => {
     return allAvailableDates.reduce((acc, dates) =>
       acc.length === 0
         ? dates
-        : acc.filter((date) => dates.some((d) => d.getTime() === date.getTime()))
+        : acc.filter((date) =>
+            dates.some((d) => d.getTime() === date.getTime())
+          )
     );
   }
 
   // If only one collaborator is selected, return their dates
   return allAvailableDates.flat();
 });
-
 </script>
 
 <template>
   <div>
     <div class="d-flex flex-wrap align-items-center">
-      <h3 class="fw-bold me-4">Select a date</h3>
+      <h3 class="fw-bold me-4">{{ strings.selectADate }}</h3>
       <span
         v-if="experienceStore.customExperience?.date"
         class="d-flex align-items-center badge bg-primary pill me-2"
@@ -163,7 +166,7 @@ const availableDates = computed(() => {
       <AvailabilityCalendar class="mt-2" :final-dates="availableDates" />
     </div>
     <div class="d-flex flex-wrap align-items-center mt-5">
-      <h3 class="fw-bold me-4">Food Experiences</h3>
+      <h3 class="fw-bold me-4">{{ strings.experiences }}</h3>
       <span
         v-for="experienceId in experienceStore.customExperience?.experienceIds"
         :key="`selected-experience-${experienceId}`"

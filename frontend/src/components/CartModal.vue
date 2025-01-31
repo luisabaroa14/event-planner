@@ -3,18 +3,18 @@
     <div class="modal-dialog modal-dialog-scrollable">
       <div class="modal-content">
         <div class="modal-header">
-          <h5 class="modal-title">Confirm Purchase</h5>
+          <h5 class="modal-title">{{ strings.confirmPurchase }}</h5>
           <button
             type="button"
             class="btn-close"
             data-bs-dismiss="modal"
-            aria-label="Close"
+            :aria-label="strings.close"
           ></button>
         </div>
         <div class="modal-body">
           <form @submit.prevent="confirm">
             <div class="form-group mb-3">
-              <label for="name">Name</label>
+              <label for="name">{{ strings.name }}</label>
               <input
                 type="text"
                 v-model="name"
@@ -25,7 +25,7 @@
             </div>
 
             <div class="form-group mb-3">
-              <label for="email">Email</label>
+              <label for="email">{{ strings.email }}</label>
               <input
                 type="email"
                 v-model="email"
@@ -36,7 +36,7 @@
             </div>
 
             <div class="form-group mb-3">
-              <label for="phone">Phone</label>
+              <label for="phone">{{ strings.phone }}</label>
               <input
                 type="tel"
                 v-model="phone"
@@ -53,7 +53,7 @@
             class="btn btn-secondary"
             data-bs-dismiss="modal"
           >
-            Cancel
+            {{ strings.close }}
           </button>
           <button
             type="submit"
@@ -61,7 +61,7 @@
             class="btn btn-primary"
             @click="confirm"
           >
-            Confirm
+            {{ strings.confirm }}
           </button>
         </div>
       </div>
@@ -71,6 +71,7 @@
 
 <script setup>
 import { ref } from "vue";
+import strings from "@/utils/strings";
 
 const emit = defineEmits(["confirm"]);
 

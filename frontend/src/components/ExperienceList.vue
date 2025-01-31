@@ -78,7 +78,7 @@ const collaboratorName = (collaboratorId) => {
               class="d-flex flex-row align-items-center justify-content-between mt-auto"
             >
               <p class="fs-5 m-0 mt-1" style="font-weight: bold">
-                {{ experience.price }}$ pp
+                {{ experience.price }}$ p/p
               </p>
               <button
                 v-if="

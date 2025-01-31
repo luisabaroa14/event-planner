@@ -24,6 +24,11 @@ import 'v-calendar/style.css';
 // Import Carousel and its styles
 import "vue3-carousel/dist/carousel.css";
 
+// Import Spanish locale
+import dayjs from "dayjs";
+import "dayjs/locale/es";
+dayjs.locale("es");
+
 const app = createApp(App);
 
 const pinia = createPinia();

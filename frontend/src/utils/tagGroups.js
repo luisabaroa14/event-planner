@@ -12,6 +12,7 @@ export const cuisineFilterTags = [
   "mediterránea",
   "española",
   "mexicana",
+  "italiana",
 ];
 
 export const daysOfWeekTags = [

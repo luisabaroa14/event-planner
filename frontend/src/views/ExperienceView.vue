@@ -28,14 +28,15 @@ const filteredExperiences = computed(() => {
     const matchesTag =
       selectedFilterTag.value === "all" ||
       experience.tags.includes(selectedFilterTag.value);
-    const matchesName =
+    const matchesNameOrTags =
       activeName.value === "" ||
+      experience.tags.join(" ").includes(activeName.value.toLowerCase()) ||
       experience.name.toLowerCase().includes(activeName.value.toLowerCase());
     const matchesCollaborator =
       !collaboratorId.value ||
       experience.collaboratorId === collaboratorId.value;
 
-    return matchesTag && matchesName && matchesCollaborator;
+    return matchesTag && matchesNameOrTags && matchesCollaborator;
   });
 });
 </script>

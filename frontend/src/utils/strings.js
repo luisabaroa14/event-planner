@@ -25,7 +25,7 @@ const strings = {
   added: "Agregado",
   typeOfFood: "Tipo de comida",
   aboutMe: "Sobre mí",
-  goToCart: "Ir al carrito",
+  addToCart: "Agregar al carrito",
   continue: "Continuar",
   previous: "Anterior",
   yourCart: "Tu carrito",

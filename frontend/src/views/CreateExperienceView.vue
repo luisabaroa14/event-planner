@@ -25,6 +25,7 @@ const nextStep = () => {
     currentStep.value++;
     initiateProducts();
   } else if (currentStep.value === stepsSize) {
+    experienceStore.addCustomExperienceToCart();
     router.push("/cart");
   }
 };
@@ -234,10 +235,10 @@ const total = computed(() => {
           class="btn btn-primary"
           @click="nextStep"
           :disabled="
-            currentStep >= stepsSize || !experienceStore.status[currentStep]
+            currentStep > stepsSize || !experienceStore.status[currentStep]
           "
         >
-          {{ strings.continue }}
+          {{ currentStep === stepsSize ? strings.addToCart : strings.continue }}
         </button>
       </div>
     </div>

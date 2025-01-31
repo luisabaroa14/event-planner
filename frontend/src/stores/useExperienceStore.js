@@ -7,9 +7,8 @@ import { ref, computed, watch } from "vue";
 export const useExperienceStore = defineStore("experienceStore", () => {
   // State
   const experiences = ref([]);
-  const cartExperienceIds = ref([]);
+  const cartCustomExperiences = ref([]);
   const errorMessage = ref(null);
-  const quantities = ref({});
 
   const customExperience = ref({
     date: null,
@@ -23,20 +22,11 @@ export const useExperienceStore = defineStore("experienceStore", () => {
   });
 
   // Load data
-  if (localStorage.getItem("cartExperienceIds")) {
-    cartExperienceIds.value = JSON.parse(
-      localStorage.getItem("cartExperienceIds")
+  if (localStorage.getItem("cartCustomExperiences")) {
+    cartCustomExperiences.value = JSON.parse(
+      localStorage.getItem("cartCustomExperiences")
     );
   }
-  if (localStorage.getItem("experienceQuantities")) {
-    quantities.value = JSON.parse(localStorage.getItem("experienceQuantities"));
-  }
-
-  const cartExperiences = computed(() => {
-    return experiences.value.filter((experience) =>
-      cartExperienceIds.value.includes(experience.id)
-    );
-  });
 
   const selectedExperiencesData = computed(() => {
     const experienceIds = customExperience.value?.experienceIds;
@@ -93,22 +83,11 @@ export const useExperienceStore = defineStore("experienceStore", () => {
   });
 
   watch(
-    () => quantities.value,
+    () => cartCustomExperiences.value,
     () => {
       localStorage.setItem(
-        "experienceQuantities",
-        JSON.stringify(quantities.value)
-      );
-    },
-    { deep: true }
-  );
-
-  watch(
-    () => cartExperienceIds.value,
-    () => {
-      localStorage.setItem(
-        "cartExperienceIds",
-        JSON.stringify(cartExperienceIds.value)
+        "cartCustomExperiences",
+        JSON.stringify(cartCustomExperiences.value)
       );
     },
     { deep: true }
@@ -192,32 +171,20 @@ export const useExperienceStore = defineStore("experienceStore", () => {
     }
   };
 
-  const addToCart = (experienceId) => {
+  const addCustomExperienceToCart = () => {
+    customExperience.value.timestamp = new Date().getTime();
+
+    // Check if the custom experience is already in the cart
     if (
-      experiences.value.find((experience) => experience.id === experienceId) &&
-      !cartExperienceIds.value.includes(experienceId)
+      !cartCustomExperiences.value.some(
+        (e) => e.timestamp === customExperience.value.timestamp
+      )
     ) {
-      cartExperienceIds.value.push(experienceId);
-      quantities.value[experienceId] = 1;
+      cartCustomExperiences.value.push(customExperience.value);
+      clearSelectedData();
     }
   };
 
-  const removeFromCart = (experienceId) => {
-    cartExperienceIds.value = cartExperienceIds.value.filter(
-      (id) => id !== experienceId
-    );
-    delete quantities.value[experienceId];
-  };
-
-  const decrementQuantity = (experienceId) => {
-    if (quantities.value[experienceId] > 1) {
-      quantities.value[experienceId]--;
-    } else {
-      removeFromCart(experienceId);
-    }
-  };
-
-  // Getters
   const getExperienceById = (id) => {
     return experiences.value.find((experience) => experience.id === id);
   };
@@ -239,14 +206,6 @@ export const useExperienceStore = defineStore("experienceStore", () => {
     customExperience.value.experienceIds = [];
   };
 
-  const removeExperiencesByCollaborator = (collaboratorId) => {
-    customExperience.value.experienceIds =
-      customExperience.value.experienceIds?.filter((experienceId) => {
-        const experience = getExperienceById(experienceId);
-        return experience.collaboratorId !== collaboratorId;
-      });
-  };
-
   const clearSelectedData = () => {
     customExperience.value = {
       date: null,
@@ -256,15 +215,14 @@ export const useExperienceStore = defineStore("experienceStore", () => {
       time: null,
       comments: "",
       productIds: null,
+      timestamp: null,
     };
   };
 
   return {
     // State
     experiences,
-    cartExperiences,
-    cartExperienceIds,
-    quantities,
+    cartCustomExperiences,
     customExperience,
     status,
     minNumberOfParts,
@@ -278,13 +236,10 @@ export const useExperienceStore = defineStore("experienceStore", () => {
     updateExperience,
     deleteExperience,
     getExperienceById,
-    addToCart,
-    removeFromCart,
-    decrementQuantity,
     addExperience,
     clearExperiences,
     clearSelectedData,
     removeExperience,
-    removeExperiencesByCollaborator,
+    addCustomExperienceToCart,
   };
 });

@@ -19,6 +19,7 @@ export const useExperienceStore = defineStore("experienceStore", () => {
     time: null,
     comments: "",
     productIds: null,
+    timestamp: null,
   });
 
   // Load data
@@ -47,6 +48,7 @@ export const useExperienceStore = defineStore("experienceStore", () => {
       .filter((experience) => experienceIds.includes(experience.id))
       .map((experience) => ({
         id: experience.id,
+        price: experience.price,
         min: experience?.participants?.min ?? 0,
         fee: experience?.participants?.fee ?? 0,
       }));

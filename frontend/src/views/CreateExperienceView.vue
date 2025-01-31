@@ -4,6 +4,7 @@ import { useExperienceStore } from "@/stores/useExperienceStore";
 import { useProductStore } from "@/stores/useProductStore";
 import ExperienceSelection from "@/components/ExperienceSelection.vue";
 import ProductList from "@/components/ProductList.vue";
+import ReviewExperience from "@/components/ReviewExperience.vue";
 import { toasts } from "@/utils/toast.js";
 import { useRouter } from "vue-router";
 import strings from "@/utils/strings";
@@ -68,6 +69,19 @@ const sortedProducts = computed(() => {
     collaboratorIds.includes(product.collaboratorId)
   );
 });
+
+const total = computed(() => {
+  const totalFees = experienceStore.totalFees;
+  const guests = experienceStore.customExperience.guests;
+
+  // Calculate the total price of selected experiences
+  const experiencesPrice = experienceStore.selectedExperiencesData.reduce(
+    (total, experience) => total + Number(experience.price) || 0,
+    0
+  );
+
+  return experiencesPrice * guests + totalFees;
+});
 </script>
 
 <template>
@@ -87,6 +101,13 @@ const sortedProducts = computed(() => {
         <ProductList :products="sortedProducts" />
       </div>
     </div>
+    <div v-else-if="currentStep === 5" class="flex-grow-1 overflow-auto w-100">
+      <div class="d-flex flex-column mt-2">
+        <h2 class="fw-bold text-center">{{ strings.reviewEvent }}</h2>
+        <ReviewExperience current-experience />
+        <h3 class="fw-bold">{{ strings.total }}: ${{ total }}</h3>
+      </div>
+    </div>
 
     <div
       v-else
@@ -94,7 +115,7 @@ const sortedProducts = computed(() => {
     >
       <div
         v-if="currentStep === 2"
-        class="d-flex flex-column w-40-lg-w-80-sm mt-2"
+        class="d-flex flex-column w-40-lg-w-90-sm mt-2"
       >
         <h2 class="fw-bold text-center">{{ strings.planExperience }}</h2>
         <h4 class="mt-5">{{ strings.locationOfEvent }}</h4>
@@ -135,11 +156,11 @@ const sortedProducts = computed(() => {
       </div>
       <div
         v-else-if="currentStep === 3"
-        class="d-flex flex-column w-40-lg-w-80-sm mt-2"
+        class="d-flex flex-column w-40-lg-w-90-sm mt-2"
       >
-        <h2 class="fw-bold text-center">{{ strings.numberOfParticipants }}</h2>
+        <h2 class="fw-bold text-center">{{ strings.participantsInfo }}</h2>
 
-        <h4 class="mt-5">{{ strings.selectNumberOfParticipants }}</h4>
+        <h4 class="mt-3">{{ strings.selectNumberOfParticipants }}</h4>
         <span class="text-muted">
           {{ strings.numberOfParticipantsSubtitle }}
         </span>
@@ -173,15 +194,22 @@ const sortedProducts = computed(() => {
         >
           <span class="d-block text-danger mt-2">
             *{{ strings.minParticipantsForEvent }}
-            <strong>{{ experienceStore.minNumberOfParts }}</strong
-            >.<br />
+            <strong>{{ experienceStore.minNumberOfParts }}</strong>
+            .<br />
             {{ strings.extraFeeMessage }}
             <strong>{{ experienceStore.totalFees }}$</strong>.<br />
           </span>
         </div>
-      </div>
-      <div v-else-if="currentStep === 5">
-        <h2 class="fw-bold text-center">{{ strings.planExperience }}</h2>
+        <h4 class="mt-3">{{ strings.extraInfo }}</h4>
+        <span class="text-muted">{{ strings.extraInfoSubtitle }}</span>
+        <textarea
+          id="experience-comments"
+          v-model="experienceStore.customExperience.comments"
+          class="form-control mt-2"
+          rows="5"
+          style="resize: none"
+          :placeholder="strings.extraInfoPlaceholder"
+        ></textarea>
       </div>
     </div>
 

@@ -44,11 +44,11 @@ $breakpoint-md: 992px;
   }
 }
 
-.w-40-lg-w-80-sm {
+.w-40-lg-w-90-sm {
   width: 40% !important;
 
   @media (max-width: $breakpoint-md) {
-    width: 80% !important;
+    width: 90% !important;
   }
 }
 

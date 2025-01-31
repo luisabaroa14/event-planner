@@ -83,8 +83,8 @@ export const useExperienceStore = defineStore("experienceStore", () => {
       1:
         customExperience.value?.date &&
         customExperience.value?.experienceIds?.length,
-      2: customExperience.value?.guests > 0 && customExperience.value?.guests,
-      3: customExperience.value?.location && customExperience.value?.time,
+      2: customExperience.value?.location && customExperience.value?.time,
+      3: customExperience.value?.guests > 0 && customExperience.value?.guests,
       4: customExperience.value?.productIds,
       5: true,
     };

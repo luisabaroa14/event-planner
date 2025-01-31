@@ -96,6 +96,47 @@ const sortedProducts = computed(() => {
         v-if="currentStep === 2"
         class="d-flex flex-column w-40-lg-w-80-sm mt-2"
       >
+        <h2 class="fw-bold text-center">{{ strings.planExperience }}</h2>
+        <h4 class="mt-5">{{ strings.locationOfEvent }}</h4>
+        <span class="text-muted">
+          {{ strings.locationOfEventSubtitle }}
+        </span>
+        <div class="input-group mt-2">
+          <input
+            class="form-control"
+            v-model="experienceStore.customExperience.location"
+            step="any"
+          />
+          <div class="input-group-append">
+            <span
+              class="input-group-text bg-primary border-primary rounded-0 rounded-end text-white ms-1 h-100"
+            >
+              <i class="fas fa-map-pin"></i>
+            </span>
+          </div>
+        </div>
+        <h4 class="mt-5">{{ strings.timeOfEvent }}</h4>
+        <span class="text-muted"> {{ strings.timeOfEventSubtitle }} </span>
+        <div class="input-group mt-2 w-100 d-flex justify-content-center">
+          <button
+            v-for="tag in experienceTimeTags"
+            :key="tag"
+            @click="experienceStore.customExperience.time = tag"
+            :class="[
+              'btn m-1',
+              experienceStore.customExperience.time === tag
+                ? 'btn-primary'
+                : 'btn-outline-primary',
+            ]"
+          >
+            {{ tag.toUpperCase() }}
+          </button>
+        </div>
+      </div>
+      <div
+        v-else-if="currentStep === 3"
+        class="d-flex flex-column w-40-lg-w-80-sm mt-2"
+      >
         <h2 class="fw-bold text-center">{{ strings.numberOfParticipants }}</h2>
 
         <h4 class="mt-5">{{ strings.selectNumberOfParticipants }}</h4>
@@ -124,7 +165,7 @@ const sortedProducts = computed(() => {
         </div>
         <div
           v-if="
-          experienceStore.customExperience.guests &&
+            experienceStore.customExperience.guests &&
             experienceStore.minNumberOfParts &&
             experienceStore.minNumberOfParts >
               experienceStore.customExperience.guests
@@ -135,56 +176,12 @@ const sortedProducts = computed(() => {
             <strong>{{ experienceStore.minNumberOfParts }}</strong
             >.<br />
             {{ strings.extraFeeMessage }}
-            <strong>{{ experienceStore.totalFees }}$</strong
-            >.<br />
+            <strong>{{ experienceStore.totalFees }}$</strong>.<br />
           </span>
         </div>
       </div>
-      <div
-        v-else-if="currentStep === 3"
-        class="d-flex flex-column w-40-lg-w-80-sm mt-2"
-      >
-        <h2 class="fw-bold text-center">{{ strings.planExperience }}</h2>
-
-        <h4 class="mt-5">{{ strings.locationOfEvent }}</h4>
-        <span class="text-muted">
-          {{ strings.locationOfEventSubtitle }}
-        </span>
-        <div class="input-group mt-2">
-          <input
-            class="form-control"
-            v-model="experienceStore.customExperience.location"
-            step="any"
-          />
-          <div class="input-group-append">
-            <span
-              class="input-group-text bg-primary border-primary rounded-0 rounded-end text-white ms-1 h-100"
-            >
-              <i class="fas fa-map-pin"></i>
-            </span>
-          </div>
-        </div>
-
-        <h4 class="mt-5">{{ strings.timeOfEvent }}</h4>
-        <span class="text-muted"> {{ strings.timeOfEventSubtitle }} </span>
-        <div class="input-group mt-2 w-100 d-flex justify-content-center">
-          <button
-            v-for="tag in experienceTimeTags"
-            :key="tag"
-            @click="experienceStore.customExperience.time = tag"
-            :class="[
-              'btn m-1',
-              experienceStore.customExperience.time === tag
-                ? 'btn-primary'
-                : 'btn-outline-primary',
-            ]"
-          >
-            {{ tag.toUpperCase() }}
-          </button>
-        </div>
-      </div>
       <div v-else-if="currentStep === 5">
-        <h3>{{ strings.goToCart }}</h3>
+        <h2 class="fw-bold text-center">{{ strings.planExperience }}</h2>
       </div>
     </div>
 

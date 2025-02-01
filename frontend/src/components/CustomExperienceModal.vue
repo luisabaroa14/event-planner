@@ -26,7 +26,9 @@ const collaborator = computed(() =>
     v-if="experienceData.experience"
     class="modal fade"
     tabindex="-1"
-    :id="`custom-experience-${experienceData.experience.id}`"
+    :id="`custom-experience-${
+      experienceData.customExperience?.timestamp ?? 0
+    }-${experienceData.experience.id}`"
   >
     <div class="modal-dialog modal-dialog-scrollable">
       <div class="modal-content">

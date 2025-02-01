@@ -202,6 +202,30 @@ export const useExperienceStore = defineStore("experienceStore", () => {
       );
   };
 
+  const removeCartExperience = (timestamp, experienceId) => {
+    // Find the custom experience in the cart by timestamp
+    const cartCurrentExperience = cartCustomExperiences.value.find(
+      (experience) => experience.timestamp === timestamp
+    );
+
+    if (!cartCurrentExperience) return;
+
+    // If only one experience is selected, remove the whole custom experience
+    if (
+      cartCurrentExperience.experienceIds.length === 1 &&
+      cartCurrentExperience.experienceIds[0] === experienceId
+    ) {
+      cartCustomExperiences.value = cartCustomExperiences.value.filter(
+        (experience) => experience.timestamp !== timestamp
+      );
+
+      // If there are no more custom experiences, clear the selected data
+    } else if (cartCurrentExperience.experienceIds.length > 1) {
+      cartCurrentExperience.experienceIds =
+        cartCurrentExperience.experienceIds.filter((id) => experienceId !== id);
+    }
+  };
+
   const clearExperiences = () => {
     customExperience.value.experienceIds = [];
   };
@@ -240,6 +264,7 @@ export const useExperienceStore = defineStore("experienceStore", () => {
     clearExperiences,
     clearSelectedData,
     removeExperience,
+    removeCartExperience,
     addCustomExperienceToCart,
   };
 });

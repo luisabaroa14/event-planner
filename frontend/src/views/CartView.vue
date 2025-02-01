@@ -1,17 +1,21 @@
 <script setup>
-import { useEventStore } from "@/stores/useEventStore";
+// import { useEventStore } from "@/stores/useEventStore";
+import { useExperienceStore } from "@/stores/useExperienceStore";
 import { useProductStore } from "@/stores/useProductStore";
 import axios from "axios";
 import { computed } from "vue";
 import CartModal from "@/components/CartModal.vue";
+import ReviewExperience from "@/components/ReviewExperience.vue";
 import strings from "@/utils/strings";
+import { formatNumber } from "@/utils/functions";
 
-const eventStore = useEventStore();
+// const eventStore = useEventStore();
+const experienceStore = useExperienceStore();
 const productsStore = useProductStore();
 
 const total = computed(() => {
   const cartItems = [
-    { items: eventStore.cartEvents, quantities: eventStore.quantities },
+    // { items: eventStore.cartEvents, quantities: eventStore.quantities },
     { items: productsStore.cartProducts, quantities: productsStore.quantities },
   ];
 
@@ -24,6 +28,38 @@ const total = computed(() => {
       }, 0)
     );
   }, 0);
+});
+
+// const experiencesTotal = computed(() => {
+//   const customExperiences = experienceStore.cartCustomExperiences || [];
+
+//   /// For each custom experience, calculate the total price of each experiece and consider the fee is the participants min is lower than it's guests
+// });
+
+const experiencesTotal = computed(() => {
+  const customExperiences = experienceStore.cartCustomExperiences || [];
+
+  const x = customExperiences.reduce((total, customExperience) => {
+    const guests = customExperience.guests || 0;
+
+    const experienceTotal = customExperience.experienceIds.reduce((sum, id) => {
+      const experience = experienceStore.experiences.find(
+        (exp) => exp.id === id
+      );
+      if (!experience) return sum;
+
+      const fee =
+        guests < (experience.participants?.min || 0)
+          ? experience.participants?.fee || 0
+          : 0;
+
+      return sum + Number(experience.price) * guests + fee;
+    }, 0);
+
+    return total + experienceTotal;
+  }, 0);
+
+  return x;
 });
 
 const sendEmail = async (subject, body) => {
@@ -45,10 +81,10 @@ const handleConfirm = (userData) => {
   const { name, email, phone } = userData;
 
   // Get the products in the cart
-  const cartItems = [...eventStore.cartEvents, ...productsStore.cartProducts];
+  const cartItems = [...productsStore.cartProducts];
 
   // Get the quantities of each product
-  const quantities = { ...eventStore.quantities, ...productsStore.quantities };
+  const quantities = { ...productsStore.quantities };
 
   // Create the email content
   let productDetails = cartItems
@@ -81,9 +117,7 @@ const handleConfirm = (userData) => {
 
 <template>
   <div class="d-flex flex-column mt-5 mx-3 p-3">
-    <h2 class="mb-4">{{ strings.yourCart }}</h2>
-
-    <div v-if="eventStore.cartEvents?.length" class="mb-4">
+    <!-- <div v-if="eventStore.cartEvents?.length" class="mb-4">
       <div class="table-responsive rounded">
         <table class="table mb-0">
           <thead>
@@ -149,17 +183,17 @@ const handleConfirm = (userData) => {
           </tbody>
         </table>
       </div>
-    </div>
+    </div> -->
 
-    <div v-if="productsStore.cartProducts?.length" class="mb-4">
+    <div v-if="productsStore.cartProducts?.length" class="my-4">
       <div class="table-responsive rounded">
         <table class="table mb-0">
           <thead>
             <tr>
               <th scope="col">{{ strings.products }}</th>
               <th scope="col" class="text-center">{{ strings.quantity }}</th>
-              <th scope="col" class="text-center">{{ strings.remove }}</th>
               <th scope="col" class="text-center">{{ strings.price }}</th>
+              <th scope="col" class="text-center">{{ strings.remove }}</th>
             </tr>
           </thead>
           <tbody class="rounded">
@@ -201,6 +235,9 @@ const handleConfirm = (userData) => {
                   </button>
                 </div>
               </td>
+              <td class="fs-5 fw-bold text-center">
+                ${{ product.price * productsStore.quantities[product.id] }}
+              </td>
               <td class="text-center">
                 <i
                   class="fas fa-trash fs-5 text-primary"
@@ -208,16 +245,25 @@ const handleConfirm = (userData) => {
                 >
                 </i>
               </td>
-              <td class="fs-5 fw-bold text-center">
-                ${{ product.price * productsStore.quantities[product.id] }}
-              </td>
             </tr>
           </tbody>
         </table>
       </div>
     </div>
+    <h4 class="fw-bold">{{ strings.subtotal }}: ${{ formatNumber(total) }}</h4>
+    <hr />
 
-    <h3 class="fw-bold">{{ strings.total }}: ${{ total }}</h3>
+    <div v-if="experienceStore.cartCustomExperiences?.length">
+      <ReviewExperience />
+    </div>
+
+    <h4 class="fw-bold">
+      {{ strings.subtotal }}: ${{ formatNumber(experiencesTotal) }}
+    </h4>
+    <hr />
+    <h3 class="fw-bold mt-1">
+      {{ strings.total }}: ${{ formatNumber(experiencesTotal + total) }}
+    </h3>
     <button
       data-bs-toggle="modal"
       data-bs-target="#cart-modal"
@@ -225,8 +271,8 @@ const handleConfirm = (userData) => {
     >
       {{ strings.confirm }}
     </button>
+    <CartModal @confirm="handleConfirm" />
   </div>
-  <CartModal @confirm="handleConfirm" />
 </template>
 
 <style scoped>

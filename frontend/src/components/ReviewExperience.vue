@@ -13,27 +13,42 @@ const props = defineProps({
 const experienceStore = useExperienceStore();
 
 const customExperiences = computed(() => {
+  // Extract experience IDs with timestamps (if applicable)
   const experienceIds = props.currentExperience
-    ? experienceStore.customExperience.experienceIds
-    : [];
+    ? experienceStore.customExperience.experienceIds.map((id) => ({ id }))
+    : experienceStore.cartCustomExperiences?.flatMap((e) =>
+        e.experienceIds.map((id) => ({ id, timestamp: e.timestamp }))
+      ) || [];
 
-  return experienceIds.map((id) => {
+  // Map the extracted IDs to find the corresponding experiences
+  const mappedExperiences = experienceIds.map(({ id, timestamp }) => {
     const experience = experienceStore.experiences.find((exp) => exp.id === id);
+    if (!experience) return null;
+
+    // Find the associated custom experience (either current or from cart)
     const customExperience = props.currentExperience
       ? experienceStore.customExperience
-      : null;
+      : experienceStore.cartCustomExperiences.find(
+          (c) => c.timestamp === timestamp
+        );
 
+    if (!customExperience) return null;
+
+    // Calculate fee if guests are below the minimum participants
     const fee =
-      customExperience.guests < experience.participants?.min
-        ? experience.participants?.fee
+      customExperience.guests < (experience.participants?.min ?? 0)
+        ? experience.participants?.fee ?? 0
         : 0;
 
+    // Return the structured object
     return {
-      experience: experience,
-      customExperience: customExperience,
-      fee: fee,
+      experience,
+      customExperience,
+      fee,
     };
   });
+  // Filter out any null values (in case some experiences were not found)
+  return mappedExperiences.filter(Boolean);
 });
 </script>
 
@@ -48,12 +63,15 @@ const customExperiences = computed(() => {
             <th scope="col" class="text-center">{{ strings.time }}</th>
             <th scope="col" class="text-center">{{ strings.details }}</th>
             <th scope="col" class="text-center">{{ strings.price }}</th>
+            <th v-if="!currentExperience" scope="col" class="text-center">
+              {{ strings.remove }}
+            </th>
           </tr>
         </thead>
         <tbody class="rounded">
           <tr
             v-for="(experienceData, index) in customExperiences"
-            :key="`${experienceData.experience.id}-${index}`"
+            :key="`${experienceData?.experience.id}-${index}`"
             class="align-middle"
           >
             <td>
@@ -70,7 +88,7 @@ const customExperiences = computed(() => {
               </div>
             </td>
             <td class="text-center">
-              <span>{{ experienceStore.customExperience.guests }}</span>
+              <span>{{ experienceData.customExperience.guests }}</span>
             </td>
             <td class="text-center">
               <span>
@@ -84,7 +102,9 @@ const customExperiences = computed(() => {
                 type="button"
                 class="btn btn-primary rounded-pill"
                 data-bs-toggle="modal"
-                :data-bs-target="`#custom-experience-${experienceData.experience.id}`"
+                :data-bs-target="`#custom-experience-${
+                  experienceData.customExperience?.timestamp ?? 0
+                }-${experienceData.experience.id}`"
               >
                 {{ strings.viewDetails }}
               </button>
@@ -99,6 +119,19 @@ const customExperiences = computed(() => {
                   experienceData.customExperience.guests +
                 experienceData.fee
               }}
+            </td>
+            <td class="text-center">
+              <i
+                class="fas fa-trash fs-5 text-primary"
+                role="button"
+                @click="
+                  experienceStore.removeCartExperience(
+                    experienceData.customExperience.timestamp,
+                    experienceData.experience.id
+                  )
+                "
+              >
+              </i>
             </td>
           </tr>
         </tbody>

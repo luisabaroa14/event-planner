@@ -5,6 +5,7 @@ import CollaboratorList from "../components/CollaboratorList.vue";
 import { capitalizeKebab } from "@/utils/functions";
 import { cuisineFilterTags } from "@/utils/tagGroups";
 import strings from "@/utils/strings";
+import Empty from "@/assets/lottie/empty.json";
 
 const collaboratorStore = useCollaboratorStore();
 
@@ -22,7 +23,9 @@ const filteredCollaborators = computed(() => {
       collaborator.name.toLowerCase().includes(activeName.value.toLowerCase());
     const matchesBrief =
       activeName.value === "" ||
-      collaborator.brief?.toLowerCase().includes(activeName.value.toLowerCase());
+      collaborator.brief
+        ?.toLowerCase()
+        .includes(activeName.value.toLowerCase());
 
     return matchesTag && (matchesName || matchesBrief);
   });
@@ -89,6 +92,7 @@ const filteredCollaborators = computed(() => {
         :gridLayout="true"
         :collaborators="filteredCollaborators"
       />
+      <Vue3Lottie v-else :animationData="Empty" :height="400" />
     </div>
   </div>
 </template>

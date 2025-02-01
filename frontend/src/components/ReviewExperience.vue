@@ -1,14 +1,17 @@
 <script setup>
-import { computed } from "vue";
+import { ref, computed } from "vue";
 import strings from "@/utils/strings";
 import { capitalizeFirstLetter } from "@/utils/functions";
 import { useExperienceStore } from "@/stores/useExperienceStore";
 import CustomExperienceModal from "./CustomExperienceModal.vue";
+import ConfirmModal from "@/components/ConfirmModal.vue";
 import { formatNumber } from "@/utils/functions";
 
 const props = defineProps({
   currentExperience: { type: Boolean, default: false },
 });
+
+const confirmModal = ref(null);
 
 const experienceStore = useExperienceStore();
 
@@ -50,6 +53,14 @@ const customExperiences = computed(() => {
   // Filter out any null values (in case some experiences were not found)
   return mappedExperiences.filter(Boolean);
 });
+
+const deleteCartExperience = (timestamp, experienceId) => {
+  confirmModal.value.showModal(
+    strings.confirmDelete,
+    strings.confirmDeleteSubtitle,
+    () => experienceStore.removeCartExperience(timestamp, experienceId)
+  );
+};
 </script>
 
 <template>
@@ -127,7 +138,7 @@ const customExperiences = computed(() => {
                 class="fas fa-trash fs-5 text-primary"
                 role="button"
                 @click="
-                  experienceStore.removeCartExperience(
+                  deleteCartExperience(
                     experienceData.customExperience.timestamp,
                     experienceData.experience.id
                   )
@@ -139,5 +150,6 @@ const customExperiences = computed(() => {
         </tbody>
       </table>
     </div>
+    <ConfirmModal ref="confirmModal" />
   </div>
 </template>

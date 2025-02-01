@@ -2,14 +2,17 @@
 import { useExperienceStore } from "@/stores/useExperienceStore";
 import { useProductStore } from "@/stores/useProductStore";
 import axios from "axios";
-import { computed } from "vue";
+import { ref, computed } from "vue";
 import CartModal from "@/components/CartModal.vue";
 import ReviewExperience from "@/components/ReviewExperience.vue";
+import ConfirmModal from "@/components/ConfirmModal.vue";
 import strings from "@/utils/strings";
 import { formatNumber } from "@/utils/functions";
 
 const experienceStore = useExperienceStore();
 const productsStore = useProductStore();
+
+const confirmModal = ref(null);
 
 const total = computed(() => {
   const cartItems = [
@@ -26,12 +29,6 @@ const total = computed(() => {
     );
   }, 0);
 });
-
-// const experiencesTotal = computed(() => {
-//   const customExperiences = experienceStore.cartCustomExperiences || [];
-
-//   /// For each custom experience, calculate the total price of each experiece and consider the fee is the participants min is lower than it's guests
-// });
 
 const experiencesTotal = computed(() => {
   const customExperiences = experienceStore.cartCustomExperiences || [];
@@ -110,11 +107,19 @@ const handleConfirm = (userData) => {
 
   sendEmail("Order Confirmation", emailBody);
 };
+
+const deleteProduct = (productId) => {
+  confirmModal.value.showModal(
+    strings.confirmDelete,
+    strings.confirmDeleteSubtitle,
+    () => productsStore.removeFromCart(productId)
+  );
+};
 </script>
 
 <template>
   <div class="d-flex flex-column mt-5 mx-3 p-3">
-    <div v-if="productsStore.cartProducts?.length" class="my-4">
+    <div v-if="productsStore.cartProducts?.length" class="mt-4">
       <div class="table-responsive rounded">
         <table class="table mb-0">
           <thead>
@@ -173,8 +178,9 @@ const handleConfirm = (userData) => {
               </td>
               <td class="text-center">
                 <i
+                  role="button"
                   class="fas fa-trash fs-5 text-primary"
-                  @click="[productsStore.removeFromCart(product.id)]"
+                  @click="deleteProduct(product.id)"
                 >
                 </i>
               </td>
@@ -182,19 +188,21 @@ const handleConfirm = (userData) => {
           </tbody>
         </table>
       </div>
+      <h4 class="fw-bold mt-4">
+        {{ strings.subtotal }}: ${{ formatNumber(total) }}
+      </h4>
+      <hr />
     </div>
-    <h4 class="fw-bold">{{ strings.subtotal }}: ${{ formatNumber(total) }}</h4>
-    <hr />
 
     <div v-if="experienceStore.cartCustomExperiences?.length">
       <ReviewExperience />
+      <h4 class="fw-bold">
+        {{ strings.subtotal }}: ${{ formatNumber(experiencesTotal) }}
+      </h4>
+      <hr />
     </div>
 
-    <h4 class="fw-bold">
-      {{ strings.subtotal }}: ${{ formatNumber(experiencesTotal) }}
-    </h4>
-    <hr />
-    <h3 class="fw-bold mt-1">
+    <h3 class="fw-bold mt-2">
       {{ strings.total }}: ${{ formatNumber(experiencesTotal + total) }}
     </h3>
     <button
@@ -205,6 +213,7 @@ const handleConfirm = (userData) => {
       {{ strings.confirm }}
     </button>
     <CartModal @confirm="handleConfirm" />
+    <ConfirmModal ref="confirmModal" />
   </div>
 </template>
 

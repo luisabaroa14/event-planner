@@ -4,7 +4,7 @@ import strings from "@/utils/strings";
 import { capitalizeFirstLetter } from "@/utils/functions";
 import { useExperienceStore } from "@/stores/useExperienceStore";
 import CustomExperienceModal from "./CustomExperienceModal.vue";
-import dayjs from "dayjs";
+import { formatNumber } from "@/utils/functions";
 
 const props = defineProps({
   currentExperience: { type: Boolean, default: false },
@@ -115,12 +115,14 @@ const customExperiences = computed(() => {
             </td>
             <td class="fs-5 fw-bold text-center">
               ${{
-                experienceData.experience.price *
-                  experienceData.customExperience.guests +
-                experienceData.fee
+                formatNumber(
+                  experienceData.experience.price *
+                    experienceData.customExperience.guests +
+                    experienceData.fee
+                )
               }}
             </td>
-            <td class="text-center">
+            <td v-if="!currentExperience" class="text-center">
               <i
                 class="fas fa-trash fs-5 text-primary"
                 role="button"

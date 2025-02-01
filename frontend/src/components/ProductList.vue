@@ -1,5 +1,5 @@
 <script setup>
-import { capitalizeKebab } from "@/utils/functions";
+import { capitalizeKebab, formatNumber } from "@/utils/functions";
 import { useProductStore } from "@/stores/useProductStore";
 import Empty from "@/assets/lottie/empty.json";
 import strings from "@/utils/strings";
@@ -45,7 +45,7 @@ const productStore = useProductStore();
               class="d-flex flex-row align-items-center justify-content-between mt-auto"
             >
               <p class="fs-5 m-0 mt-1" style="font-weight: bold">
-                {{ product.price }}$
+                ${{ formatNumber(product.price) }}
               </p>
               <button
                 type="button"

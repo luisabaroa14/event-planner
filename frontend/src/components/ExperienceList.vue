@@ -1,5 +1,5 @@
 <script setup>
-import { capitalizeKebab } from "@/utils/functions";
+import { capitalizeKebab, formatNumber } from "@/utils/functions";
 import { useExperienceStore } from "@/stores/useExperienceStore";
 import { useCollaboratorStore } from "@/stores/useCollaboratorStore";
 import Empty from "@/assets/lottie/empty.json";
@@ -78,7 +78,7 @@ const collaboratorName = (collaboratorId) => {
               class="d-flex flex-row align-items-center justify-content-between mt-auto"
             >
               <p class="fs-5 m-0 mt-1" style="font-weight: bold">
-                {{ experience.price }}$ p/p
+                ${{ formatNumber(experience.price) }} p/p
               </p>
               <button
                 v-if="

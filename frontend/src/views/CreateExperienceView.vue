@@ -9,6 +9,7 @@ import { toasts } from "@/utils/toast.js";
 import { useRouter } from "vue-router";
 import strings from "@/utils/strings";
 import { experienceTimeTags } from "@/utils/tagGroups";
+import { formatNumber } from "@/utils/functions";
 
 const experienceStore = useExperienceStore();
 const productsStore = useProductStore();
@@ -106,7 +107,7 @@ const total = computed(() => {
       <div class="d-flex flex-column mt-2">
         <h2 class="fw-bold text-center">{{ strings.reviewEvent }}</h2>
         <ReviewExperience current-experience />
-        <h3 class="fw-bold">{{ strings.total }}: ${{ total }}</h3>
+        <h3 class="fw-bold">{{ strings.total }}: ${{formatNumber(total) }}</h3>
       </div>
     </div>
 
@@ -195,10 +196,11 @@ const total = computed(() => {
         >
           <span class="d-block text-danger mt-2">
             *{{ strings.minParticipantsForEvent }}
-            <strong>{{ experienceStore.minNumberOfParts }}</strong>
-            .<br />
+            <strong>{{ experienceStore.minNumberOfParts }}.</strong>
+            <br />
             {{ strings.extraFeeMessage }}
-            <strong>{{ experienceStore.totalFees }}$</strong>.<br />
+            <strong>${{ formatNumber(experienceStore.totalFees) }}</strong
+            >.<br />
           </span>
         </div>
         <h4 class="mt-3">{{ strings.extraInfo }}</h4>

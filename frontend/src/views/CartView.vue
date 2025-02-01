@@ -236,7 +236,11 @@ const handleConfirm = (userData) => {
                 </div>
               </td>
               <td class="fs-5 fw-bold text-center">
-                ${{ product.price * productsStore.quantities[product.id] }}
+                ${{
+                  formatNumber(
+                    product.price * productsStore.quantities?.[product.id]
+                  )
+                }}
               </td>
               <td class="text-center">
                 <i

@@ -80,7 +80,6 @@ export function capitalizeKebab(str) {
     .join(" ");
 }
 
-
 /**
   Get the next dates based for the pattern
   @param {string} pattern - The pattern to match (e.g. "monday, wednesday")
@@ -94,7 +93,7 @@ export const getNextDates = (pattern, startDate, monthsAhead) => {
   const dates = [];
   const start = new Date(startDate);
   start.setDate(1); // Start from the first of the month
-  
+
   const today = new Date();
   today.setHours(0, 0, 0, 0);
 
@@ -125,4 +124,20 @@ export const getNextDates = (pattern, startDate, monthsAhead) => {
   }
 
   return dates;
+};
+
+/**
+ * Format a number with commas as thousands separators.
+ * @param {number} value - The number to format
+ * @returns {string} - The formatted number as a string
+ */
+export const formatNumber = (value) => {
+  if (isNaN(value) || value === null || value === undefined) {
+    return "0"; // Default to 0 if the value is invalid
+  }
+
+  return new Intl.NumberFormat("en-US", {
+    minimumFractionDigits: 0,
+    maximumFractionDigits: 0,
+  }).format(value);
 };

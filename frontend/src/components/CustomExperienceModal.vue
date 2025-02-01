@@ -1,7 +1,7 @@
 <script setup>
 import { computed } from "vue";
 import { useCollaboratorStore } from "@/stores/useCollaboratorStore";
-import { capitalizeKebab } from "@/utils/functions";
+import { capitalizeKebab, formatNumber } from "@/utils/functions";
 import strings from "@/utils/strings";
 import dayjs from "dayjs";
 
@@ -73,7 +73,11 @@ const collaborator = computed(() =>
             >.
             <br />
             {{ strings.extraFeeMessage }}
-            <strong>{{ experienceData.experience.participants.fee }}$</strong>.
+            <strong
+              >${{
+                formatNumber(experienceData.experience.participants.fee)
+              }}</strong
+            >.
             <br />
           </span>
 

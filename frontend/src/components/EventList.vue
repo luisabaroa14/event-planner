@@ -53,7 +53,7 @@ const props = defineProps({
               </span>
             </div>
             <p
-              class="overflow-hidden elispe-text-3-lines"
+              class="overflow-auto"
               style="max-height: 70px"
             >
               {{ event.description }}

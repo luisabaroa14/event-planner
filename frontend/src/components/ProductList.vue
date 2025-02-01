@@ -36,7 +36,7 @@ const productStore = useProductStore();
               </span>
             </div>
             <p
-              class="flex-grow-1 overflow-hidden elispe-text-3-lines m-0"
+              class="flex-grow-1 overflow-auto m-0"
               style="max-height: 70px"
             >
               {{ product.description }}

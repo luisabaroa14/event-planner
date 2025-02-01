@@ -54,7 +54,7 @@ const strings = {
   timeOfEvent: "¿En qué momento del día será tu evento?",
   timeOfEventSubtitle: "Elige entre desayuno, comida o cena según el horario de tu evento.",
   locationOfEvent: "¿Dónde será tu evento?",
-  locationOfEventSubtitle: "Agrega la dirección de tu evento.",
+  locationOfEventSubtitle: "Agrega la dirección completa de tu evento.",
   createOwnEventSubtitle: "Personaliza cada detalle para que tu evento sea único e inolvidable. Elija entre una amplia gama de opciones, desde listas de invitados hasta ubicación entornos, asegurando que su evento refleje su estilo y visión perfectamente.",
   anyLastProduct: "¿Quieres agregar algún último producto?",
   participantsInfo: "Cuéntanos sobre tu grupo",

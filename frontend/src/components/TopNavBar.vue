@@ -2,17 +2,22 @@
 import { computed } from "vue";
 import ChefIcon from "@/assets/icons/ChefIcon.vue";
 import icon from "@/assets/images/icon.png";
-import { useEventStore } from "@/stores/useEventStore";
+import { useExperienceStore } from "@/stores/useExperienceStore";
 import { useProductStore } from "@/stores/useProductStore";
 import { useRouter } from "vue-router";
 import strings from "@/utils/strings";
 
-const eventStore = useEventStore();
+const experienceStore = useExperienceStore();
 const productsStore = useProductStore();
 
-const totalItems = computed(
-  () => eventStore.cartEventIds?.length + productsStore.cartProductIds?.length
-);
+const totalItems = computed(() => {
+  const productCount = productsStore.cartProductIds?.length || 0;
+  const experienceCount =
+    experienceStore.cartCustomExperiences?.flatMap((e) => e.experienceIds)
+      .length || 0;
+
+  return productCount + experienceCount;
+});
 
 const router = useRouter();
 </script>
@@ -37,7 +42,7 @@ const router = useRouter();
                 to="/"
               >
                 <i class="fas fa-house-chimney"></i>
-                <p class="large-screen m-0">{{ strings.home}}</p>
+                <p class="large-screen m-0">{{ strings.home }}</p>
               </router-link>
             </li>
             <li class="nav-item">

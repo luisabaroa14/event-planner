@@ -19,12 +19,12 @@ const router = createRouter({
       component: HomeView,
       meta: { adminOnly: false }
     },
-    {
-      path: '/events',
-      name: 'events',
-      component: EventsView,
-      meta: { adminOnly: false }
-    },
+    // {
+    //   path: '/events',
+    //   name: 'events',
+    //   component: EventsView,
+    //   meta: { adminOnly: false }
+    // },
     {
       path: '/experiences',
       name: 'experiences',

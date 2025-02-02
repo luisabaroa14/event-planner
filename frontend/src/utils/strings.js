@@ -75,6 +75,9 @@ const strings = {
   productsFromSelectedChefs: "Productos de los chefs seleccionados",
   pleaseCompleteTheSteps: "Por favor completa los pasos antes de continuar",
   emptyCartMessage: "Tu carrito está vacío",
+  missingData: "Se requiere completar la información",
+  experienceNotAvailable: "La experiencia no está disponible en esa fecha",
+  orderCreated: "Orden creada exitosamente, te contactaremos pronto",
 };
 
 export default strings;

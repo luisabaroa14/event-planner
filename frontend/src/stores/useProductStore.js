@@ -155,6 +155,11 @@ export const useProductStore = defineStore("productStore", () => {
     }
   };
 
+  const clearCart = () => {
+    cartProductIds.value = [];
+    quantities.value = {};
+  };
+
   // Getters
   const getProductById = (id) => {
     return products.value.find((product) => product.id === id);
@@ -176,6 +181,7 @@ export const useProductStore = defineStore("productStore", () => {
     getProductById,
     addToCart,
     removeFromCart,
+    clearCart,
     decrementQuantity,
   };
 });

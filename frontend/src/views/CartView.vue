@@ -1,6 +1,7 @@
 <script setup>
 import { useExperienceStore } from "@/stores/useExperienceStore";
 import { useProductStore } from "@/stores/useProductStore";
+import { useOrderStore } from "@/stores/useOrderStore";
 import axios from "axios";
 import { ref, computed } from "vue";
 import CartModal from "@/components/CartModal.vue";
@@ -9,13 +10,15 @@ import ConfirmModal from "@/components/ConfirmModal.vue";
 import Empty from "@/assets/lottie/empty.json";
 import strings from "@/utils/strings";
 import { formatNumber } from "@/utils/functions";
+import { toasts } from "@/utils/toast.js";
 
 const experienceStore = useExperienceStore();
 const productsStore = useProductStore();
+const orderStore = useOrderStore();
 
 const confirmModal = ref(null);
 
-const total = computed(() => {
+const itemsTotal = computed(() => {
   const cartItems = [
     { items: productsStore.cartProducts, quantities: productsStore.quantities },
   ];
@@ -34,7 +37,7 @@ const total = computed(() => {
 const experiencesTotal = computed(() => {
   const customExperiences = experienceStore.cartCustomExperiences || [];
 
-  const x = customExperiences.reduce((total, customExperience) => {
+  return customExperiences.reduce((total, customExperience) => {
     const guests = customExperience.guests || 0;
 
     const experienceTotal = customExperience.experienceIds.reduce((sum, id) => {
@@ -53,16 +56,19 @@ const experiencesTotal = computed(() => {
 
     return total + experienceTotal;
   }, 0);
-
-  return x;
 });
 
 const cart = computed(() => {
-  const products = productsStore.cartProducts;
+  const products = productsStore.quantities;
   const customExperiences = experienceStore.cartCustomExperiences;
 
-  // If there are no products or custom experiences in the cart, return null
-  if (!products.length && !customExperiences.length) return null;
+  // If there are no products or custom experiences in the cart return null
+  if (
+    !customExperiences.length &&
+    (!products || Object.keys(products).length === 0)
+  ) {
+    return null;
+  }
 
   return {
     products,
@@ -70,56 +76,34 @@ const cart = computed(() => {
   };
 });
 
-const sendEmail = async (subject, body) => {
-  const sbj = encodeURIComponent(subject);
-  const message = encodeURIComponent(body);
-
-  console.log(`/mail.php?sbj=${sbj}&message=${message}`);
-
-  try {
-    const response = await axios.get(`/mail.php?sbj=${sbj}&message=${message}`);
-    console.log("Email sent successfully", response);
-  } catch (error) {
-    console.error("Failed to send email", error);
-  }
-};
-
-const handleConfirm = (userData) => {
+const handleConfirm = async (userData) => {
   // Get user details from userData
   const { name, email, phone } = userData;
 
-  // Get the products in the cart
-  const cartItems = [...productsStore.cartProducts];
+  if (!name || !email || !phone) {
+    toasts.show(strings.missingData);
+    return;
+  }
 
-  // Get the quantities of each product
-  const quantities = { ...productsStore.quantities };
+  // Return if the cart is empty
+  if (!cart.value) return;
 
-  // Create the email content
-  let productDetails = cartItems
-    .map((item) => {
-      const quantity = quantities[item.id] || 0; // Get the quantity for each product
-      const price = item.price; // Assuming price is a number
-      return `- ${item.name}: ${quantity} x $${price}`;
-    })
-    .join("\n");
+  const response = await orderStore.createOrder({
+    userData: {
+      name,
+      email,
+      phone,
+    },
+    ...cart.value,
+    experiencesTotal: experiencesTotal.value,
+    itemsTotal: itemsTotal.value,
+    total: experiencesTotal.value + itemsTotal.value,
+  });
 
-  // Calculate total and format it
-  const total = cartItems.reduce((acc, item) => {
-    return acc + item.price * (quantities[item.id] || 0);
-  }, 0);
-
-  // Construct the email body
-  const emailBody =
-    `Dear ${name},\n\n` +
-    `Thank you for your purchase! Below are the details of your order:\n\n` +
-    `${productDetails}\n\n` +
-    `Total: $${total}\n\n` +
-    `Your contact details are as follows:\n` +
-    `Email: ${email}\n` +
-    `Phone: ${phone}\n\n` +
-    `Thank you for shopping with us! If you have any questions, feel free to contact us.`;
-
-  sendEmail("Order Confirmation", emailBody);
+  if (response) {
+    productsStore.clearCart();
+    experienceStore.clearCart();
+  }
 };
 
 const deleteProduct = (productId) => {
@@ -204,7 +188,7 @@ const deleteProduct = (productId) => {
           </table>
         </div>
         <h4 class="fw-bold mt-4">
-          {{ strings.subtotal }}: ${{ formatNumber(total) }}
+          {{ strings.subtotal }}: ${{ formatNumber(itemsTotal) }}
         </h4>
         <hr />
       </div>
@@ -218,7 +202,7 @@ const deleteProduct = (productId) => {
       </div>
 
       <h3 class="fw-bold mt-2">
-        {{ strings.total }}: ${{ formatNumber(experiencesTotal + total) }}
+        {{ strings.total }}: ${{ formatNumber(experiencesTotal + itemsTotal) }}
       </h3>
       <button
         data-bs-toggle="modal"

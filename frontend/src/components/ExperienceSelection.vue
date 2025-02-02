@@ -60,7 +60,7 @@ watch(
               (availableDate) => availableDate.getTime() === date?.getTime()
             );
             if (!isEventAvailable) {
-              toasts.show("Experience not available on selected date");
+              toasts.show(strings.experienceNotAvailable);
             }
 
             return isEventAvailable;

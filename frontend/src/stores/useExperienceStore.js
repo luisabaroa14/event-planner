@@ -243,6 +243,10 @@ export const useExperienceStore = defineStore("experienceStore", () => {
     };
   };
 
+  const clearCart = () => {
+    cartCustomExperiences.value = [];
+  };
+
   return {
     // State
     experiences,
@@ -263,6 +267,7 @@ export const useExperienceStore = defineStore("experienceStore", () => {
     addExperience,
     clearExperiences,
     clearSelectedData,
+    clearCart,
     removeExperience,
     removeCartExperience,
     addCustomExperienceToCart,

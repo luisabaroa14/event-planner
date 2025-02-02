@@ -43,7 +43,8 @@ const strings = {
   upcommingEvents: "Próximos eventos",
   participants: "Participantes",
   minParticipants: "Participantes mínimos",
-  minParticipantsForEvent: "El mínimo de participantes para el evento debe ser de",
+  minParticipantsForEvent:
+    "El mínimo de participantes para el evento debe ser de",
   extraFeeMessage: "Se aplicará un cargo adicional de ",
   selectADate: "Selecciona una fecha",
   scheduleExperience: "Agendar experiencia",
@@ -53,21 +54,27 @@ const strings = {
   viewDetails: "Ver detalles",
   reviewEvent: "Revisa tu evento",
   timeOfEvent: "¿En qué momento del día será tu evento?",
-  timeOfEventSubtitle: "Elige entre desayuno, comida o cena según el horario de tu evento.",
+  timeOfEventSubtitle:
+    "Elige entre desayuno, comida o cena según el horario de tu evento.",
   locationOfEvent: "¿Dónde será tu evento?",
   locationOfEventSubtitle: "Agrega la dirección completa de tu evento.",
-  createOwnEventSubtitle: "Personaliza cada detalle para que tu evento sea único e inolvidable. Elija entre una amplia gama de opciones, desde listas de invitados hasta ubicación entornos, asegurando que su evento refleje su estilo y visión perfectamente.",
+  createOwnEventSubtitle:
+    "Personaliza cada detalle para que tu evento sea único e inolvidable. Elija entre una amplia gama de opciones, desde listas de invitados hasta ubicación entornos, asegurando que su evento refleje su estilo y visión perfectamente.",
   anyLastProduct: "¿Quieres agregar algún último producto?",
   confirmDelete: "Confirmar eliminar",
   confirmDeleteSubtitle: "¿Estás seguro? Esta acción no se puede deshacer.",
   participantsInfo: "Cuéntanos sobre tu grupo",
   extraInfo: "¿Algo que debamos saber?",
-  extraInfoSubtitle: "Cuéntanos si tienes alguna restricción alimentaria, preferencia especial o cualquier otro detalle.",
-  extraInfoPlaceholder: "Ejemplo: “Sin gluten”, “Alérgico a los frutos secos”, “Prefiero opciones vegetarianas”...",
-  numberOfParticipantsSubtitle: "Selecciona el número de participantes que asistirán al evento.",
+  extraInfoSubtitle:
+    "Cuéntanos si tienes alguna restricción alimentaria, preferencia especial o cualquier otro detalle.",
+  extraInfoPlaceholder:
+    "Ejemplo: “Sin gluten”, “Alérgico a los frutos secos”, “Prefiero opciones vegetarianas”...",
+  numberOfParticipantsSubtitle:
+    "Selecciona el número de participantes que asistirán al evento.",
   selectNumberOfParticipants: "Selecciona el número de participantes",
   productsFromSelectedChefs: "Productos de los chefs seleccionados",
   pleaseCompleteTheSteps: "Por favor completa los pasos antes de continuar",
+  emptyCartMessage: "Tu carrito está vacío",
 };
 
 export default strings;

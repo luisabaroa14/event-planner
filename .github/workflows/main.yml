@@ -16,6 +16,7 @@ env:
   VITE_DATABASE: ${{ secrets.VITE_DATABASE }}
   VITE_INSTAGRAM: ${{ secrets.VITE_INSTAGRAM }}
   VITE_WHATSAPP: ${{ secrets.VITE_WHATSAPP }}
+  VITE_ADMIN_PASSWORD: ${{ secrets.VITE_ADMIN_PASSWORD }}
 
 jobs:
   build:
